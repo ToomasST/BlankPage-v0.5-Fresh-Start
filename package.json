@@ -1,0 +1,30 @@
+{
+  "name": "blankpage-v0.5-windsurf",
+  "version": "0.5.0",
+  "description": "BlankPage v0.5 Windsurf Project with TailPress Theme",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "theme:dev": "cd blankpage-tailpress-theme && npm run dev",
+    "theme:build": "cd blankpage-tailpress-theme && npm run build",
+    "theme:format": "cd blankpage-tailpress-theme && npm run format",
+    "theme:lint": "cd blankpage-tailpress-theme && npm run lint",
+    "theme:lint:fix": "cd blankpage-tailpress-theme && npm run lint:fix"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2"
+  },
+  "lint-staged": {
+    "blankpage-tailpress-theme/**/*.{js,jsx}": [
+      "cd blankpage-tailpress-theme && npx eslint --fix",
+      "cd blankpage-tailpress-theme && npx prettier --write"
+    ],
+    "blankpage-tailpress-theme/**/*.{css,scss}": [
+      "cd blankpage-tailpress-theme && npx prettier --write"
+    ],
+    "blankpage-tailpress-theme/**/*.php": [
+      "cd blankpage-tailpress-theme && npx prettier --write --parser=php"
+    ]
+  }
+}
