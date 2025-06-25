@@ -4,6 +4,59 @@
 
 ### 🚨 CRITICAL ISSUES
 
+#### WordPress 6.6.0 Underline Bug ⚡ BREAKING CHANGE
+**Problem:** WordPress 6.6.0+ adds unwanted underlines to ALL links via global CSS rule
+```css
+/* WordPress core rule causing the issue */
+a:where(:not(.wp-element-button)) { text-decoration: underline; }
+```
+
+**Symptoms:**
+- All links show underlines (even when CSS says `text-decoration: none`)
+- Theme custom button styling broken
+- Product card links have persistent underlines
+- `!important` doesn't work due to CSS specificity
+
+**EXACT SOLUTION:**
+```css
+/* Add to woocommerce.css or main CSS file */
+:root :where(a:where(:not(.wp-element-button))) {
+    text-decoration: none;
+}
+```
+
+**References:**
+- CPUReport.com solution: https://www.cpureport.com/solving-the-wordpress-6-6-0-underline-bug/
+- Known WordPress bug affecting all themes
+
+#### WooCommerce Custom Button Icons
+**Problem:** Adding SVG icons to WooCommerce "add to cart" buttons is complex
+
+**❌ METHODS THAT DON'T WORK:**
+1. CSS `::before` pseudo-elements (limited control)
+2. `woocommerce_product_add_to_cart_link` filter (complex, conflicts)
+3. Inline CSS (performance issues, no caching)
+
+**✅ CORRECT SOLUTION:**
+Replace WooCommerce default button with fully custom button in `content-product.php`:
+
+```php
+<!-- Remove this -->
+<?php do_action('woocommerce_after_shop_loop_item'); ?>
+
+<!-- Replace with custom button -->
+<a href="<?php echo esc_url($product->add_to_cart_url()); ?>" 
+   data-quantity="1" 
+   data-product_id="<?php echo esc_attr($product->get_id()); ?>" 
+   data-product_sku="<?php echo esc_attr($product->get_sku()); ?>"
+   class="flex items-center justify-between w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline add_to_cart_button ajax_add_to_cart">
+    <span>Lisa korvi</span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2 opacity-70">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+    </svg>
+</a>
+```
+
 #### WordPress ei lae / 500 Error
 ```bash
 # 1. Kontrolli XAMPP teenused
@@ -44,6 +97,101 @@ npm run build
 ```
 
 ---
+
+## 🔧 SESSION-SPECIFIC ISSUES (2025-01-26)
+
+### WooCommerce Product Card Styling Issues
+
+#### Problem: WooCommerce CSS Conflicts
+**Symptoms:**
+- Product grid layout broken
+- Default WooCommerce styles override theme styles
+- Sale badges overlapping
+- Button positioning issues
+
+**Solutions Applied:**
+1. **Removed WooCommerce default CSS in functions.php:**
+```php
+function blankpage_remove_woocommerce_styles() {
+    wp_dequeue_style('woocommerce-general');
+    wp_dequeue_style('woocommerce-layout');
+    wp_dequeue_style('woocommerce-smallscreen');
+}
+add_action('wp_enqueue_scripts', 'blankpage_remove_woocommerce_styles', 99);
+```
+
+2. **Forced custom templates to load:**
+```php
+function blankpage_force_custom_woocommerce_templates($template, $template_name, $template_path) {
+    if ($template_name === 'archive-product.php') {
+        $custom_template = get_template_directory() . '/woocommerce/archive-product.php';
+        if (file_exists($custom_template)) {
+            return $custom_template;
+        }
+    }
+    return $template;
+}
+add_filter('woocommerce_locate_template', 'blankpage_force_custom_woocommerce_templates', 10, 3);
+```
+
+#### Problem: Sale Badge Overlap
+**Solution:** Hide WooCommerce default sale badge and style custom one
+```css
+/* Hide default sale badge */
+.woocommerce ul.products li.product span.onsale,
+.woocommerce ul.products li.product .onsale {
+    display: none !important;
+    visibility: hidden !important;
+}
+```
+
+#### Problem: Estonian Translation Not Working
+**Root Cause:** WooCommerce translation hooks not firing for result count
+**Solution:** Direct template override in `archive-product.php`
+```php
+// Replace woocommerce_result_count() with custom Estonian text
+$total_products = wc_get_loop_prop('total');
+if ($total_products > 0) {
+    echo '<p class="woocommerce-result-count text-sm text-gray-600">';
+    if ($total_products == 1) {
+        echo 'Näitan 1 toodet';
+    } else {
+        echo 'Näitan kõiki ' . $total_products . ' toodet';
+    }
+    echo '</p>';
+}
+```
+
+### CSS Specificity Problems
+
+#### Problem: Underline Removal Not Working
+**Root Cause:** WordPress 6.6.0 global CSS rule has higher specificity
+**Failed Attempts:**
+- `text-decoration: none !important`
+- Specific class selectors
+- Multiple CSS overrides
+
+**Working Solution:** Match exact WordPress selector specificity
+```css
+:root :where(a:where(:not(.wp-element-button))) {
+    text-decoration: none;
+}
+```
+
+### SVG Icon Implementation Challenges
+
+#### Problem: CSS Pseudo-elements vs. HTML SVG
+**Lesson Learned:** For full control over SVG icons in buttons:
+- ❌ CSS `::before` or `::after` - limited styling options
+- ✅ Direct HTML SVG injection - full control, better accessibility
+
+**Best Practice:**
+```html
+<!-- Correct approach -->
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2 opacity-70">
+    <path stroke-linecap="round" stroke-linejoin="round" d="..." />
+</svg>
+```
 
 ## Common Problems & Solutions
 

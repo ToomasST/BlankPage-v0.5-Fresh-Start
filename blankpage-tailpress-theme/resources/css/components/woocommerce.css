@@ -1,0 +1,285 @@
+/**
+ * WooCommerce Tailwind Components
+ * Custom styling for WooCommerce elements using Tailwind CSS
+ * 
+ * @package BlankPage_Tailpress
+ */
+
+/* ===== WOOCOMMERCE GRID FIXES ===== */
+
+/* Remove WooCommerce default ::before pseudo-elements that cause grid gaps */
+.woocommerce ul.products::before,
+.woocommerce ul.products::after,
+.woocommerce ul.products li.product::before,
+.woocommerce ul.products li.product::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Override WooCommerce default list styles */
+.woocommerce ul.products {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.woocommerce ul.products li.product {
+  list-style: none !important;
+  margin: 0 !important;
+  float: none !important;
+  width: auto !important;
+}
+
+/* Remove clearfix that might interfere */
+.woocommerce ul.products:before,
+.woocommerce ul.products:after {
+  display: none !important;
+}
+
+/* ===== BUTTONS ===== */
+.woocommerce .button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit {
+  @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl border-0 cursor-pointer;
+}
+
+.woocommerce .button.alt,
+.woocommerce button.button.alt,
+.woocommerce input.button.alt {
+  @apply bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700;
+}
+
+.woocommerce .button:disabled,
+.woocommerce button.button:disabled,
+.woocommerce input.button:disabled {
+  @apply bg-gray-400 hover:bg-gray-400 cursor-not-allowed shadow-none;
+}
+
+/* ===== PRICING ===== */
+.woocommerce .price,
+.woocommerce .amount {
+  @apply text-lg font-bold text-gray-900;
+}
+
+.woocommerce .price del,
+.woocommerce del .amount {
+  @apply text-sm text-gray-500 font-normal mr-2;
+}
+
+.woocommerce .price ins,
+.woocommerce ins .amount {
+  @apply text-green-600 no-underline;
+}
+
+/* ===== SALE BADGE ===== */
+.woocommerce .onsale {
+  @apply absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10;
+}
+
+/* ===== PRODUCT GRID ===== */
+.woocommerce ul.products {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 list-none p-0 m-0;
+}
+
+.woocommerce ul.products li.product {
+  @apply bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-gray-300 transition-all duration-300 flex flex-col h-full;
+}
+
+.woocommerce ul.products li.product .woocommerce-loop-product__link {
+  @apply flex flex-col h-full text-inherit no-underline;
+}
+
+.woocommerce ul.products li.product img {
+  @apply w-full h-auto rounded-lg mb-4 transition-transform duration-300;
+}
+
+.woocommerce ul.products li.product h2,
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+  @apply text-lg font-semibold text-gray-900 mb-3 transition-colors;
+}
+
+/* ===== RATINGS ===== */
+.woocommerce .star-rating {
+  @apply text-yellow-400 text-sm mb-2;
+}
+
+.woocommerce .star-rating::before {
+  @apply text-gray-300;
+}
+
+.woocommerce .star-rating span::before {
+  @apply text-yellow-400;
+}
+
+/* ===== FORMS ===== */
+.woocommerce form .form-row {
+  @apply mb-4;
+}
+
+.woocommerce form .form-row label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.woocommerce form .input-text,
+.woocommerce form input[type="text"],
+.woocommerce form input[type="email"],
+.woocommerce form input[type="tel"],
+.woocommerce form input[type="password"],
+.woocommerce form textarea,
+.woocommerce form select {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors;
+}
+
+.woocommerce form select {
+  @apply bg-white;
+}
+
+/* ===== TABLES ===== */
+.woocommerce table.shop_table {
+  @apply w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm;
+}
+
+.woocommerce table.shop_table th,
+.woocommerce table.shop_table td {
+  @apply p-4 text-left border-b border-gray-100;
+}
+
+.woocommerce table.shop_table th {
+  @apply bg-gray-50 font-semibold text-gray-900;
+}
+
+.woocommerce table.shop_table td {
+  @apply text-gray-700;
+}
+
+/* ===== CART SPECIFIC ===== */
+.woocommerce-cart .cart_totals {
+  @apply bg-white rounded-xl shadow-lg border border-gray-100 p-6;
+}
+
+.woocommerce-cart .cart_totals h2 {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.woocommerce-cart .cart_totals table {
+  @apply w-full;
+}
+
+.woocommerce-cart .cart_totals .order-total {
+  @apply text-lg font-bold border-t-2 border-gray-200 pt-2;
+}
+
+/* ===== CHECKOUT SPECIFIC ===== */
+.woocommerce-checkout .col2-set {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
+}
+
+.woocommerce-checkout .woocommerce-billing-fields,
+.woocommerce-checkout .woocommerce-shipping-fields {
+  @apply bg-white rounded-xl shadow-lg border border-gray-100 p-6;
+}
+
+.woocommerce-checkout .woocommerce-billing-fields h3,
+.woocommerce-checkout .woocommerce-shipping-fields h3 {
+  @apply text-xl font-semibold text-gray-900 mb-6 flex items-center;
+}
+
+.woocommerce-checkout #order_review_heading {
+  @apply text-xl font-semibold text-gray-900 mb-6;
+}
+
+.woocommerce-checkout #order_review {
+  @apply bg-white rounded-xl shadow-lg border border-gray-100 p-6;
+}
+
+/* ===== MESSAGES & NOTICES ===== */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+  @apply p-4 rounded-lg mb-4 border-l-4;
+}
+
+.woocommerce-message {
+  @apply bg-green-50 border-green-500 text-green-700;
+}
+
+.woocommerce-info {
+  @apply bg-blue-50 border-blue-500 text-blue-700;
+}
+
+.woocommerce-error {
+  @apply bg-red-50 border-red-500 text-red-700;
+}
+
+/* ===== PRODUCT TABS ===== */
+.woocommerce div.product .woocommerce-tabs ul.tabs {
+  @apply flex border-b border-gray-200 mb-6 overflow-x-auto list-none p-0 m-0;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li {
+  @apply mr-8 mb-0 border-0 bg-transparent;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li a {
+  @apply block py-4 px-2 text-gray-600 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-colors font-medium whitespace-nowrap no-underline;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active a {
+  @apply text-blue-600 border-blue-600;
+}
+
+.woocommerce div.product .woocommerce-tabs .panel {
+  @apply p-6 bg-white rounded-lg;
+}
+
+/* ===== QUANTITY INPUTS ===== */
+.woocommerce .quantity {
+  @apply flex items-center space-x-2;
+}
+
+.woocommerce .quantity input.qty {
+  @apply w-16 text-center px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* ===== RESPONSIVE OVERRIDES ===== */
+@media (max-width: 640px) {
+  .woocommerce ul.products {
+    @apply grid-cols-1;
+  }
+
+  .woocommerce ul.products li.product {
+    @apply p-4;
+  }
+
+  .woocommerce-checkout .col2-set {
+    @apply grid-cols-1;
+  }
+}
+
+/* ===== PRODUCT CARD FIXES ===== */
+/* Hide WooCommerce default sale badge - prevent overlap */
+.woocommerce ul.products li.product span.onsale,
+.woocommerce ul.products li.product .onsale {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* WordPress 6.6.0 underline bug fix - exact solution from CPUReport */
+:root :where(a:where(:not(.wp-element-button))) {
+  text-decoration: none;
+}
+
+/* Add shopping cart icon to WooCommerce add to cart buttons - Business Bloomer method */
+.woocommerce ul.products li.product .button::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23374151'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5a1 1 0 00.95 1.25h9.3a1 1 0 00.95-1.25L15 13M7 13v6a2 2 0 002 2h6a2 2 0 002-2v-6'/%3E%3C/svg%3E");
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.7;
+}

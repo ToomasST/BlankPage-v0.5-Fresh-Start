@@ -1,6 +1,6 @@
 # 📋 TODO - BlankPage v0.5 Windsurf
 
-## Current Sprint (v0.5.1)
+## Current Sprint (v0.5.2)
 
 ### 🔥 HIGH PRIORITY
 - [ ] **Mobile Responsive Testing**
@@ -9,11 +9,11 @@
   - [ ] Fix any responsive layout issues
   - [ ] Optimize mobile form interactions
 
-- [ ] **Checkout Page Polish**
-  - [ ] Ensure all form fields are consistently styled
-  - [ ] Test checkout process end-to-end
-  - [ ] Validate required field handling
-  - [ ] Test payment processing (if integrated)
+- [ ] **Cross-Browser Testing**
+  - [ ] Test WooCommerce product cards in different browsers
+  - [ ] Verify WordPress 6.6.0 underline fix works globally
+  - [ ] Test SVG icon rendering consistency
+  - [ ] Validate gradient backgrounds display correctly
 
 ### 🎯 MEDIUM PRIORITY
 - [ ] **Performance Optimization**
@@ -28,12 +28,41 @@
   - [ ] Optimize heading structure (H1, H2, H3)
   - [ ] Add alt tags to all images
 
+- [ ] **Checkout Page Polish**
+  - [ ] Ensure all form fields are consistently styled
+  - [ ] Test checkout process end-to-end
+  - [ ] Validate required field handling
+  - [ ] Test payment processing (if integrated)
+
 ### 💡 LOW PRIORITY
 - [ ] **Enhanced Features**
   - [ ] Add product image zoom functionality
   - [ ] Implement product quick view
   - [ ] Add product comparison feature
   - [ ] Create custom 404 page
+
+---
+
+## ✅ COMPLETED (v0.5.1 - 2025-01-26)
+
+### 🔥 CRITICAL FIXES
+- [x] **WordPress 6.6.0 Underline Bug** - Fixed global CSS rule causing unwanted underlines
+- [x] **WooCommerce CSS Conflicts** - Removed default WooCommerce styles
+- [x] **Estonian Translations** - Implemented direct template overrides
+- [x] **Product Card Underlines** - Resolved persistent link styling issues
+
+### 🎨 UI/UX ENHANCEMENTS
+- [x] **Custom WooCommerce Buttons** - Replaced default with fully custom buttons
+- [x] **SVG Icon Implementation** - Added elegant thin-stroke icons to both buttons
+- [x] **Gradient Restoration** - Fixed lost gradient effects on "Lisa korvi" button
+- [x] **Button Consistency** - Matching design patterns for all action buttons
+- [x] **Sale Badge Fix** - Removed overlapping WooCommerce default badges
+
+### 🛠️ TECHNICAL IMPROVEMENTS
+- [x] **Template Override Strategy** - Direct customization instead of hooks
+- [x] **CSS Architecture** - Consolidated WooCommerce styles in components
+- [x] **Code Cleanup** - Removed experimental and redundant code
+- [x] **Documentation Updates** - Comprehensive troubleshooting guide
 
 ---
 
@@ -150,21 +179,6 @@
 - [ ] WordPress REST API integration
 - [ ] Modern JavaScript frameworks integration
 - [ ] E-commerce conversion optimization
-
----
-
-## Completed Tasks ✅
-
-### Recently Completed
-- [x] **Core Setup Complete** (v0.5.0)
-  - [x] WordPress fresh installation
-  - [x] TailPress theme integration
-  - [x] WooCommerce setup and integration
-  - [x] Custom cart page design
-  - [x] Custom checkout page design
-  - [x] Deploy script automation
-  - [x] Git repository setup
-  - [x] Project documentation structure
 
 ---
 
