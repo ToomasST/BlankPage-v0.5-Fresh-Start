@@ -1,0 +1,23 @@
+{
+	"name": "blankpage_tailpress_theme",
+	"version": "0.1.0",
+	"description": "Boilerplate WordPress theme with Tailwind CSS.",
+	"author": "Blankpage",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tailpress/tailpress"
+	},
+	"theme_uri": "https://github.com/tailpress/tailpress",
+	"author_uri": "https://tailpress.io",
+	"text_domain": "blankpage_tailpress_theme",
+	"license": "MIT",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build"
+	},
+	"devDependencies": {
+		"tailwindcss": "^4.0.0",
+		"vite": "^6.3.2",
+		"@tailwindcss/vite": "^4.0.0"
+	}
+}
