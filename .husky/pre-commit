@@ -1,6 +1,4 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
 # Run lint-staged in the theme directory
-cd blankpage-tailpress-theme
-npx lint-staged
+cd blankpage-tailpress-theme && npx lint-staged
