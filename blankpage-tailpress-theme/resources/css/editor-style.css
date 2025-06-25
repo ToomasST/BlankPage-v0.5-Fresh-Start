@@ -1,15 +1,15 @@
-@import 'tailwindcss';
-@import './theme.css';
-@import './custom.css';
+@import "tailwindcss";
+@import "./theme.css";
+@import "./custom.css";
 
 h1 {
-    @apply text-3xl mb-8;
-    font-family: var(--font-sans);
+  @apply text-3xl mb-8;
+  font-family: var(--font-sans);
 }
 
 .entry-content,
 .block-editor-block-list__layout {
-    font-family: var(--font-sans);
+  font-family: var(--font-sans);
 }
 
 /*

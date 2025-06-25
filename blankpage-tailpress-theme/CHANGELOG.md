@@ -38,6 +38,7 @@ All notable changes to TailPress will be documented in this file.
 - Update to Tailwind 3.2.0
 
 ## 3.1.0
+
 - Tailwind font sizes are now set as defined in `theme.json`.
 - Breakpoints now based on WordPress defaults (https://developer.wordpress.org/block-editor/reference-guides/packages/packages-viewport/#usage).
 - Providing `w-content`, `max-w-content`, `w-wide` and `max-w-wide` utility classes.
@@ -125,7 +126,7 @@ All notable changes to TailPress will be documented in this file.
 ## 0.0.2 - 2020-11-24
 
 - Adding basic support for the block editor Gutenberg by generating alignment, font size and color classes.
-Contains four theme colors out of the box, being primary, secondary, dark and light. This is adjustable of course.
+  Contains four theme colors out of the box, being primary, secondary, dark and light. This is adjustable of course.
 - Loading a editor-style.css.
 - Removing double slashes on resulting manifest asset URLs.
 - Modified template files to have a better starting point (including horizontal main navigation, footer always at the bottom for short pages).

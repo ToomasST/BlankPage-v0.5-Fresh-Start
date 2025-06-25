@@ -5,9 +5,9 @@
   line-height: var(--text-lg--line-height);
 
   :where(
-      .entry-content > *:not(li),
-      .block-editor-block-list__layout > *:not(li)
-    ) {
+    .entry-content > *:not(li),
+    .block-editor-block-list__layout > *:not(li)
+  ) {
     margin-top: --spacing(6);
     margin-bottom: --spacing(6);
   }
