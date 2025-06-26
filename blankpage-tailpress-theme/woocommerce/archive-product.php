@@ -55,7 +55,7 @@ get_header('shop');
                 </div>
 
                 <!-- Products Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12 mt-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 mt-8">
                     <?php
                     // Remove default hooks that create UL structure
                     remove_action('woocommerce_before_shop_loop', 'woocommerce_output_all_notices', 10);

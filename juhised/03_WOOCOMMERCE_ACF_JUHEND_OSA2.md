@@ -75,13 +75,13 @@ WordPress admin → Custom Fields → Field Groups → Add New:
    - Instructions: Meta description for search engines
    - Character Limit: 160
 
-3. **Product Brand**
+3. **Product Brand** NB! Brand is now a taxonomy in woocommerce like product categories. no need to add this in AFC. look up for official documentation
    - Field Label: Brand
    - Field Name: product_brand
    - Field Type: Text
    - Instructions: Product brand name for schema markup
 
-4. **Product GTIN**
+4. **Product GTIN** NB! GTIN in now built in field in woocommerce. look up for official documentation
    - Field Label: GTIN/Barcode
    - Field Name: product_gtin
    - Field Type: Text

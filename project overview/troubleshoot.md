@@ -49,7 +49,7 @@ Replace WooCommerce default button with fully custom button in `content-product.
    data-quantity="1" 
    data-product_id="<?php echo esc_attr($product->get_id()); ?>" 
    data-product_sku="<?php echo esc_attr($product->get_sku()); ?>"
-   class="flex items-center justify-between w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline add_to_cart_button ajax_add_to_cart">
+   class="flex items-center justify-between w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline add_to_cart_button ajax_add_to_cart">
     <span>Lisa korvi</span>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2 opacity-70">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -444,3 +444,129 @@ cd blankpage-tailpress-theme
 **Last Updated:** 2025-06-25  
 **Emergency Contact:** Check project documentation  
 **Backup Strategy:** Regular Git commits + manual backups
+
+---
+
+## WooCommerce Product Card Issues (v0.5.2)
+
+### 🖼️ Product Image Thumbnail Issues
+**Problem:** WooCommerce product cards showing very small, poor quality thumbnail images instead of proper product photos.
+
+**Symptoms:**
+- Product images appear tiny and pixelated in shop grid
+- Images don't fill the card space properly
+- Poor visual quality affecting user experience
+
+**Root Cause:** WooCommerce defaults to using `woocommerce_thumbnail` size (typically 150x150px) which is too small for modern product cards.
+
+**Solution:**
+```php
+// Add to functions.php
+function blankpage_override_product_image_size() {
+    remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
+    add_action('woocommerce_before_shop_loop_item_title', 'blankpage_custom_product_thumbnail', 10);
+}
+add_action('init', 'blankpage_override_product_image_size');
+
+function blankpage_custom_product_thumbnail() {
+    global $product;
+    
+    if (!$product || !has_post_thumbnail($product->get_id())) {
+        echo '<div class="aspect-square bg-gray-200 flex items-center justify-center">';
+        echo '<span class="text-gray-400">Pilt puudub</span>';
+        echo '</div>';
+        return;
+    }
+    
+    echo get_the_post_thumbnail(
+        $product->get_id(), 
+        'medium', // Use medium instead of woocommerce_thumbnail
+        array(
+            'class' => 'w-full h-full object-cover object-center',
+            'alt' => get_the_title($product->get_id())
+        )
+    );
+}
+```
+
+**Additional CSS:**
+```css
+/* Ensure images fill container properly */
+.woocommerce ul.products li.product .woocommerce-loop-product__link img,
+.woocommerce ul.products li.product img,
+.woocommerce .products .product img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+```
+
+### 💰 Sale Price Styling Issues
+**Problem:** WooCommerce sale prices losing custom styling when using `wc_price()` function.
+
+**Symptoms:**
+- Sale prices not displaying in intended green color
+- Price formatting inconsistent with theme design
+- CSS classes not being applied properly
+
+**Root Cause:** WooCommerce's `wc_price()` function outputs its own HTML wrapper that can override theme styles.
+
+**Solution:**
+```php
+// Custom price formatting instead of wc_price()
+if ($product->is_on_sale()) {
+    $regular_price = $product->get_regular_price();
+    $sale_price = $product->get_sale_price();
+    if ($regular_price && $sale_price) {
+        ?>
+        <div class="flex flex-col">
+            <span class="text-xs text-gray-400 line-through mb-1"><?php echo number_format($regular_price, 2, ',', ' ') . ' €'; ?></span>
+            <span class="text-lg font-bold text-green-600"><?php echo number_format($sale_price, 2, ',', ' ') . ' €'; ?></span>
+        </div>
+        <?php
+    }
+}
+```
+
+### 🏷️ Category Link Implementation
+**Problem:** Making product category badges clickable while maintaining proper styling and functionality.
+
+**Symptoms:**
+- Categories displayed as static text
+- No navigation to category pages
+- Hover effects not working properly
+
+**Solution:**
+```php
+// Clickable category badges with proper linking
+$product_categories = get_the_terms($product->get_id(), 'product_cat');
+if ($product_categories && !is_wp_error($product_categories)) :
+    ?>
+    <div class="mb-4">
+        <?php foreach (array_slice($product_categories, 0, 2) as $category) : ?>
+            <a href="<?php echo get_term_link($category); ?>" 
+               class="inline-block bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 text-xs px-2 py-1 rounded-full mr-2 no-underline hover:no-underline transition-colors">
+                <?php echo esc_html($category->name); ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+    <?php
+endif;
+```
+
+### 📱 Grid Layout Optimization
+**Problem:** Product cards too narrow when using 4-column grid on larger screens.
+
+**Symptoms:**
+- Cards appear cramped and hard to read
+- Poor visual hierarchy
+- Suboptimal user experience on desktop
+
+**Solution:**
+```php
+// Change from xl:grid-cols-4 to maximum of 3 columns
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 mt-8">
+```
+
+**Result:** Wider cards with better content spacing and improved readability.

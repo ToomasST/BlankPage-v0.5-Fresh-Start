@@ -4,6 +4,56 @@
 
 ---
 
+## [0.5.2] - 2025-01-26
+
+### Major Product Card Redesign
+**Complete WooCommerce product card redesign inspired by modern e-commerce layouts**
+
+#### Visual Improvements
+- **Modern sale badge**: Clean black badge with discount percentage (e.g., "-45%") in top-left corner
+- **Enhanced product images**: Upgraded from small thumbnails to medium-size images with perfect 1:1 aspect ratio, object-fit: cover, and center positioning
+- **Improved grid layout**: Reduced from 4 columns to 3 columns max for wider, more spacious product cards
+- **Optimized layout hierarchy**: 
+  1. Product name (bolder font-weight: semibold)
+  2. Price + rating on same row (space-efficient design)
+  3. Clickable category badges (with hover effects)
+  4. Action buttons (maintained double-button design)
+
+#### Price Display Enhancements
+- **Smart sale price handling**: Regular price shown small and gray above, sale price prominently displayed in green below
+- **Consistent formatting**: Custom price formatting (e.g., "54,00 €") with proper Estonian number format
+- **Visual hierarchy**: Price and rating positioned on same row for optimal space usage
+
+#### Interactive Elements
+- **Clickable category badges**: Categories now link to their respective category pages with smooth hover transitions
+- **Enhanced hover states**: Blue hover effects for category links and maintained product card hover animations
+- **Preserved functionality**: All WooCommerce AJAX add-to-cart functionality maintained
+
+#### Technical Improvements
+- **Custom image sizing**: Override WooCommerce default thumbnail size to use medium-size images
+- **Responsive design**: Maintained responsive behavior across all device sizes
+- **Performance optimized**: Efficient CSS and HTML structure for faster rendering
+
+### Technical Details
+- **Files modified**: `content-product.php`, `archive-product.php`, `functions.php`, `woocommerce.css`
+- **New image handling**: Custom `blankpage_custom_product_thumbnail()` function
+- **Improved CSS**: Enhanced product image cover and centering styles
+- **Layout optimization**: Perfect balance between content density and visual appeal
+
+### Bug Fixes
+- **Image display**: Fixed small thumbnail issue - now uses proper medium-size images
+- **Price styling**: Resolved sale price color inheritance issues
+- **Category positioning**: Fine-tuned category placement for optimal visual hierarchy
+- **Responsive layout**: Ensured proper card sizing across all screen sizes
+
+### User Experience
+- **Visual consistency**: Clean, modern design matching contemporary e-commerce standards  
+- **Improved readability**: Better typography hierarchy and spacing
+- **Enhanced navigation**: Clickable categories improve site browsing experience
+- **Maintained functionality**: All existing WooCommerce features preserved
+
+---
+
 ## [0.5.1] - 2025-01-26
 
 ### Critical Bug Fixes

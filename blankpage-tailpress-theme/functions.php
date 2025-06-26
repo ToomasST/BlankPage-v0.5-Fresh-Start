@@ -99,6 +99,37 @@ function blankpage_woocommerce_template_loader($template) {
 add_filter('template_include', 'blankpage_woocommerce_template_loader', 99);
 
 /**
+ * Override WooCommerce product loop image size
+ * Use 'medium' or 'large' instead of tiny 'woocommerce_thumbnail'
+ */
+function blankpage_override_product_image_size() {
+    remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
+    add_action('woocommerce_before_shop_loop_item_title', 'blankpage_custom_product_thumbnail', 10);
+}
+add_action('init', 'blankpage_override_product_image_size');
+
+function blankpage_custom_product_thumbnail() {
+    global $product;
+    
+    if (!$product || !has_post_thumbnail($product->get_id())) {
+        echo '<div class="aspect-square bg-gray-200 flex items-center justify-center">';
+        echo '<span class="text-gray-400">Pilt puudub</span>';
+        echo '</div>';
+        return;
+    }
+    
+    // Use 'medium' or 'large' instead of tiny 'woocommerce_thumbnail'  
+    echo get_the_post_thumbnail(
+        $product->get_id(), 
+        'medium', // Change to 'large' if needed
+        array(
+            'class' => 'w-full h-full object-cover object-center',
+            'alt' => get_the_title($product->get_id())
+        )
+    );
+}
+
+/**
  * Theme setup
  */
 function tailpress(): TailPress\Framework\Theme
