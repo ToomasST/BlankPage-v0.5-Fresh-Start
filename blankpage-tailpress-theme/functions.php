@@ -94,6 +94,15 @@ function blankpage_woocommerce_template_loader($template) {
             return $template;
         }
     }
+    
+    // Handle single product pages
+    if (is_product()) {
+        $template = get_template_directory() . '/woocommerce/single-product.php';
+        if (file_exists($template)) {
+            return $template;
+        }
+    }
+    
     return $template;
 }
 add_filter('template_include', 'blankpage_woocommerce_template_loader', 99);

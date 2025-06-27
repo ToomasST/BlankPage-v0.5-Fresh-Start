@@ -570,3 +570,181 @@ endif;
 ```
 
 **Result:** Wider cards with better content spacing and improved readability.
+
+---
+
+## WooCommerce Custom Button Styling Issues (v0.5.3)
+
+### 🚨 Button Text/Icon Wrapping on Custom Buttons
+**Problem:** Custom styled buttons show text and icons wrapping to multiple lines, making buttons extremely tall and breaking layout.
+
+**Symptoms:**
+- "Lisa korvi" and other custom buttons become very tall
+- Text and icon split across multiple lines
+- Button layout looks broken despite using `whitespace-nowrap`
+- Custom Tailwind styles don't work as expected
+
+**Root Cause:** WooCommerce default button classes (`single_add_to_cart_button`, `button`, `alt`) override custom CSS styles and introduce conflicting layout rules that force text wrapping.
+
+**Solution - Remove WooCommerce Default Classes:**
+```php
+// ❌ WRONG - Mixing WooCommerce classes with custom styles
+<button class="custom-tailwind-classes single_add_to_cart_button button alt">
+    <svg>...</svg>
+    Lisa korvi
+</button>
+
+// ✅ CORRECT - Only custom classes
+<button type="submit" 
+        name="add-to-cart" 
+        value="<?php echo esc_attr($product->get_id()); ?>" 
+        class="flex-1 flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline whitespace-nowrap">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 flex-shrink-0">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+    </svg>
+    Lisa korvi
+</button>
+```
+
+**Key Rules for Custom WooCommerce Buttons:**
+1. **Never mix** WooCommerce default classes with custom styling
+2. **Always remove**: `single_add_to_cart_button`, `button`, `alt` classes when using custom design
+3. **Keep required attributes**: `type="submit"`, `name="add-to-cart"`, `value="product_id"`
+4. **Use only**: Custom Tailwind classes for complete style control
+
+**Additional CSS Conflicts to Watch:**
+- WooCommerce theme CSS may override custom styles
+- Plugin CSS can interfere with button layout
+- Always test buttons after styling changes
+
+**Testing Checklist:**
+- [ ] Button height is normal (not extremely tall)
+- [ ] Text and icon stay on same line
+- [ ] Button functionality works (adds to cart)
+- [ ] Responsive behavior correct on mobile
+- [ ] No visual conflicts with theme styling
+
+**Files Affected:**
+- `woocommerce/single-product.php` (product page buttons)
+- `template-parts/woocommerce/product-card.php` (shop grid buttons)
+- Any custom WooCommerce templates with buttons
+
+---
+
+## ❌ CRITICAL: WooCommerce Product Gallery CSS Targeting Issues (v0.5.4)
+
+**Date:** 2025-06-26  
+**Issue Type:** CSS Targeting & DOM Structure Mismatch  
+**Severity:** High - Gallery layout completely broken  
+**Files Affected:** `woocommerce/single-product.php`
+
+### 🚨 Problem Summary
+
+The WooCommerce product gallery was completely broken due to incorrect CSS targeting and multiple failed attempts to apply custom gallery layouts. This caused major frustration and wasted development time.
+
+### 🔍 Root Cause Analysis
+
+1. **Incorrect CSS Selectors**: Initially targeted wrong DOM elements
+   - Used `.single-product div.product .woocommerce-product-gallery` but actual DOM was different
+   - Real structure: `.woocommerce-product-gallery-wrapper > .woocommerce-product-gallery`
+
+2. **DOM Structure Misunderstanding**: 
+   ```html
+   <div class="woocommerce-product-gallery-wrapper w-full">
+     <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images">
+       <div class="flex-viewport">
+         <div class="woocommerce-product-gallery__wrapper">
+           <!-- Main images -->
+         </div>
+       </div>
+       <ol class="flex-control-nav flex-control-thumbs">
+         <!-- Thumbnail images -->
+       </ol>
+     </div>
+   </div>
+   ```
+
+3. **Multiple Failed Approaches**:
+   - Custom CSS Grid solutions
+   - Flexbox equal-height attempts  
+   - "Standard" WooCommerce CSS (outdated)
+   - CSS targeting wrapper instead of actual gallery elements
+
+### ⚠️ Symptoms Encountered
+
+- Gallery displayed vertically instead of side-by-side
+- Thumbnails not working or missing
+- Main image not maintaining 1:1 aspect ratio
+- Lightbox trigger missing or broken
+- Mobile responsive issues
+- CSS selectors not matching actual DOM structure
+
+### ✅ Final Solution Applied
+
+**Source:** Business Bloomer (2024/2025) - Modern WooCommerce Gallery CSS  
+**URL:** https://www.businessbloomer.com/woocommerce-display-product-gallery-vertically-single-product/
+
+**Correct CSS Targeting:**
+```css
+/* Make main image 75% width to make room for thumbnails */
+.single-product div.product .woocommerce-product-gallery .flex-viewport {
+    width: 75% !important;
+    float: left !important;
+    aspect-ratio: 1/1 !important;
+    overflow: hidden !important;
+}
+
+/* Make thumbnails 25% width and place beside main image */
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs {
+    width: 25% !important;
+    float: left !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+```
+
+### 🛠️ Prevention Steps for Future
+
+1. **ALWAYS inspect DOM structure first**:
+   ```bash
+   # Right-click > Inspect Element > View actual HTML structure
+   # Don't assume CSS selectors without verification
+   ```
+
+2. **Research modern solutions first**:
+   - Check Business Bloomer for latest WooCommerce patterns
+   - Verify compatibility with current WooCommerce version
+   - Test CSS with actual DOM structure
+
+3. **Document CSS selector patterns**:
+   - `.single-product div.product .woocommerce-product-gallery .flex-viewport` (main image)
+   - `.single-product div.product .woocommerce-product-gallery .flex-control-thumbs` (thumbnails)
+   - `.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger` (lightbox)
+
+4. **Testing checklist**:
+   - [ ] Main image displays at 75% width
+   - [ ] Thumbnails display at 25% width beside main image  
+   - [ ] Main image maintains 1:1 aspect ratio with object-cover
+   - [ ] Thumbnails show active/hover states
+   - [ ] Lightbox trigger visible and functional
+   - [ ] Mobile responsive (thumbnails below on mobile)
+   - [ ] Cross-browser compatibility
+
+### 🎯 Key Lessons Learned
+
+1. **DOM-first approach**: Always inspect real DOM structure before writing CSS
+2. **Research modern solutions**: Don't reinvent the wheel, find proven solutions
+3. **Incremental testing**: Test each CSS change immediately
+4. **Proper documentation**: Document working solutions for future reference
+
+### 📋 Working Gallery Features (Final State)
+
+- ✅ **Layout**: 75% main image + 25% vertical thumbnails
+- ✅ **Aspect Ratio**: 1:1 square main image with object-cover
+- ✅ **Lightbox**: Modern SVG magnifier icon trigger
+- ✅ **Thumbnails**: Active state highlighting, hover effects
+- ✅ **Responsive**: Horizontal thumbnails below on mobile
+- ✅ **Scrolling**: Styled scrollbars for thumbnail overflow
+- ✅ **Cross-browser**: Compatible with all major browsers
+
+---
