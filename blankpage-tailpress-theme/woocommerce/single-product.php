@@ -34,20 +34,161 @@ get_header('shop'); ?>
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
                     
-                    <!-- Images container: WooCommerce Native Gallery -->
-                    <div class="flex flex-col lg:flex-row gap-4">
-                        <!-- Use WooCommerce native gallery with our responsive wrapper -->
-                        <div class="woocommerce-product-gallery-wrapper w-full">
-                            <?php
-                            /**
-                             * Hook: woocommerce_show_product_images.
-                             *
-                             * @hooked woocommerce_show_product_sale_flash - 10
-                             * @hooked woocommerce_show_product_images - 20
-                             */
-                            do_action( 'woocommerce_before_single_product_summary' );
-                            ?>
+                    <!-- Images container: Custom Gallery Implementation -->
+                    <div class="gallery-container">
+                        <?php
+                        // Custom Gallery Implementation following the guide
+                        global $product;
+                        $main_id = $product->get_image_id();
+                        $gallery_ids = $product->get_gallery_image_ids();
+                        array_unshift($gallery_ids, $main_id); // pane põhifoto esimeseks
+                        
+                        // SAFE JSON encoding for HTML attributes
+                        $image_urls = array_map('wp_get_attachment_url', $gallery_ids);
+                        $json_data = htmlspecialchars(json_encode($image_urls), ENT_QUOTES, 'UTF-8');
+                        ?>
+                        
+                        <div
+                            x-data="{ 
+                                active: 0, 
+                                images: <?php echo $json_data; ?>,
+                                topOpacity: 0, 
+                                bottomOpacity: 0,
+                                fadeDistance: 80
+                            }"
+                            class="flex flex-col md:flex-row gap-4"
+                        >
+                            <!-- THUMBS -->
+                            <div class="relative w-full md:w-24 flex-shrink-0">
+                                <div 
+                                    class="flex md:flex-col gap-2 md:overflow-y-auto overflow-x-auto md:h-full p-1 max-h-[464px] scrollbar-hide"
+                                    x-ref="scrollContainer"
+                                    @scroll="
+                                        const el = $refs.scrollContainer;
+                                        const fade = fadeDistance;
+                                        
+                                        // Calculate top gradient opacity (0px = 0, 80px+ = 1)
+                                        topOpacity = Math.min(el.scrollTop / fade, 1);
+                                        
+                                        // Calculate bottom gradient opacity
+                                        const scrollBottom = el.scrollTop + el.clientHeight;
+                                        const distanceFromBottom = el.scrollHeight - scrollBottom;
+                                        bottomOpacity = el.scrollHeight > el.clientHeight ? Math.min(distanceFromBottom / fade, 1) : 0;
+                                    "
+                                    x-init="
+                                        $nextTick(() => {
+                                            const el = $refs.scrollContainer;
+                                            topOpacity = 0;
+                                            bottomOpacity = el.scrollHeight > el.clientHeight ? 1 : 0;
+                                        });
+                                    "
+                                >
+                                    <?php foreach ($gallery_ids as $index => $id) : ?>
+                                        <button
+                                            @click="active = <?php echo $index; ?>"
+                                            :class="{'ring-2 ring-blue-500': active === <?php echo $index; ?> }"
+                                            class="aspect-square w-24 md:w-full flex-shrink-0 rounded overflow-hidden focus:outline-none"
+                                        >
+                                            <img src="<?php echo wp_get_attachment_image_url($id, 'woocommerce_thumbnail'); ?>" class="w-full h-full object-cover" />
+                                        </button>
+                                    <?php endforeach; ?>
+                                    
+                                    <!-- Progressive gradient fade - Final clean version -->
+                                    <!-- Top gradient -->
+                                    <div 
+                                        x-show="topOpacity > 0" 
+                                        :style="{ opacity: topOpacity }"
+                                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                                        x-transition:leave="transition-opacity duration-250 ease-in"
+                                        class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white via-white/70 to-transparent pointer-events-none hidden md:block z-10"
+                                    ></div>
+                                    
+                                    <!-- Bottom gradient -->
+                                    <div 
+                                        x-show="bottomOpacity > 0" 
+                                        :style="{ opacity: bottomOpacity }"
+                                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                                        x-transition:leave="transition-opacity duration-250 ease-in"
+                                        class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none hidden md:block z-10"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <!-- MAIN IMAGE (1:1) -->
+                            <div class="relative flex-1 aspect-square">
+                                <!-- Fancybox Gallery - Main Visible Image -->
+                                <a
+                                    :href="images[active]"                      
+                                    class="block w-full h-full"
+                                    data-fancybox="product-gallery"
+                                    :data-caption="'Product image ' + (active + 1)"
+                                >
+                                    <img
+                                        :src="images[active]"
+                                        :alt="'Product image'"
+                                        class="w-full h-full object-contain"
+                                        loading="lazy"
+                                    >
+
+                                    <!-- Zoom/Lightbox-trigger -->
+                                    <span class="absolute top-2 right-2 p-1 bg-white/80 rounded-full shadow cursor-zoom-in" aria-label="Open image gallery">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                                        </svg>
+                                    </span>
+                                </a>
+                                
+                                <!-- Hidden Gallery Links for Fancybox Navigation -->
+                                <div class="hidden">
+                                    <?php foreach ($gallery_ids as $index => $id) : ?>
+                                        <a
+                                            href="<?php echo wp_get_attachment_url($id); ?>"
+                                            data-fancybox="product-gallery"
+                                            data-caption="Product image <?php echo $index + 1; ?>"
+                                        ></a>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <!-- Fancybox Initialization Script -->
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Initialize Fancybox with custom options
+                            Fancybox.bind('[data-fancybox="product-gallery"]', {
+                                infinite: true,
+                                keyboard: true,
+                                wheel: false,
+                                touch: {
+                    vertical: true,
+                    momentum: true
+                },
+                buttons: [
+                    "zoom",
+                    "slideShow", 
+                    "fullScreen",
+                    "download",
+                    "thumbs",
+                    "close"
+                ],
+                Toolbar: {
+                    display: {
+                        left: ["infobar"],
+                        middle: [
+                            "zoomIn",
+                            "zoomOut", 
+                            "toggle1to1",
+                            "rotateCCW",
+                            "rotateCW",
+                            "flipX",
+                            "flipY"
+                        ],
+                        right: ["slideshow", "thumbs", "close"]
+                    }
+                }
+            });
+        });
+        </script>
                     </div>
 
                     <!-- Product Details - Right Side -->
@@ -72,10 +213,9 @@ get_header('shop'); ?>
                                         <div class="flex items-center">
                                             <?php for ($i = 1; $i <= 5; $i++) : ?>
                                                 <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-400' : 'text-gray-300'; ?>" 
-                                                     fill="currentColor" viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor">
-                                                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1.125 1.125 0 0 1 1.12 1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                            </svg>
+                                                     fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                                </svg>
                                             <?php endfor; ?>
                                             <span class="text-sm text-gray-600 ml-2"><?php echo number_format($average_rating, 1); ?></span>
                                         </div>
@@ -241,173 +381,6 @@ get_header('shop'); ?>
 /* WordPress 6.6.0 underline bug fix */
 :root :where(a:where(:not(.wp-element-button))) {
     text-decoration: none;
-}
-
-/* WooCommerce Product Gallery - MODERN 2025 SOLUTION (Business Bloomer) */
-
-/* Make main image 75% width to make room for thumbnails */
-.single-product div.product .woocommerce-product-gallery .flex-viewport {
-    width: 75% !important;
-    float: left !important;
-    aspect-ratio: 1/1 !important;
-    overflow: hidden !important;
-    border-radius: 0.5rem !important;
-    background-color: #f3f4f6 !important;
-}
-
-/* Force images to cover properly inside viewport */
-.single-product div.product .woocommerce-product-gallery .flex-viewport img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-
-/* Make thumbnails 25% width and place beside main image */
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs {
-    width: 25% !important;
-    float: left !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.5rem !important;
-    max-height: 400px !important;
-    overflow-y: auto !important;
-    padding: 0.25rem !important;
-    list-style: none !important;
-    margin: 0 !important;
-}
-
-/* Style each thumbnail with proper sizing and spacing */
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li img {
-    width: 90% !important;
-    aspect-ratio: 1/1 !important;
-    object-fit: cover !important;
-    border-radius: 0.5rem !important;
-    margin: 0 0 10% 10% !important;
-    float: none !important;
-    cursor: pointer !important;
-    border: 2px solid transparent !important;
-    transition: all 0.2s ease !important;
-    opacity: 0.7 !important;
-}
-
-/* Active and hover states for thumbnails */
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li img.flex-active {
-    border-color: #3b82f6 !important;
-    opacity: 1 !important;
-    box-shadow: 0 0 0 1px #3b82f6 !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li img:hover {
-    border-color: #93c5fd !important;
-    opacity: 1 !important;
-}
-
-/* Lightbox trigger - modern styling */
-.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger {
-    position: absolute !important;
-    top: 1rem !important;
-    right: 1rem !important;
-    z-index: 10 !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: none !important;
-    border-radius: 50% !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-    transition: all 0.2s ease !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger:hover {
-    background: rgba(255, 255, 255, 1) !important;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Replace emoji with modern SVG magnifier */
-.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger span {
-    display: none !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger::before {
-    content: '' !important;
-    width: 20px !important;
-    height: 20px !important;
-    background-image: url("data:image/svg+xml,%3csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='11' cy='11' r='8' stroke='%23374151' stroke-width='2'/%3e%3cpath d='m21 21-4.35-4.35' stroke='%23374151' stroke-width='2'/%3e%3c/svg%3e") !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: contain !important;
-}
-
-/* Sale badge */
-.single-product div.product .woocommerce-product-gallery .onsale {
-    position: absolute !important;
-    top: 1rem !important;
-    left: 1rem !important;
-    z-index: 10 !important;
-    background-color: #ef4444 !important;
-    color: white !important;
-    padding: 0.5rem 1rem !important;
-    border-radius: 9999px !important;
-    font-size: 0.875rem !important;
-    font-weight: 500 !important;
-}
-
-/* Thumbnail scrollbar styling */
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs::-webkit-scrollbar {
-    width: 4px !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs::-webkit-scrollbar-track {
-    background: #f1f5f9 !important;
-    border-radius: 2px !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs::-webkit-scrollbar-thumb {
-    background: #cbd5e1 !important;
-    border-radius: 2px !important;
-}
-
-.single-product div.product .woocommerce-product-gallery .flex-control-thumbs::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8 !important;
-}
-
-/* Mobile responsive - thumbnails below on mobile */
-@media (max-width: 768px) {
-    .single-product div.product .woocommerce-product-gallery .flex-viewport {
-        width: 100% !important;
-        float: none !important;
-    }
-    
-    .single-product div.product .woocommerce-product-gallery .flex-control-thumbs {
-        width: 100% !important;
-        float: none !important;
-        flex-direction: row !important;
-        max-height: none !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        padding: 0.5rem 0 !important;
-    }
-    
-    .single-product div.product .woocommerce-product-gallery .flex-control-thumbs li {
-        width: auto !important;
-        flex-shrink: 0 !important;
-    }
-    
-    .single-product div.product .woocommerce-product-gallery .flex-control-thumbs li img {
-        width: 4rem !important;
-        height: 4rem !important;
-        margin: 0 0.5rem 0 0 !important;
-    }
 }
 </style>
 

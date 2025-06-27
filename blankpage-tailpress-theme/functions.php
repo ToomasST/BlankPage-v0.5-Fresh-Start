@@ -13,6 +13,11 @@ function blankpage_woocommerce_setup() {
         // Clear WordPress theme support cache
         wp_cache_delete('theme_support_woocommerce', 'theme_support');
         
+        // CRITICAL: WooCommerce gallery support - enables PhotoSwipe, FlexSlider, and zoom
+        add_theme_support('wc-product-gallery-zoom');
+        add_theme_support('wc-product-gallery-lightbox');
+        add_theme_support('wc-product-gallery-slider');
+        
         // Disable WooCommerce blocks for cart and checkout
         add_filter('woocommerce_blocks_enable_cart', '__return_false');
         add_filter('woocommerce_blocks_enable_checkout', '__return_false');
