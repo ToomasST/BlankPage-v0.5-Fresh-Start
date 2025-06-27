@@ -4,7 +4,71 @@
 
 ### 🚨 CRITICAL ISSUES
 
+#### Gallery Modern Transitions & Scroll Issues (v0.5.6 - June 27, 2025) ⚡ RECENT FIXES
+
+**Problem:** Gallery image switching lacks professional transitions and scroll behavior is inconsistent across devices
+
+**Symptoms:**
+- Abrupt image switching without smooth transitions
+- Mouse wheel doesn't work for horizontal thumbnail scrolling on desktop
+- Choppy/jumpy scroll behavior on mobile
+- Inconsistent cursor behavior (no pointer indication)
+- Different padding needs between mobile/desktop
+
+**✅ SOLUTIONS IMPLEMENTED:**
+
+**1. Modern Image Transition System:**
+```javascript
+// Alpine.js reactive state for smooth transitions
+x-data="{ 
+    imageLoaded: true 
+}"
+
+// Smooth image switching with delay
+@click="
+    imageLoaded = false; 
+    setTimeout(() => { 
+        active = index; 
+        imageLoaded = true; 
+    }, 150);
+"
+
+// Container-based transitions (entire gallery element)
+:class="imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'"
+class="transition-all duration-500 ease-out"
+```
+
+**2. Smart Scroll Event Handling:**
+```javascript
+// Conditional scroll behavior based on screen size
+@wheel="
+    const el = $refs.scrollContainer;
+    if (window.innerWidth < 1024) {
+        $event.preventDefault();
+        // Smooth horizontal scroll for mobile
+        el.scrollLeft += $event.deltaY * 0.5;
+    }
+    // Desktop: allow native vertical scroll
+"
+```
+
+**3. Responsive Padding & UX:**
+```css
+/* Responsive container padding */
+class="p-4 lg:p-8" /* Mobile: 16px, Desktop: 32px */
+
+/* Interactive cursors for all clickable elements */
+class="cursor-pointer"
+```
+
+**Key Learnings:**
+- **Container vs Image Transitions**: Apply transitions to the entire container (background + border + image) for consistent visual effect
+- **Event Prevention Timing**: Only prevent default scroll events when necessary (mobile horizontal scroll)
+- **Smooth Scroll Physics**: Reduce scroll increment for fluid experience (`deltaY * 0.5`)
+- **Framework Compliance**: Always verify compatibility with latest Tailwind CSS v4.0 and Alpine.js
+
 #### WordPress 6.6.0 Underline Bug ⚡ BREAKING CHANGE
+
 **Problem:** WordPress 6.6.0+ adds unwanted underlines to ALL links via global CSS rule
 ```css
 /* WordPress core rule causing the issue */
@@ -748,3 +812,194 @@ The WooCommerce product gallery was completely broken due to incorrect CSS targe
 - ✅ **Cross-browser**: Compatible with all major browsers
 
 ---
+
+## Progressive Fade Gradient Implementation (v0.5.5)
+
+### 🎯 Problem Statement
+After implementing the working WooCommerce gallery, we needed subtle visual indicators to show when thumbnails could be scrolled up/down. The solution was progressive fade gradients that appear/disappear based on scroll position.
+
+### ✅ Final Working Solution
+
+#### **Technical Implementation:**
+```javascript
+// Alpine.js Data Structure
+x-data="{ 
+    active: 0, 
+    images: [JSON_ARRAY],
+    topOpacity: 0, 
+    bottomOpacity: 0,
+    fadeDistance: 80
+}"
+
+// Scroll Event Handler (NO THROTTLE)
+@scroll="
+    const el = $refs.scrollContainer;
+    const fade = fadeDistance;
+    
+    // Top gradient: 0px = opacity 0, 80px+ = opacity 1
+    topOpacity = Math.min(el.scrollTop / fade, 1);
+    
+    // Bottom gradient: 0px from bottom = opacity 0, 80px+ = opacity 1
+    const scrollBottom = el.scrollTop + el.clientHeight;
+    const distanceFromBottom = el.scrollHeight - scrollBottom;
+    bottomOpacity = el.scrollHeight > el.clientHeight ? Math.min(distanceFromBottom / fade, 1) : 0;
+"
+
+// Progressive Gradient Elements
+:style="{ opacity: topOpacity }"
+:style="{ opacity: bottomOpacity }"
+```
+
+#### **Key Features:**
+- **80px fade zone**: Progressive opacity from 0.0 → 1.0 over 80 pixels
+- **Object style binding**: Alpine.js best practice `{ opacity: value }`
+- **Immediate response**: No throttling for smooth UX
+- **Scrollbar hidden**: `scrollbar-hide` utility for clean look
+- **Dynamic behavior**: Gradients appear/disappear based on scroll proximity
+
+### 🚨 Critical Issue: Alpine.js Throttle Problem
+
+#### **Problem Discovered:**
+Initially implemented with `@scroll.throttle` based on Alpine.js documentation recommendations for performance.
+
+#### **Why Throttle Failed:**
+1. **Alpine.js throttle = "leading edge"** - only fires on FIRST scroll event
+2. **250ms gaps** between scroll events caused laggy/choppy progressive fade
+3. **Progressive fade requires every pixel** to be smooth and responsive
+4. **User experience suffered** - gradients appeared jittery and unresponsive
+
+#### **Alpine.js Documentation vs. Reality:**
+```javascript
+// ❌ RECOMMENDED (but wrong for progressive fade)
+@scroll.throttle="handleScroll" // Fires every 250ms
+
+// ✅ ACTUALLY NEEDED (for smooth progressive fade)  
+@scroll="handleScroll" // Fires on every scroll event
+```
+
+#### **Decision Rationale:**
+- **Simple calculations**: `Math.min(scrollTop / 80, 1)` is extremely lightweight
+- **Modern browsers**: Can handle unthrottled scroll events efficiently
+- **UX priority**: Smooth progressive fade more important than micro-optimizations
+- **Leading edge throttle**: Inappropriate for continuous visual feedback
+
+### 📊 Progressive Fade Logic
+
+#### **Top Gradient Behavior:**
+- **Scroll position 0px**: `opacity = 0` (invisible)
+- **Scroll position 40px**: `opacity = 0.5` (half visible)
+- **Scroll position 80px+**: `opacity = 1.0` (fully visible)
+
+#### **Bottom Gradient Behavior:**
+- **80px+ from bottom**: `opacity = 1.0` (fully visible)
+- **40px from bottom**: `opacity = 0.5` (half visible)  
+- **0px from bottom**: `opacity = 0` (invisible)
+
+### 🔧 Technical Best Practices Applied
+
+1. **Alpine.js Object Style Binding**: 
+   - ✅ `:style="{ opacity: topOpacity }"`
+   - ❌ `:style="'opacity: ' + topOpacity"`
+
+2. **Scope Management**:
+   - All data in parent `x-data` for proper reactivity
+   - No nested `x-data` scopes to avoid conflicts
+
+3. **Initialization**:
+   - `$nextTick()` ensures DOM is ready
+   - Proper initial values for scroll state
+
+4. **Performance Considerations**:
+   - Lightweight math operations only
+   - No DOM manipulation during scroll
+   - CSS transitions handle visual smoothing
+
+### 🎯 Key Lessons Learned
+
+1. **Throttle is not always best practice** - depends on use case
+2. **Progressive UX requires immediate feedback** - no delays acceptable
+3. **Alpine.js leading edge throttle** - inappropriate for continuous animations
+4. **Test scroll performance** - modern browsers handle unthrottled events well
+5. **Debug with console.log** - essential for understanding scroll behavior
+
+### 📋 Files Modified
+
+- `single-product.php`: Progressive fade Alpine.js implementation
+- `utilities.css`: `scrollbar-hide` utility maintained
+- `troubleshoot.md`: Documented throttle issue and solution
+
+### ⚠️ Important Notes
+
+- **DO NOT add throttle back** - breaks smooth progressive fade
+- **80px fade distance** - optimal balance of smoothness and visibility
+- **Object style binding** - Alpine.js v3.x best practice
+- **Hidden scrollbars** - maintains clean visual design
+
+---
+
+## Gallery Modern Transitions & Scroll Issues (v0.5.6 - June 27, 2025) ⚡ RECENT FIXES
+
+**Problem:** Gallery image switching lacks professional transitions and scroll behavior is inconsistent across devices
+
+**Symptoms:**
+- Abrupt image switching without smooth transitions
+- Mouse wheel doesn't work for horizontal thumbnail scrolling on desktop
+- Choppy/jumpy scroll behavior on mobile
+- Inconsistent cursor behavior (no pointer indication)
+- Different padding needs between mobile/desktop
+
+**✅ SOLUTIONS IMPLEMENTED:**
+
+**1. Modern Image Transition System:**
+```javascript
+// Alpine.js reactive state for smooth transitions
+x-data="{ 
+    imageLoaded: true 
+}"
+
+// Smooth image switching with delay
+@click="
+    imageLoaded = false; 
+    setTimeout(() => { 
+        active = index; 
+        imageLoaded = true; 
+    }, 150);
+"
+
+// Container-based transitions (entire gallery element)
+:class="imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'"
+class="transition-all duration-500 ease-out"
+```
+
+**2. Smart Scroll Event Handling:**
+```javascript
+// Conditional scroll behavior based on screen size
+@wheel="
+    const el = $refs.scrollContainer;
+    if (window.innerWidth < 1024) {
+        $event.preventDefault();
+        // Smooth horizontal scroll for mobile
+        el.scrollLeft += $event.deltaY * 0.5;
+    }
+    // Desktop: allow native vertical scroll
+"
+```
+
+**3. Responsive Padding & UX:**
+```css
+/* Responsive container padding */
+class="p-4 lg:p-8" /* Mobile: 16px, Desktop: 32px */
+
+/* Interactive cursors for all clickable elements */
+class="cursor-pointer"
+```
+
+**Key Learnings:**
+- **Container vs Image Transitions**: Apply transitions to the entire container (background + border + image) for consistent visual effect
+- **Event Prevention Timing**: Only prevent default scroll events when necessary (mobile horizontal scroll)
+- **Smooth Scroll Physics**: Reduce scroll increment for fluid experience (`deltaY * 0.5`)
+- **Framework Compliance**: Always verify compatibility with latest Tailwind CSS v4.0 and Alpine.js
+
+#### WordPress 6.6.0 Underline Bug ⚡ BREAKING CHANGE
+
+{{ ... }}

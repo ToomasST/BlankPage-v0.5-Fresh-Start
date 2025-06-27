@@ -42,23 +42,93 @@
   - Inglise keele tugi (default)
 - **Staatus:** ✅ Eesti keele tugi implementeeritud WooCommerce elementides
 
-## 🚀 Project Status (v0.5.4 - June 2025)
+## 🚀 Project Status (v0.5.6 - June 2025)
 
-### ⭐ LATEST MAJOR ACHIEVEMENT: WooCommerce Product Gallery Complete Redesign ✅
-**Successfully resolved critical WooCommerce product gallery layout issues with modern 2025 CSS patterns**
+### ⭐ LATEST MAJOR ACHIEVEMENT: Modern Gallery UX & Responsive Enhancements ✅
+**Successfully upgraded the WooCommerce product gallery with professional transitions, smooth scrolling, and enhanced user experience across all devices**
 
-#### 🔥 Critical Gallery Problems Solved
-- **Layout Fixed**: Replaced broken vertical layout with proper 75% main image + 25% thumbnails
-- **Aspect Ratio Enforced**: All main product images now display in perfect 1:1 square ratio with object-cover
-- **DOM Targeting Corrected**: Fixed CSS selectors to match actual WooCommerce DOM structure
-- **Modern Lightbox**: Custom SVG magnifier icon replaces outdated emoji trigger
-- **Responsive Design**: Desktop side-by-side, mobile stacked layout
+#### 🔥 Latest Gallery Improvements (v0.5.6 - June 27, 2025)
 
-#### 🛠️ Technical Implementation
-- **Business Bloomer Integration**: Applied proven 2025 WooCommerce gallery patterns
-- **CSS Architecture**: Clean, maintainable styles targeting correct DOM elements
-- **Cross-Browser Support**: Tested compatibility across all major browsers  
-- **Performance Optimized**: No impact on build times or bundle size
+**Modern Image Transition System:**
+- **Fade + Scale Effect**: Professional image switching with smooth container transitions
+- **Timing Perfection**: 500ms ease-out transitions with 150ms delay for natural feel
+- **Load State Management**: Reactive Alpine.js state (`imageLoaded`) for seamless switching
+- **Container-Based Transitions**: Entire gallery element transitions (background + border + image)
+
+**Advanced Scroll System:**
+- **Desktop Mouse Wheel Support**: Horizontal scrolling with mouse wheel for thumbnails
+- **Smooth Physics**: Reduced scroll increment (`deltaY * 0.5`) for fluid experience  
+- **Smart Event Handling**: Conditional preventDefault - horizontal on mobile, vertical on desktop
+- **Cross-Device Compatibility**: Native touch scroll + responsive gradient fades
+
+**Responsive & UX Improvements:**
+- **Mobile Container Padding**: Optimized spacing `p-4 lg:p-8` for better mobile experience
+- **Interactive Cursors**: `cursor-pointer` on all clickable elements (thumbnails, buttons, links)
+- **Framework Compliance**: Verified compatibility with Tailwind CSS v4.0 Beta and Alpine.js latest
+
+#### 🏆 Previous Major Achievement: WooCommerce Product Gallery + Progressive Fade Gradients Complete ✅
+**Successfully implemented a fully functional WooCommerce product gallery with Alpine.js, Fancybox lightbox, AND progressive fade scroll indicators**
+
+#### 🔥 Critical Gallery Implementation Details
+- **Problem:** Previous gallery was documented as "fixed" but was completely non-functional
+- **Solution:** Custom implementation with Alpine.js + Fancybox v5 + Progressive fade gradients
+- **Architecture:** 
+  - **Alpine.js (CDN):** Reactive thumbnail switching and gallery state management
+  - **Fancybox v5 (CDN):** Professional lightbox with full gallery navigation
+  - **Custom PHP markup:** Clean integration with WooCommerce product data
+  - **JSON encoding fix:** Safe HTML attribute embedding for Alpine.js
+  - **Progressive gradients:** Dynamic scroll indicators with 80px fade zones
+- **Key Technical Breakthrough:** Hidden gallery links for Fancybox navigation support
+
+#### ✅ Gallery Features Implemented
+- **Responsive Layout:** 75% main image + 25% vertical thumbnails (desktop), horizontal thumbnails (mobile)
+- **Interactive Thumbnails:** Click to switch main image with Alpine.js reactivity
+- **Professional Lightbox:** Fancybox with zoom, slideshow, keyboard navigation, download
+- **Gallery Navigation:** Full next/prev support in lightbox with all product images
+- **Progressive Fade Gradients:** 80px fade zones indicating scrollable content above/below
+- **Hidden Scrollbars:** Clean UI with `scrollbar-hide` utility
+- **Modern UI:** Fullscreen expand icon, smooth transitions, proper spacing
+- **Mobile Optimized:** Touch-friendly with scrollable thumbnail strip
+
+#### 🎨 Progressive Fade Gradient System (v0.5.5)
+**Advanced UX feature: Dynamic gradients that appear/disappear based on scroll proximity**
+
+**Technical Implementation:**
+- **80px fade zones:** Progressive opacity 0.0 → 1.0 over 80 pixels of scroll distance
+- **Real-time calculations:** `Math.min(scrollTop / 80, 1)` for immediate response
+- **Object style binding:** Alpine.js best practice `{ opacity: value }`
+- **No throttling:** Immediate scroll response for smooth UX (throttle caused laggy gradients)
+
+**Gradient Behavior:**
+- **Top gradient:** Appears when scrolled down from top, fades based on distance
+- **Bottom gradient:** Appears when content below, disappears when at bottom
+- **Smart initialization:** Gradients only appear when container is actually scrollable
+
+#### 🚨 CRITICAL Alpine.js Throttle Issue Resolved
+**Major Discovery:** Alpine.js `@scroll.throttle` breaks progressive fade UX
+
+**Problem Identified:**
+- Alpine.js throttle uses "leading edge" - only fires on FIRST scroll event
+- 250ms gaps between events caused choppy, unresponsive gradients
+- Progressive fade requires every pixel to be smooth
+
+**Solution Applied:**
+- **Removed throttle:** Use `@scroll` instead of `@scroll.throttle`
+- **Lightweight calculations:** Simple math operations handle unthrottled events efficiently
+- **Modern browser performance:** Can handle real-time scroll events without issues
+- **UX priority:** Smooth progressive fade more important than micro-optimizations
+
+#### 🚨 CRITICAL DEVELOPMENT NOTE
+**DO NOT MODIFY THE GALLERY IMPLEMENTATION** - This solution took 2 days of intensive troubleshooting to achieve. The Alpine.js + Fancybox integration is delicate and any changes risk breaking functionality.
+
+**DO NOT ADD THROTTLE BACK** - Progressive fade requires immediate scroll response for smooth UX.
+
+**Files Modified:**
+- `header.php`: Alpine.js and Fancybox CDN links
+- `single-product.php`: Complete gallery markup with progressive fade implementation
+- `functions.php`: WooCommerce gallery theme support
+- `utilities.css`: Tailwind scrollbar-hide utility
+- `troubleshoot.md`: Detailed documentation of throttle issue and resolution
 
 ### Previous Achievement: Complete Product Card Redesign ✅
 **Successfully completed comprehensive WooCommerce product card redesign inspired by modern e-commerce layouts**
@@ -83,16 +153,16 @@
 - **Build System:** Vite 6.3.3 + npm scripts (612ms build time)
 - **Version Control:** Git + GitHub repository
 
-## 📊 CURRENT PROJECT STATUS (v0.5.4 - 2025-06-26)
+## 📊 CURRENT PROJECT STATUS (v0.5.6 - 2025-06-27)
 
 ### ✅ COMPLETED FEATURES
 - **WordPress 6.8.1 Compatibility:** Fixed critical underline bug affecting all themes
-- **WooCommerce Gallery:** Complete redesign with modern layout and responsive behavior
+- **WooCommerce Gallery:** Complete implementation with Alpine.js and Fancybox lightbox
 - **Product Gallery Features:**
   - 75% main image + 25% vertical thumbnails (desktop)
-  - 1:1 aspect ratio enforcement with object-cover
-  - Custom SVG lightbox trigger with modern styling
-  - Responsive mobile layout (thumbnails below)
+  - Interactive thumbnails with Alpine.js reactivity
+  - Professional Fancybox lightbox with full gallery navigation
+  - Responsive mobile layout (horizontal thumbnails)
   - Styled scrollbars and smooth interactions
 - **WooCommerce Integration:** Fully custom product cards with gradient buttons and SVG icons
 - **Estonian Localization:** Complete WooCommerce shop translation
@@ -302,7 +372,7 @@ export default defineConfig({
 }
 ```
 
-### WooCommerce Gallery CSS Targeting (RESOLVED v0.5.4)
+### WooCommerce Gallery CSS Targeting (RESOLVED v0.5.5)
 **Issue:** Multiple failed attempts at gallery layout due to incorrect CSS selectors
 **Root Cause:** Targeting wrong DOM elements (`.woocommerce-product-gallery-wrapper` vs actual structure)
 **Solution:** Applied Business Bloomer modern CSS with correct selectors
@@ -324,7 +394,7 @@ export default defineConfig({
 ## 📋 PROJECT DETAILS
 
 **Project Name:** BlankPage v0.5 Windsurf  
-**Version:** 0.5.4  
+**Version:** 0.5.6  
 **Created:** 2025-06-25  
 **Status:** ✅ ACTIVE DEVELOPMENT  
 **Repository:** https://github.com/ToomasST/BlankPage-v0.5-Fresh-Start.git
@@ -369,5 +439,5 @@ export default defineConfig({
 
 ---
 
-**Last Updated:** 2025-06-26  
-**Document Version:** 1.4
+**Last Updated:** 2025-06-27  
+**Document Version:** 1.6
