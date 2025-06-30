@@ -1,16 +1,70 @@
 @import "tailwindcss";
-@import "./theme.css";
-@import "./utilities.css";
-@import "./custom.css" layer(utilities);
-@import "./components/woocommerce.css";
 
+@theme {
+  /* Estonian Brand Colors (OKLCH format for wider gamut) */
+  --color-brand-50: oklch(0.98 0.02 250);
+  --color-brand-100: oklch(0.95 0.05 250);
+  --color-brand-200: oklch(0.9 0.1 250);
+  --color-brand-300: oklch(0.82 0.15 250);
+  --color-brand-400: oklch(0.7 0.18 250);
+  --color-brand-500: oklch(0.55 0.2 250);
+  --color-brand-600: oklch(0.45 0.22 250);
+  --color-brand-700: oklch(0.35 0.2 250);
+  --color-brand-800: oklch(0.25 0.15 250);
+  --color-brand-900: oklch(0.15 0.1 250);
+
+  /* WooCommerce Success/Error Colors */
+  --color-success-50: oklch(0.95 0.05 140);
+  --color-success-500: oklch(0.6 0.15 140);
+  --color-success-600: oklch(0.5 0.18 140);
+  --color-success-700: oklch(0.4 0.2 140);
+
+  --color-error-50: oklch(0.95 0.05 25);
+  --color-error-500: oklch(0.55 0.22 25);
+  --color-error-600: oklch(0.45 0.25 25);
+  --color-error-700: oklch(0.35 0.2 25);
+
+  /* Responsive Breakpoints */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 782px;
+  --breakpoint-lg: 960px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-3xl: 1920px;
+
+  /* Typography Scale */
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* WordPress Integration */
+  --color-primary: var(--wp--preset--color--primary);
+  --color-secondary: var(--wp--preset--color--secondary);
+  --color-dark: var(--wp--preset--color--dark);
+  --color-light: var(--wp--preset--color--light);
+
+  /* Text Sizes (WordPress compatibility) */
+  --text-xs: var(--wp--preset--font-size--xs, 0.75rem);
+  --text-sm: var(--wp--preset--font-size--sm, 0.875rem);
+  --text-base: var(--wp--preset--font-size--base, 1rem);
+  --text-lg: var(--wp--preset--font-size--lg, 1.125rem);
+  --text-xl: var(--wp--preset--font-size--xl, 1.25rem);
+  --text-2xl: var(--wp--preset--font-size--2-xl, 1.5rem);
+  --text-3xl: var(--wp--preset--font-size--3-xl, 1.875rem);
+  --text-4xl: var(--wp--preset--font-size--4-xl, 2.25rem);
+  --text-5xl: var(--wp--preset--font-size--5-xl, 3rem);
+}
+
+/* Content Detection Sources */
 @source '../../vendor/tailpress/framework/**/*.php';
 @source '../../vendor/tailpress/framework/**/**/*.php';
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 2rem;
-}
+/* Import other CSS files with explicit layer assignment */
+@import "./utilities.css"; /* No layer wrapper - contains @utility directives */
+@import "./custom.css" layer(utilities);
+@import "./components/woocommerce.css" layer(components);
+
+/* Note: Custom utilities are defined in utilities.css to avoid conflicts */
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,

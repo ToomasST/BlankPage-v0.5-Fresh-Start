@@ -197,9 +197,20 @@
 - **WordPress:** 6.8.1 + Latest security updates
 - **WooCommerce:** 9.9.5 + Custom templates + Native gallery integration
 - **Theme Framework:** TailPress (modern WordPress development)
-- **CSS Framework:** Tailwind CSS v4.0 + Custom components + Business Bloomer patterns
-- **Build System:** Vite 6.3.3 + npm scripts (612ms build time)
+- **CSS Framework:** Tailwind CSS v4.0 + Oxide Engine + CSS-First Configuration
+- **Build System:** Vite 6.3.3 + @tailwindcss/vite plugin (612ms build time)
 - **Version Control:** Git + GitHub repository
+
+### 🚀 TAILWIND CSS 4.0 REQUIREMENTS (MANDATORY)
+**All new design work must follow Tailwind CSS 4.0 best practices:**
+- ✅ **CSS-First Configuration:** Use `@theme` directive instead of `tailwind.config.js`
+- ✅ **Vite Plugin:** Use `@tailwindcss/vite` for optimal performance
+- ✅ **Modern CSS Features:** Leverage cascade layers, OKLCH colors, container queries
+- ✅ **Dynamic Utilities:** Use built-in dynamic grid-cols-*, data-*, spacing utilities
+- ✅ **No Legacy Syntax:** Avoid `text-opacity-*`, use `text-black/50` instead
+- ✅ **Performance First:** Utilize automatic content detection and CSS variables
+
+**📋 Required Reading:** `juhised/TAILWIND_CSS_4.0_BEST_PRACTICES.md`
 
 ## 📊 CURRENT PROJECT STATUS (v0.5.6 - 2025-06-27)
 
@@ -263,6 +274,15 @@ blankpage-tailpress-theme/
 ```
 
 ## 🚨 KNOWN ISSUES & FIXES
+
+### 🔍 DESIGN AUDIT REQUIRED (v0.5.7+)
+**CRITICAL:** All existing design components need review for Tailwind CSS 4.0 compatibility
+- ⚠️ **WooCommerce Components:** Product cards, buttons, forms may use legacy syntax
+- ⚠️ **Current CSS:** May contain `text-opacity-*`, `flex-grow`, old gradient syntax
+- ⚠️ **Configuration:** `tailwind.config.js` needs conversion to CSS `@theme`
+- ⚠️ **Performance:** Missing v4.0 optimizations (dynamic utilities, container queries)
+
+**Action Required:** Systematic audit of all templates and CSS files before next major release
 
 ### WordPress 6.6.0 Underline Bug
 **Issue:** WordPress core CSS adds unwanted underlines to all links
