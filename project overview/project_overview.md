@@ -42,9 +42,40 @@
   - Inglise keele tugi (default)
 - **Staatus:** ✅ Eesti keele tugi implementeeritud WooCommerce elementides
 
-## 🚀 Project Status (v0.5.6 - June 2025)
+## 🚀 Project Status (v0.5.7 - June 2025)
 
-### ⭐ LATEST MAJOR ACHIEVEMENT: Modern Gallery UX & Responsive Enhancements ✅
+### ⭐ LATEST MAJOR ACHIEVEMENT: Smart Consolidation System ✅
+**Implemented intelligent WordPress/WooCommerce image size consolidation with real-time optimization and accurate savings calculation**
+
+#### 🔥 Smart Consolidation Features (v0.5.7 - June 30, 2025)
+- **Smart Consolidation Detection:** Automatically detects when WordPress and WooCommerce image sizes share identical dimensions
+- **Accurate File Count Display:** Shows both active size count (6) and actual generated file count (4) considering consolidation
+- **Real Savings Calculation:** Percentage reflects actual disk space saved from disabled sizes + smart file sharing
+- **Unified Display Logic:** All UI elements use consistent dimension format (`180xauto` for uncropped, `180x180` for cropped)
+- **Dynamic Statistics:** Updated summary cards show "Genereerituid faile" reflecting true file system state
+- **Enhanced Active Sizes Block:** Displays real dimensions matching admin table logic
+- **Production-Ready Interface:** Removed all debug output for clean professional UI
+
+#### 🧠 Smart Consolidation Logic
+- **Cropped Size Matching:** Exact width AND height must match for consolidation
+- **Uncropped Size Matching:** Only width needs to match (height is 'auto' and varies)
+- **Mixed Crop Matching:** Width-based comparison for different crop settings
+- **Real-Time Updates:** All calculations based on actual WordPress/WooCommerce settings
+- **Performance Optimized:** Reuses table dimension data for consolidation calculations
+
+#### 🛠️ Previous Admin Tool Features (v0.5.7 - June 28, 2025)
+- **Smart Image Size Control:** Custom WordPress admin interface "BlankPage töölaud" in main admin menu
+- **Complete Image Management:** Toggle controls for ALL image sizes including WordPress auto-generated (1536x1536, 2048x2048)
+- **Proper Table Layout:** HTML table structure with headers, aligned columns, and intuitive checkbox positioning
+- **Storage Optimization:** Automatic calculation of space savings (up to 57% storage reduction)
+- **Professional UI:** Minimal business dashboard design with Estonian localization
+- **CSS Architecture:** Separated stylesheets loaded via wp_enqueue_style (no inline CSS)
+- **WooCommerce Integration:** Shows actual dimensions and crop settings from real admin settings
+- **Critical Bug Fixes:** Removed hardcoded size removal - admin checkboxes now properly control ALL image generation
+- **Security Features:** Proper nonce verification, capability checks, input sanitization
+- **WordPress Best Practices:** Complete audit and compliance with official coding standards
+
+### 🎯 PREVIOUS ACHIEVEMENT: Modern Gallery UX & Responsive Enhancements ✅
 **Successfully upgraded the WooCommerce product gallery with professional transitions, smooth scrolling, and enhanced user experience across all devices**
 
 #### 🔥 Latest Gallery Improvements (v0.5.6 - June 27, 2025)
@@ -439,5 +470,49 @@ export default defineConfig({
 
 ---
 
-**Last Updated:** 2025-06-27  
-**Document Version:** 1.6
+## 🔧 DEVELOPMENT WORKFLOW & TOOLS
+
+### 📦 Build Process
+**Primary Build Tool: Vite + TailPress Framework**
+
+#### Development Commands
+```bash
+# Development mode with hot reload
+npm run dev
+
+# Production build
+npm run build
+
+# Watch mode for development
+npm run watch
+```
+
+### 🚀 Deployment Workflow
+**Primary Deployment: deploy.bat Script**
+
+#### deploy.bat Functionality
+- Executes `npm run build` for production assets
+- Vite compiles Tailwind CSS and processes all assets
+- Built files output to `dist/` directory
+- WordPress automatically serves optimized assets
+- Test at http://localhost/wordpress/
+
+### 🔍 Code Quality Tools
+- **ESLint:** JavaScript linting with WordPress standards
+- **Prettier:** Code formatting for JS, CSS, PHP
+- **Husky + lint-staged:** Pre-commit hooks for quality checks
+
+### 📋 Git Workflow
+- **Repository:** https://github.com/ToomasST/BlankPage-v0.5-Fresh-Start.git
+- **Main Branch:** `main` (production-ready)
+- **Feature Branches:** `feature/description`
+
+### 🧪 Testing Environment
+- **XAMPP:** Apache + MySQL 8.0+ + PHP 8.2.12
+- **WordPress:** 6.8.1 + WooCommerce 9.9.5
+- **URLs:** http://localhost/wordpress/ (home), /pood/ (shop), /wp-admin/ (admin)
+
+---
+
+**Last Updated:** 2025-06-30  
+**Document Version:** 1.7

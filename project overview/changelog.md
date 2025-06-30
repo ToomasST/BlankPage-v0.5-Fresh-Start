@@ -4,6 +4,117 @@
 
 ---
 
+## [0.5.7] - 2025-06-30 (Windsurf AI Session) 🔥
+
+### Smart Consolidation System & Image Optimization
+**Release Date:** 2025-06-30  
+**Focus:** Intelligent Image Size Consolidation, Real Savings Calculation, Production-Ready UI
+
+### 🧠 BREAKTHROUGH: Smart Consolidation Detection ✅
+**Revolutionary feature that detects when WordPress and WooCommerce sizes share identical dimensions**
+
+- **Smart File Sharing Detection**: Automatically identifies when WP and WC sizes generate the same physical file
+- **Accurate File Count**: Shows both active size count (6) and actual generated files (4) considering consolidation
+- **Real Savings Calculation**: Percentage reflects true disk space saved from disabled sizes + smart consolidation
+- **Unified Display Logic**: All UI elements use consistent `180xauto` vs `180x180` format matching table logic
+- **Dynamic Statistics**: Summary cards show "Genereerituid faile" reflecting true file system state
+- **Production Interface**: Removed all debug output for clean professional experience
+
+#### Smart Consolidation Logic Implementation
+- **Cropped Size Matching**: Exact width AND height comparison for consolidation
+- **Uncropped Size Matching**: Width-only comparison (height varies, shows as 'auto')
+- **Mixed Crop Handling**: Intelligent width-based comparison for different crop settings
+- **Performance Optimized**: Reuses table dimension data for all consolidation calculations
+- **Real-Time Updates**: All statistics based on actual WordPress/WooCommerce settings
+
+### 🛠️ Previous Admin Tool Foundation (2025-06-28)
+**Release Date:** 2025-06-28  
+**Focus:** WordPress Image Management, Performance Optimization, Admin UX
+
+### 🚀 New Features & Major Improvements
+
+#### Professional WordPress Admin Tool ✅
+- **Custom Admin Page**: "BlankPage töölaud" in main WordPress admin menu
+- **HTML Table Layout**: Proper table structure with headers, aligned columns, and intuitive checkbox positioning
+- **Image Size Management**: Real-time toggle controls for ALL WordPress/WooCommerce image sizes (including 1536x1536, 2048x2048)
+- **Live Statistics**: Dynamic calculation of active sizes, storage savings (up to 57%)
+- **Estonian Localization**: Complete UI translation with professional business terminology
+- **Minimal Dashboard UI**: Clean, modern design matching business application standards
+- **Proper CSS Architecture**: Separated CSS file loaded via wp_enqueue_style (no inline styles)
+- **Smart WooCommerce Integration**: Shows actual dimensions and crop settings from real WooCommerce admin settings
+
+#### Core Image Optimization Engine ✅
+- **Duplicate Function Resolution**: Fixed conflicting hardcoded vs. admin-controlled image size logic
+- **Dynamic Size Control**: Admin settings now properly control `intermediate_image_sizes_advanced` filter
+- **Smart Defaults**: Automatic disabling of unused `woocommerce_gallery_thumbnail` size
+- **WordPress Integration**: Proper hooks (`init`, `admin_menu`, `admin_init`) and capability checks
+
+#### Security & Best Practices ✅
+- **Nonce Verification**: Proper CSRF protection with descriptive error messages
+- **Input Sanitization**: `sanitize_text_field()` validation and whitelist checking
+- **Capability Checks**: `manage_options` permission enforcement
+- **Error Handling**: Comprehensive success/failure feedback with Estonian messages
+- **Data Validation**: Type checking and array validation for all user inputs
+
+#### User Experience Enhancements ✅
+- **Real-time Feedback**: Instant visual updates when toggling image size settings
+- **Storage Calculations**: Live percentage display of space savings
+- **Active Size Display**: Monospace list of currently enabled image dimensions
+- **Professional Layout**: Card-based statistics with clean typography and spacing
+- **Responsive Design**: 20px padding wrapper for optimal viewing experience
+
+### 🐛 Critical Bug Fixes
+
+#### Image Size Generation Issues ✅
+- **Fixed Hardcoded Logic**: Removed `blankpage_cleanup_intermediate_image_sizes()` function that ignored admin settings
+- **Admin Tool Integration**: Ensured settings from admin interface actually control image generation
+- **Critical Auto-Size Bug**: Fixed hardcoded removal of 1536x1536 and 2048x2048 sizes - admin checkboxes now properly control these
+- **Duplicate Code Removal**: Eliminated conflicting functions and duplicate summary sections
+- **PHP Syntax Errors**: Fixed HTML comments appearing in PHP blocks
+- **WooCommerce Thumbnail Display**: Fixed height display for uncropped images (now shows 'auto' instead of incorrect fixed height)
+
+#### Admin Interface Polish ✅
+- **Layout Optimization**: Proper sectioning with statistics → active sizes → table → submit button
+- **Container Structure**: Removed unnecessary wrapper containers while maintaining visual hierarchy
+- **Submit Button Design**: Restored white container styling for clear action distinction
+- **Code Organization**: Separated concerns between display logic and form processing
+
+### 🔧 Technical Improvements
+
+#### WordPress Standards Compliance ✅
+- **Hook Usage**: Proper `add_action()` and `add_filter()` implementation
+- **Option Management**: Secure `get_option()` and `update_option()` usage
+- **Admin Pages**: Following WordPress admin page creation best practices
+- **Internationalization**: Prepared for `__()` function implementation
+
+#### Performance Optimizations ✅
+- **Image Size Reduction**: Up to 57% storage savings through selective size generation
+- **Cache-Friendly**: Admin settings stored in WordPress options table
+- **Efficient Queries**: Minimal database calls with proper option caching
+- **Clean Code**: Removed redundant functions and duplicate processing logic
+
+### 📋 Testing & Validation
+
+#### Functionality Testing ✅
+- **Admin Tool**: Verified toggle controls affect actual image generation
+- **Storage Savings**: Confirmed percentage calculations and live updates
+- **Error Handling**: Tested nonce failures, permission issues, and invalid inputs
+- **UI/UX**: Validated Estonian translations and responsive layout
+
+### 🎯 Developer Notes
+
+#### Key Technical Decisions
+- **Minimal UI Design**: Business dashboard aesthetic over colorful/playful designs
+- **Estonian-First**: Complete localization for target market
+- **Security-First**: Multiple validation layers and proper WordPress security practices
+- **Performance-First**: Aggressive image size optimization while maintaining functionality
+
+#### Files Modified
+- `functions.php`: Image size logic, admin tool implementation, form processing
+- Project documentation: Updated overview, changelog, and troubleshooting guides
+
+---
+
 ## [0.5.6] - 2025-06-27 (Evening Session)
 
 ### WooCommerce Gallery - UX & Responsive Enhancements

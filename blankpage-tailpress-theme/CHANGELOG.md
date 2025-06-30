@@ -2,6 +2,28 @@
 
 All notable changes to TailPress will be documented in this file.
 
+## BlankPage v0.5.7 - 2025-06-30
+
+### Added - WooCommerce Image Size Smart Consolidation
+- **Smart Consolidation Detection**: Admin tool now detects when WordPress and WooCommerce image sizes share identical dimensions
+- **Accurate File Count**: Shows both active size count and actual generated file count (considering consolidation)
+- **Unified Display Logic**: All UI elements now use consistent dimension display (e.g., `180xauto` for uncropped images)
+- **Real Savings Calculation**: Percentage reflects actual disk space saved from disabled sizes + smart consolidation
+- **Enhanced Statistics**: Updated summary cards to show "Genereerituid faile" instead of misleading metrics
+
+### Fixed - Image Size Admin Tool
+- Fixed active sizes block to match table display logic (`180xauto` vs `180x180`)
+- Fixed consolidation logic to properly detect uncropped size matches (width-only comparison)
+- Fixed summary statistics to account for smart file sharing between WP and WC sizes
+- Improved dimension comparison accuracy using table rendering logic
+- Removed debug output for production-ready interface
+
+### Technical Implementation
+- Implemented dimension collection during table rendering for accurate comparisons
+- Added smart matching logic for cropped vs uncropped image size consolidation
+- Enhanced admin tool UI with consistent display formatting across all blocks
+- Optimized calculation performance by reusing table dimension data
+
 ## Unreleased
 
 ## 5.0.0

@@ -26,11 +26,16 @@ xcopy "woocommerce" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailp
 echo PHP files copied!
 echo.
 
-echo [4/4] Copying theme assets...
+echo [4/5] Copying theme assets...
 xcopy "style.css" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\" /Y
 xcopy "theme.json" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\" /Y 2>nul
 xcopy "screenshot.png" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\" /Y 2>nul
 echo Theme assets copied!
+echo.
+
+echo [5/5] Copying resources folder...
+xcopy "resources" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\resources" /E /Y /I
+echo Resources folder copied!
 echo.
 
 echo ========================================

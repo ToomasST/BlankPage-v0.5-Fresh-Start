@@ -1,0 +1,491 @@
+/* BlankPage Admin Image Tool Styles */
+
+.blankpage-admin-wrap {
+  max-width: 1200px;
+  background: #fafafa;
+  margin: 0 -20px;
+  padding: 20px;
+}
+
+.blankpage-admin-header {
+  background: white;
+  padding: 32px 40px;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+}
+
+.blankpage-admin-title {
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.blankpage-admin-description {
+  color: #64748b;
+  font-size: 14px;
+  margin: 24px 0 0 0;
+  line-height: 1.5;
+}
+
+.blankpage-admin-stats {
+  padding: 24px 20px;
+  background: #fafafa;
+}
+
+.blankpage-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.blankpage-stat-card {
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.blankpage-stat-label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.blankpage-stat-value {
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.blankpage-active-sizes-block {
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.blankpage-active-sizes-display {
+  background: #f8fafc;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.blankpage-active-sizes-text {
+  color: #1a1a1a;
+  font-family: ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.blankpage-settings-table {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.blankpage-table-header {
+  background: #f8f9fa;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.blankpage-table-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.blankpage-table-content {
+  padding: 0;
+}
+
+.blankpage-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.blankpage-th {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.blankpage-th:last-child {
+  text-align: center;
+}
+
+.blankpage-tr:hover {
+  background-color: #f8f9fa;
+}
+
+.blankpage-td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+
+.blankpage-td-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.blankpage-td-mono {
+  font-family: "Courier New", Consolas, monospace;
+  color: #666;
+  font-size: 13px;
+}
+
+.blankpage-size-name {
+  font-family: "Courier New", Consolas, monospace;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.blankpage-size-description {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.blankpage-crop-note {
+  font-size: 11px;
+  color: #888;
+}
+
+.blankpage-usage {
+  font-size: 13px;
+  color: #555;
+}
+
+.blankpage-error {
+  text-align: center;
+  color: #e74c3c;
+  font-style: italic;
+  padding: 20px;
+}
+
+.blankpage-status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.blankpage-status-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.blankpage-status-disabled {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+/* Cleanup Section */
+.blankpage-cleanup-section {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.blankpage-cleanup-header {
+  margin-bottom: 20px;
+}
+
+.blankpage-cleanup-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.blankpage-cleanup-description {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.blankpage-cleanup-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.blankpage-cleanup-stat-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+}
+
+.blankpage-stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 4px;
+  font-family: "Courier New", monospace;
+}
+
+.blankpage-stat-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.blankpage-cleanup-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.blankpage-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.blankpage-button-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.blankpage-button-secondary:hover {
+  background: #5a6268;
+}
+
+.blankpage-button-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.blankpage-button-danger:hover {
+  background: #c82333;
+}
+
+.blankpage-button:disabled {
+  background: #e9ecef !important;
+  color: #6c757d !important;
+  cursor: not-allowed;
+}
+
+.blankpage-cleanup-progress {
+  margin-bottom: 20px;
+}
+
+/* Variants selection */
+.blankpage-variants-selection {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.blankpage-variants-selection h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.blankpage-selection-hint {
+  margin: 0 0 15px 0;
+  color: #666;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.blankpage-variants-table {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.blankpage-variant-header,
+.blankpage-variant-row {
+  display: grid;
+  grid-template-columns: 60px 50px 80px 1fr 80px 80px;
+  gap: 10px;
+  padding: 8px 12px;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.blankpage-variant-header {
+  background: #f5f5f5;
+  font-weight: 600;
+  font-size: 12px;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.blankpage-variant-row:last-child {
+  border-bottom: none;
+}
+
+.blankpage-variant-row:hover {
+  background: #f9f9f9;
+}
+
+.variant-checkbox-col {
+  text-align: center;
+}
+
+.variant-status {
+  text-align: center;
+  font-size: 16px;
+}
+
+.variant-dimensions {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: #0073aa;
+  font-weight: 600;
+}
+
+.variant-description {
+  font-size: 13px;
+  color: #333;
+}
+
+.variant-count,
+.variant-size {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+}
+
+.no-delete {
+  color: #999;
+  font-size: 14px;
+}
+
+.blankpage-selection-summary {
+  background: #e8f4f8;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #0073aa;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Progress bar */
+.blankpage-progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.blankpage-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0073aa, #005177);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Log display */
+.blankpage-cleanup-log {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #333;
+  white-space: pre-wrap;
+}
+
+.blankpage-log-content {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Submit Button Container */
+.blankpage-submit-container {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.blankpage-submit-button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.blankpage-submit-button:hover {
+  background: #1d4ed8;
+}
+
+/* Error and Success Messages */
+.blankpage-notice {
+  margin: 20px 0;
+  padding: 16px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.blankpage-notice-success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.blankpage-notice-error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.blankpage-highlight {
+  color: #1a1a1a;
+  font-weight: 600;
+}

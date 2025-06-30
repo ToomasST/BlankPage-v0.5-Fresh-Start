@@ -4,7 +4,147 @@
 
 ### 🚨 CRITICAL ISSUES
 
-#### Gallery Modern Transitions & Scroll Issues (v0.5.6 - June 27, 2025) ⚡ RECENT FIXES
+#### Smart Consolidation Detection Issues (v0.5.7 - June 30, 2025) 🧠 BREAKTHROUGH FIXES
+
+**Problem:** Smart consolidation logic wasn't properly detecting when WordPress and WooCommerce image sizes share identical dimensions, causing inaccurate file count and savings calculations
+
+**Symptoms:**
+- Admin tool showed 6 active sizes but should show 4 actual generated files
+- Savings percentage calculation ignored consolidation benefits
+- Dimension comparison failed even when WP/WC sizes were identical (e.g., 180x180)
+- "Aktiivsed suurused" block showed raw dimensions instead of user-friendly format
+- Summary blocks inconsistent with table display logic
+
+**✅ SOLUTIONS IMPLEMENTED:**
+
+**1. Fixed Smart Consolidation Logic:**
+```php
+// ❌ PROBLEMATIC: String comparison of raw option values
+$wp_width = get_option('medium_size_w');
+$wc_width = get_option('woocommerce_single_image_width');
+if ($wp_width === $wc_width) { /* Failed due to type mismatch */ }
+
+// ✅ SOLUTION: Use parsed table dimension data
+$consolidation_savings = 0;
+foreach ($table_data as $size_data) {
+    if ($size_data['wp_display'] === $size_data['wc_display']) {
+        $consolidation_savings++; // Proper matching logic
+    }
+}
+```
+
+**2. Unified Display Logic:**
+```php
+// ✅ Consistent dimension display everywhere
+function format_dimension_display($width, $height, $crop) {
+    if (!$crop || $height == 0) {
+        return $width . 'xauto'; // Uncropped or auto-height
+    }
+    return $width . 'x' . $height; // Fixed dimensions
+}
+```
+
+**3. Fixed Summary Block Accuracy:**
+```php
+// ✅ Summary shows actual generated file count
+$active_count = count(array_filter($image_sizes, fn($size) => $size['enabled']));
+$generated_files = $active_count - $consolidation_savings;
+echo sprintf(__('Genereerituid faile: %d (konsolideerimisega %d vähem)', 'textdomain'), 
+    $generated_files, $consolidation_savings);
+```
+
+**Root Cause Analysis:**
+- Original logic compared raw WordPress option values vs processed display strings
+- Different data types (integers vs strings) caused comparison failures
+- Summary blocks used separate logic instead of reusing table data
+- No consideration for crop settings affecting dimension matching
+
+**Prevention:** Always use the same dimension processing logic across all UI components
+
+---
+
+#### Image Size Optimization Admin Tool Issues (v0.5.7 - June 28, 2025) ⚡ FOUNDATION FIXES
+
+**Problem:** WordPress admin tool for image size management had multiple critical issues affecting functionality and user experience
+
+**Symptoms:**
+- Admin tool settings didn't actually control image size generation
+- Duplicate/conflicting functions in functions.php ignored admin settings
+- UI had duplicate summary sections and layout issues
+- PHP syntax errors preventing proper functionality
+- Settings not updating after save (possible cache issues)
+- Hardcoded summary content not reflecting real user settings
+
+**✅ SOLUTIONS IMPLEMENTED:**
+
+**1. Fixed Duplicate Function Logic:**
+```php
+// ❌ PROBLEMATIC: Hardcoded function ignoring admin settings
+function blankpage_cleanup_intermediate_image_sizes($sizes) {
+    // Hardcoded list that ignores admin tool settings
+    $disabled_sizes = ['woocommerce_gallery_thumbnail', '1536x1536', '2048x2048'];
+    // ...
+}
+
+// ✅ SOLUTION: Dynamic function respecting admin settings
+function blankpage_cleanup_intermediate_image_sizes($sizes) {
+    $disabled_sizes = get_option('blankpage_disabled_image_sizes', []);
+    // Now properly reads admin tool settings
+    // ...
+}
+```
+
+**2. Security & Validation Improvements:**
+```php
+// ✅ Proper nonce verification
+if (!wp_verify_nonce($_POST['blankpage_image_settings_nonce'], 'blankpage_image_settings')) {
+    wp_die(__('Turvalisuse kontroll ebaõnnestus. Palun proovige uuesti.', 'textdomain'));
+}
+
+// ✅ Capability checking
+if (!current_user_can('manage_options')) {
+    wp_die(__('Teil pole piisavalt õigusi selle toimingu teostamiseks.', 'textdomain'));
+}
+
+// ✅ Input sanitization with whitelist validation
+$valid_sizes = ['thumbnail', 'medium', 'medium_large', 'large', 'woocommerce_thumbnail', 'woocommerce_single'];
+foreach ($disabled_sizes as $size) {
+    $clean_size = sanitize_text_field($size);
+    if (in_array($clean_size, $valid_sizes)) {
+        $sanitized_disabled_sizes[] = $clean_size;
+    }
+}
+```
+
+**3. UI Layout & Design Fixes:**
+```php
+// ✅ Removed duplicate summary sections
+// ✅ Fixed container structure: stats → active sizes → table → submit
+// ✅ Restored white submit button container
+// ✅ Added proper Estonian translations
+// ✅ Implemented minimal business dashboard design
+```
+
+**4. Dynamic Settings Display:**
+```php
+// ✅ Real-time WordPress/WooCommerce option reading
+$width = get_option('woocommerce_thumbnail_width');
+$height = get_option('woocommerce_thumbnail_height');
+$crop_status = get_option('woocommerce_thumbnail_cropping');
+
+// ✅ Live storage savings calculation
+$total_sizes = 7; // All possible sizes
+$disabled_count = count($disabled_sizes);
+$savings_percentage = round(($disabled_count / $total_sizes) * 100);
+```
+
+**Key Technical Insights:**
+- WordPress image size hooks must be properly integrated: `init`, `intermediate_image_sizes_advanced`
+- Admin tool settings must use correct option names (e.g., `woocommerce_single_image_width`)
+- Conflicting functions can silently override admin settings - always audit for duplicates
+- PHP syntax errors from HTML comments in PHP blocks break entire functionality
+
+#### Gallery Modern Transitions & Scroll Issues (v0.5.6 - June 27, 2025) ⚡ PREVIOUS FIXES
 
 **Problem:** Gallery image switching lacks professional transitions and scroll behavior is inconsistent across devices
 

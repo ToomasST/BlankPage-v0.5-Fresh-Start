@@ -43,15 +43,22 @@ get_header('shop'); ?>
                         $gallery_ids = $product->get_gallery_image_ids();
                         array_unshift($gallery_ids, $main_id); // pane põhifoto esimeseks
                         
-                        // SAFE JSON encoding for HTML attributes
-                        $image_urls = array_map('wp_get_attachment_url', $gallery_ids);
-                        $json_data = htmlspecialchars(json_encode($image_urls), ENT_QUOTES, 'UTF-8');
+                        // Display images: woocommerce_single size for performance
+                        $display_image_urls = array_map(function($id) {
+                            return wp_get_attachment_image_url($id, 'woocommerce_single');
+                        }, $gallery_ids);
+                        $display_json_data = htmlspecialchars(json_encode($display_image_urls), ENT_QUOTES, 'UTF-8');
+                        
+                        // Lightbox images: full size for quality
+                        $lightbox_image_urls = array_map('wp_get_attachment_url', $gallery_ids);
+                        $lightbox_json_data = htmlspecialchars(json_encode($lightbox_image_urls), ENT_QUOTES, 'UTF-8');
                         ?>
                         
                         <div
                             x-data="{ 
                                 active: 0, 
-                                images: <?php echo $json_data; ?>,
+                                displayImages: <?php echo $display_json_data; ?>,
+                                lightboxImages: <?php echo $lightbox_json_data; ?>,
                                 topOpacity: 0, 
                                 bottomOpacity: 0,
                                 leftOpacity: 0,
@@ -178,14 +185,13 @@ get_header('shop'); ?>
                             <div class="relative flex-1 aspect-square order-1 lg:order-2">
                                 <!-- Fancybox Gallery - Main Visible Image -->
                                 <a
-                                    :href="images[active]"                      
-                                    class="block w-full h-full rounded-lg overflow-hidden bg-gray-50 border border-gray-200 transition-all duration-500 ease-out"
+                                    href="#"
+                                    @click.prevent="document.querySelectorAll('[data-fancybox=product-gallery]')[active].click()"
+                                    class="block w-full h-full rounded-lg overflow-hidden bg-gray-50 border border-gray-200 transition-all duration-500 ease-out cursor-pointer"
                                     :class="imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'"
-                                    data-fancybox="product-gallery"
-                                    :data-caption="'Product image ' + (active + 1)"
                                 >
                                     <img
-                                        :src="images[active]"
+                                        :src="displayImages[active]"
                                         :alt="'Product image'"
                                         class="w-full h-full object-contain"
                                         loading="lazy"
@@ -206,6 +212,7 @@ get_header('shop'); ?>
                                         <a
                                             href="<?php echo wp_get_attachment_url($id); ?>"
                                             data-fancybox="product-gallery"
+                                            data-index="<?php echo $index; ?>"
                                             data-caption="Product image <?php echo $index + 1; ?>"
                                         ></a>
                                     <?php endforeach; ?>
@@ -375,7 +382,7 @@ get_header('shop'); ?>
                                             value="<?php echo esc_attr($product->get_id()); ?>" 
                                             class="flex-1 flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline whitespace-nowrap cursor-pointer">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 flex-shrink-0">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12 1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                         </svg>
                                         Lisa korvi
                                     </button>
@@ -385,7 +392,7 @@ get_header('shop'); ?>
                                             onclick="buyNow(this)"
                                             class="flex-1 flex items-center justify-center bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline whitespace-nowrap cursor-pointer">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 flex-shrink-0">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 4.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                         </svg>
                                         Osta kohe
                                     </button>
