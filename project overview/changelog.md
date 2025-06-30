@@ -4,6 +4,109 @@
 
 ---
 
+## [0.5.8] - 2025-06-30 (Windsurf AI Session) 🛍️
+
+### WooCommerce Product Info Section Complete
+**Release Date:** 2025-06-30  
+**Focus:** Product Details Layout, Custom Fields Display, Professional Frontend UX
+
+### 🛍️ MILESTONE: Product Info Section Implementation ✅
+**Complete redesign and implementation of WooCommerce single product page upper section**
+
+#### Product Layout Structure (Upper Section Only)
+- **Product Title & Rating**: Clean typography with star ratings
+- **Short Description**: Optimized line-height (`leading-normal`) for better readability
+- **Price Display**: WooCommerce native pricing with proper formatting
+- **Delivery Time**: Custom field display (`Tarneaeg: X-Y tööpäeva`) before action buttons
+- **Stock Availability**: Smart quantity display ("5+ tk" if >5, exact number if ≤5)
+- **Quantity Input**: Custom +/- buttons with native WooCommerce integration
+- **Action Buttons**: "Lisa korvi" + "Osta kohe" with gradient designs and SVG icons
+- **Product Meta**: SKU and EAN in justified layout (left/right alignment)
+- **Categories**: Product taxonomy display
+
+#### Visual Enhancements ✅
+- **Separator Lines**: Professional visual separation between sections
+- **Justified Layout**: SKU (left) ↔ EAN (right) for balanced appearance
+- **Consistent Spacing**: Perfect padding and margins throughout
+- **Responsive Design**: Flexible layout adapting to screen sizes
+- **Professional Typography**: Font weights and colors matching brand
+
+### 🔧 TECHNICAL IMPLEMENTATION
+
+#### Custom Fields Integration (Programmatic Approach) ✅
+**Native WordPress implementation without ACF plugin dependency**
+
+##### Meta Box Groups Implemented:
+1. **Ladu & Tarnimine (Warehouse & Delivery)**
+   - `_blankpage_tarnija` (Supplier - text)
+   - `_blankpage_laoseis_tarnija` (Supplier stock - number)
+   - `_blankpage_laoseis_rr` (RR warehouse stock - number)
+   - `_blankpage_tarneaeg_min/max` (Delivery time range - numbers)
+
+2. **Toote Seosed (Product Relations)**
+   - `_blankpage_variatsiooni_sku` (Variation SKU - comma-separated)
+   - `_blankpage_kokkusobivad_tooted` (Compatible products - comma-separated)
+
+3. **Müük (Sales)**
+   - `_blankpage_muuakse_kaupa` (Sales quantity increment - number)
+   - `_blankpage_eeldatav_saabumine` (Expected arrival - text)
+
+4. **Meedia (Media)**
+   - `_blankpage_youtube_lingid` (YouTube links - comma-separated)
+
+5. **SEO**
+   - `_blankpage_keyword` (SEO keyword - text)
+   - `_blankpage_seo_title` (SEO title - text)
+   - `_blankpage_meta_description` (Meta description - text)
+
+#### Frontend Display Implementation ✅
+- **Delivery Time Display**: Shows "Tarneaeg: min-max tööpäeva" before action buttons
+- **Stock Status Integration**: WooCommerce native stock display with Estonian localization
+- **Smart Quantity Display**: Intelligent stock quantity presentation
+- **EAN Code Display**: Uses project-specific `_global_unique_id` meta key
+
+### 🔍 CRITICAL DISCOVERY: EAN Meta Key ✅
+**Project-specific WooCommerce EAN implementation identified**
+
+- **Correct Meta Key**: `_global_unique_id` (not standard `_wc_gtin`)
+- **Implementation**: `get_post_meta($product_id, '_global_unique_id', true)`
+- **Usage**: Product display, future schema markup, CSV import/export
+- **Lesson**: Always verify meta keys in actual system vs documentation
+
+### 🎨 UI/UX ENHANCEMENTS
+
+#### Professional Product Page Design ✅
+- **Clean Visual Hierarchy**: Logical information flow for purchasing decisions
+- **Action-Oriented Layout**: Quantity and buttons prominently placed
+- **Information Architecture**: Product details → Pricing → Actions → Meta
+- **Visual Separation**: Strategic use of separator lines for content grouping
+- **Responsive Behavior**: Adapts beautifully across all device sizes
+
+#### Estonian Localization ✅
+ - **Stock Status**: "Saadaval", "Järeltellimisel", "Laost otsas"
+ - **Interface Labels**: "Kogus", "Lisa korvi", "Osta kohe", "Tootekood", "EAN", "Kategooriad"
+ - **Delivery Terms**: "tööpäeva" for business days
+ - **Smart Quantities**: "tk" suffix for item count
+
+### ⚠️ IMPORTANT SCOPE NOTE
+**This release completes ONLY the upper product info section. The following major components remain to be implemented:**
+- ❌ **Product Tabs** (Description, Additional Info, Reviews)
+- ❌ **Related Products Section**
+- ❌ **YouTube Video Display**
+- ❌ **Schema Markup Implementation**
+- ❌ **Product Reviews System**
+- ❌ **Cross-sells/Up-sells**
+- ❌ **Advanced Product Variations**
+
+### 🚀 Next Development Priorities
+1. **Product Tabs Implementation** - Description, Additional Info, Reviews
+2. **Related Products Section** - Cross-sells and recommendations
+3. **YouTube Video Integration** - Display custom video links
+4. **Schema Markup** - Structured data for SEO
+5. **Review System Enhancement** - Custom review display
+
+---
+
 ## [0.5.7] - 2025-06-30 (Windsurf AI Session) 🔥
 
 ### Smart Consolidation System & Image Optimization
@@ -26,6 +129,23 @@
 - **Mixed Crop Handling**: Intelligent width-based comparison for different crop settings
 - **Performance Optimized**: Reuses table dimension data for all consolidation calculations
 - **Real-Time Updates**: All statistics based on actual WordPress/WooCommerce settings
+
+### 🏧 ARCHITECTURAL DECISION: Programmatic Custom Fields ✅
+**Strategic choice to use native WordPress custom fields instead of ACF plugin**
+
+- **Performance Benefits**: ~200KB reduction by avoiding ACF plugin overhead
+- **Security Advantages**: Full control, no third-party dependencies, avoids ACF/WordPress.org conflicts
+- **Integration**: Perfect fit with TailPress theme architecture and Tailwind CSS styling
+- **Implementation**: Native WordPress `meta_box` API and `wp_postmeta` for all custom field requirements
+- **Maintenance**: Zero plugin dependencies, no update conflicts, version control friendly
+- **Scope**: Optimal for project's small custom field requirements (SEO, meta data)
+
+#### Juhised Adaptation Rule
+All guide steps mentioning ACF are implemented programmatically:
+- ACF plugin install → add_meta_box() API  
+- ACF field groups → Custom meta boxes with Tailwind CSS styling
+- get_field() → get_post_meta() with custom validation
+- ACF JSON export → Version control in functions.php
 
 ### 🛠️ Previous Admin Tool Foundation (2025-06-28)
 **Release Date:** 2025-06-28  

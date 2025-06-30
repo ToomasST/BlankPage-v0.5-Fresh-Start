@@ -1716,3 +1716,434 @@ function blankpage_image_admin_page() {
         error_log('BlankPage Admin Tool: Critical error - ' . $e->getMessage());
     }
 }
+
+/**
+ * ====================================================================
+ * WOOCOMMERCE PRODUCT CUSTOM FIELDS
+ * Programmatic implementation using native WordPress meta_box API
+ * ====================================================================
+ */
+
+/**
+ * Add custom meta boxes to WooCommerce product edit page
+ */
+function blankpage_add_product_meta_boxes() {
+    // Group 1: Ladu & Tarnimine (Warehouse & Delivery)
+    add_meta_box(
+        'blankpage_warehouse_delivery',
+        'Ladu & Tarnimine',
+        'blankpage_warehouse_delivery_callback',
+        'product',
+        'normal',
+        'high'
+    );
+    
+    // Group 2: Toote Seosed (Product Relations)
+    add_meta_box(
+        'blankpage_product_relations',
+        'Toote Seosed',
+        'blankpage_product_relations_callback',
+        'product',
+        'normal',
+        'high'
+    );
+    
+    // Group 3: Müük (Sales)
+    add_meta_box(
+        'blankpage_sales',
+        'Müük',
+        'blankpage_sales_callback',
+        'product',
+        'normal',
+        'high'
+    );
+    
+    // Group 4: Meedia (Media)
+    add_meta_box(
+        'blankpage_media',
+        'Meedia',
+        'blankpage_media_callback',
+        'product',
+        'normal',
+        'high'
+    );
+    
+    // Group 5: SEO
+    add_meta_box(
+        'blankpage_seo',
+        'SEO',
+        'blankpage_seo_callback',
+        'product',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'blankpage_add_product_meta_boxes');
+
+/**
+ * Callback for Warehouse & Delivery meta box
+ */
+function blankpage_warehouse_delivery_callback($post) {
+    wp_nonce_field('blankpage_product_meta_nonce', 'blankpage_product_meta_nonce');
+    
+    // Get current values
+    $tarnija = get_post_meta($post->ID, '_blankpage_tarnija', true);
+    $laoseis_tarnija = get_post_meta($post->ID, '_blankpage_laoseis_tarnija', true);
+    $laoseis_rr = get_post_meta($post->ID, '_blankpage_laoseis_rr', true);
+    $tarneaeg_min = get_post_meta($post->ID, '_blankpage_tarneaeg_min', true);
+    $tarneaeg_max = get_post_meta($post->ID, '_blankpage_tarneaeg_max', true);
+    ?>
+    
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_tarnija">Tarnija</label>
+                    <br><small><code>_blankpage_tarnija</code></small>
+                </th>
+                <td>
+                    <input type="text" 
+                           id="blankpage_tarnija" 
+                           name="blankpage_tarnija" 
+                           value="<?php echo esc_attr($tarnija); ?>" 
+                           class="regular-text" />
+                    <p class="description">Sisesta tarnija nimi või kood</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_laoseis_tarnija">Laoseis tarnija laos</label>
+                    <br><small><code>_blankpage_laoseis_tarnija</code></small>
+                </th>
+                <td>
+                    <input type="number" 
+                           id="blankpage_laoseis_tarnija" 
+                           name="blankpage_laoseis_tarnija" 
+                           value="<?php echo esc_attr($laoseis_tarnija); ?>" 
+                           min="0" 
+                           step="1" 
+                           class="small-text" /> tk
+                    <p class="description">Tükki tarnija laos</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_laoseis_rr">Laoseis RR laos</label>
+                    <br><small><code>_blankpage_laoseis_rr</code></small>
+                </th>
+                <td>
+                    <input type="number" 
+                           id="blankpage_laoseis_rr" 
+                           name="blankpage_laoseis_rr" 
+                           value="<?php echo esc_attr($laoseis_rr); ?>" 
+                           min="0" 
+                           step="1" 
+                           class="small-text" /> tk
+                    <p class="description">Tükki RR laos</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label>Tarneaeg</label>
+                    <br><small><code>_blankpage_tarneaeg_min</code> / <code>_blankpage_tarneaeg_max</code></small>
+                </th>
+                <td>
+                    <input type="number" 
+                           id="blankpage_tarneaeg_min" 
+                           name="blankpage_tarneaeg_min" 
+                           value="<?php echo esc_attr($tarneaeg_min); ?>" 
+                           min="1" 
+                           step="1" 
+                           class="small-text" 
+                           placeholder="5" /> 
+                    kuni 
+                    <input type="number" 
+                           id="blankpage_tarneaeg_max" 
+                           name="blankpage_tarneaeg_max" 
+                           value="<?php echo esc_attr($tarneaeg_max); ?>" 
+                           min="1" 
+                           step="1" 
+                           class="small-text" 
+                           placeholder="10" /> tööpäeva
+                    <p class="description">Sisesta tarneaeg vahemikus (nt. 5-10 tööpäeva)</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php
+}
+
+/**
+ * Callback for Product Relations meta box
+ */
+function blankpage_product_relations_callback($post) {
+    // Get current values
+    $variatsiooni_sku = get_post_meta($post->ID, '_blankpage_variatsiooni_sku', true);
+    $kokkusobivad_sku = get_post_meta($post->ID, '_blankpage_kokkusobivad_sku', true);
+    ?>
+    
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_variatsiooni_sku">Variatsiooni SKU</label>
+                    <br><small><code>_blankpage_variatsiooni_sku</code></small>
+                </th>
+                <td>
+                    <input type="text" 
+                           id="blankpage_variatsiooni_sku" 
+                           name="blankpage_variatsiooni_sku" 
+                           value="<?php echo esc_attr($variatsiooni_sku); ?>" 
+                           class="regular-text" 
+                           placeholder="SKU1, SKU2, SKU3" />
+                    <p class="description">SKU-d toote variatsioonide grupeerimiseks (komaga eraldatud)</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_kokkusobivad_sku">Kokkusobivad tooted SKU</label>
+                    <br><small><code>_blankpage_kokkusobivad_sku</code></small>
+                </th>
+                <td>
+                    <input type="text" 
+                           id="blankpage_kokkusobivad_sku" 
+                           name="blankpage_kokkusobivad_sku" 
+                           value="<?php echo esc_attr($kokkusobivad_sku); ?>" 
+                           class="regular-text" 
+                           placeholder="SKU1, SKU2, SKU3" />
+                    <p class="description">SKU-d kokkusobivate toodete jaoks (komaga eraldatud)</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php
+}
+
+/**
+ * Callback for Sales meta box
+ */
+function blankpage_sales_callback($post) {
+    // Get current values
+    $myyakse_kaupa = get_post_meta($post->ID, '_blankpage_myyakse_kaupa', true);
+    $eeldatav_saabumine = get_post_meta($post->ID, '_blankpage_eeldatav_saabumine', true);
+    ?>
+    
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_myyakse_kaupa">Müüakse X kaupa</label>
+                    <br><small><code>_blankpage_myyakse_kaupa</code></small>
+                </th>
+                <td>
+                    <input type="number" 
+                           id="blankpage_myyakse_kaupa" 
+                           name="blankpage_myyakse_kaupa" 
+                           value="<?php echo esc_attr($myyakse_kaupa ? $myyakse_kaupa : 1); ?>" 
+                           min="1" 
+                           step="1" 
+                           class="small-text" /> tk
+                    <p class="description">Määrab ostukorvi miinimum koguse (nt. 2 = saab osta ainult 2, 4, 6 kaupa)</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_eeldatav_saabumine">Eeldatav saabumine</label>
+                    <br><small><code>_blankpage_eeldatav_saabumine</code></small>
+                </th>
+                <td>
+                    <input type="text" 
+                           id="blankpage_eeldatav_saabumine" 
+                           name="blankpage_eeldatav_saabumine" 
+                           value="<?php echo esc_attr($eeldatav_saabumine); ?>" 
+                           class="regular-text" 
+                           placeholder="30.08.2025" />
+                    <p class="description">Kuupäev või tekst järeltellimisel oleva toote saabumise kohta</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php
+}
+
+/**
+ * Callback for Media meta box
+ */
+function blankpage_media_callback($post) {
+    // Get current values
+    $youtube_links = get_post_meta($post->ID, '_blankpage_youtube_links', true);
+    ?>
+    
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_youtube_links">YouTube video lingid</label>
+                    <br><small><code>_blankpage_youtube_links</code></small>
+                </th>
+                <td>
+                    <textarea id="blankpage_youtube_links" 
+                              name="blankpage_youtube_links" 
+                              rows="3" 
+                              class="large-text" 
+                              placeholder="https://www.youtube.com/watch?v=VIDEO_ID1, https://youtu.be/VIDEO_ID2, https://www.youtube.com/watch?v=VIDEO_ID3"><?php echo esc_textarea($youtube_links); ?></textarea>
+                    <p class="description">Lisa YouTube videote lingid (komaga eraldatud). Näiteks:<br>
+                    https://www.youtube.com/watch?v=dQw4w9WgXcQ, https://youtu.be/dQw4w9WgXcQ</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php
+}
+
+/**
+ * Callback for SEO meta box
+ */
+function blankpage_seo_callback($post) {
+    // Get current values
+    $seo_keyword = get_post_meta($post->ID, '_blankpage_seo_keyword', true);
+    $seo_title = get_post_meta($post->ID, '_blankpage_seo_title', true);
+    $seo_meta_description = get_post_meta($post->ID, '_blankpage_seo_meta_description', true);
+    ?>
+    
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_seo_keyword">SEO märksõna</label>
+                    <br><small><code>_blankpage_seo_keyword</code></small>
+                </th>
+                <td>
+                    <input type="text" 
+                           id="blankpage_seo_keyword" 
+                           name="blankpage_seo_keyword" 
+                           value="<?php echo esc_attr($seo_keyword); ?>" 
+                           class="regular-text" />
+                    <p class="description">Peamine märksõna selle toote jaoks</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_seo_title">SEO pealkiri</label>
+                    <br><small><code>_blankpage_seo_title</code></small>
+                </th>
+                <td>
+                    <input type="text" 
+                           id="blankpage_seo_title" 
+                           name="blankpage_seo_title" 
+                           value="<?php echo esc_attr($seo_title); ?>" 
+                           class="regular-text" 
+                           maxlength="60" />
+                    <p class="description">SEO optimeeritud pealkiri (maksimaalselt 60 tähemärki)</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="blankpage_seo_meta_description">Meta kirjeldus</label>
+                    <br><small><code>_blankpage_seo_meta_description</code></small>
+                </th>
+                <td>
+                    <textarea id="blankpage_seo_meta_description" 
+                              name="blankpage_seo_meta_description" 
+                              rows="3" 
+                              class="large-text" 
+                              maxlength="160"><?php echo esc_textarea($seo_meta_description); ?></textarea>
+                    <p class="description">Meta kirjeldus otsingumootoritele (maksimaalselt 160 tähemärki)</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php
+}
+
+/**
+ * Save custom meta box data
+ */
+function blankpage_save_product_meta_boxes($post_id) {
+    // Verify nonce
+    if (!isset($_POST['blankpage_product_meta_nonce']) || 
+        !wp_verify_nonce($_POST['blankpage_product_meta_nonce'], 'blankpage_product_meta_nonce')) {
+        return;
+    }
+
+    // Check if user has permission to edit the post
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    // Don't save on autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // Save Warehouse & Delivery fields
+    if (isset($_POST['blankpage_tarnija'])) {
+        update_post_meta($post_id, '_blankpage_tarnija', sanitize_text_field($_POST['blankpage_tarnija']));
+    }
+    
+    if (isset($_POST['blankpage_laoseis_tarnija'])) {
+        update_post_meta($post_id, '_blankpage_laoseis_tarnija', intval($_POST['blankpage_laoseis_tarnija']));
+    }
+    
+    if (isset($_POST['blankpage_laoseis_rr'])) {
+        update_post_meta($post_id, '_blankpage_laoseis_rr', intval($_POST['blankpage_laoseis_rr']));
+    }
+    
+    if (isset($_POST['blankpage_tarneaeg_min'])) {
+        update_post_meta($post_id, '_blankpage_tarneaeg_min', intval($_POST['blankpage_tarneaeg_min']));
+    }
+    
+    if (isset($_POST['blankpage_tarneaeg_max'])) {
+        update_post_meta($post_id, '_blankpage_tarneaeg_max', intval($_POST['blankpage_tarneaeg_max']));
+    }
+    
+    // Save Product Relations fields
+    if (isset($_POST['blankpage_variatsiooni_sku'])) {
+        update_post_meta($post_id, '_blankpage_variatsiooni_sku', sanitize_text_field($_POST['blankpage_variatsiooni_sku']));
+    }
+    
+    if (isset($_POST['blankpage_kokkusobivad_sku'])) {
+        update_post_meta($post_id, '_blankpage_kokkusobivad_sku', sanitize_textarea_field($_POST['blankpage_kokkusobivad_sku']));
+    }
+    
+    // Save Sales fields
+    if (isset($_POST['blankpage_myyakse_kaupa'])) {
+        $value = intval($_POST['blankpage_myyakse_kaupa']);
+        update_post_meta($post_id, '_blankpage_myyakse_kaupa', $value > 0 ? $value : 1);
+    }
+    
+    if (isset($_POST['blankpage_eeldatav_saabumine'])) {
+        update_post_meta($post_id, '_blankpage_eeldatav_saabumine', sanitize_text_field($_POST['blankpage_eeldatav_saabumine']));
+    }
+    
+    // Save Media fields
+    if (isset($_POST['blankpage_youtube_links'])) {
+        update_post_meta($post_id, '_blankpage_youtube_links', sanitize_textarea_field($_POST['blankpage_youtube_links']));
+    }
+    
+    // Save SEO fields
+    if (isset($_POST['blankpage_seo_keyword'])) {
+        update_post_meta($post_id, '_blankpage_seo_keyword', sanitize_text_field($_POST['blankpage_seo_keyword']));
+    }
+    
+    if (isset($_POST['blankpage_seo_title'])) {
+        update_post_meta($post_id, '_blankpage_seo_title', sanitize_text_field($_POST['blankpage_seo_title']));
+    }
+    
+    if (isset($_POST['blankpage_seo_meta_description'])) {
+        update_post_meta($post_id, '_blankpage_seo_meta_description', sanitize_textarea_field($_POST['blankpage_seo_meta_description']));
+    }
+}
+add_action('save_post', 'blankpage_save_product_meta_boxes');

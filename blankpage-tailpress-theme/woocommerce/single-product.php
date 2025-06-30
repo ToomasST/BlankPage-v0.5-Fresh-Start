@@ -261,43 +261,71 @@ get_header('shop'); ?>
                     </div>
 
                     <!-- Product Details - Right Side -->
-                    <div class="order-2 space-y-6">
+                    <div class="order-2 space-y-4">
                         
-                        <!-- Product Title & Rating -->
-                        <div class="space-y-3">
-                            <h1 class="text-2xl font-bold text-gray-900"><?php the_title(); ?></h1>
+                        <!-- 1. Product Title with Brand Logo -->
+                        <div class="flex items-start justify-between gap-4">
+                            <h1 class="text-2xl font-bold text-gray-900 flex-1"><?php the_title(); ?></h1>
                             
-                            <?php if ($product->get_short_description()) : ?>
-                                <p class="text-gray-600 text-base leading-relaxed"><?php echo $product->get_short_description(); ?></p>
-                            <?php endif; ?>
-                            
-                            <!-- Rating - Match Product Card Style -->
-                            <?php if (wc_review_ratings_enabled()) : ?>
-                                <div class="flex items-center space-x-2">
-                                    <?php
-                                    $average_rating = $product->get_average_rating();
-                                    $rating_count = $product->get_rating_count();
-                                    if ($average_rating > 0) :
-                                    ?>
-                                        <div class="flex items-center">
-                                            <?php for ($i = 1; $i <= 5; $i++) : ?>
-                                                <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-400' : 'text-gray-300'; ?>" 
-                                                     fill="currentColor" viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
-                                                </svg>
-                                            <?php endfor; ?>
-                                            <span class="text-sm text-gray-600 ml-2"><?php echo number_format($average_rating, 1); ?></span>
-                                        </div>
-                                        <span class="text-sm text-gray-500">
-                                            (<?php echo $rating_count; ?> hinnangut)
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
+                            <?php 
+                            // Display brand logo if available
+                            $brand_terms = get_the_terms($product->get_id(), 'product_brand');
+                            if (!empty($brand_terms) && !is_wp_error($brand_terms)) {
+                                $brand = $brand_terms[0]; // Get first brand
+                                $brand_image_id = get_term_meta($brand->term_id, 'thumbnail_id', true);
+                                
+                                if ($brand_image_id) {
+                                    $brand_image = wp_get_attachment_image($brand_image_id, 'thumbnail', false, [
+                                        'class' => 'max-h-16 max-w-[150px] w-auto object-contain transition-opacity duration-200 hover:opacity-80',
+                                        'style' => 'max-height: 64px; max-width: 150px;',
+                                        'alt' => esc_attr($brand->name . ' logo')
+                                    ]);
+                                    
+                                    $brand_archive_url = get_term_link($brand, 'product_brand');
+                                    
+                                    if (!is_wp_error($brand_archive_url)) {
+                                        echo '<a href="' . esc_url($brand_archive_url) . '" class="flex-shrink-0 hover:no-underline" title="Vaata kõiki ' . esc_attr($brand->name) . ' tooteid">';
+                                        echo $brand_image;
+                                        echo '</a>';
+                                    }
+                                }
+                            }
+                            ?>
                         </div>
+                        
+                        <!-- 2. Rating -->
+                        <?php if (wc_review_ratings_enabled()) : ?>
+                            <div class="flex items-center space-x-2">
+                                <?php
+                                $average_rating = $product->get_average_rating();
+                                $rating_count = $product->get_rating_count();
+                                if ($average_rating > 0) :
+                                ?>
+                                    <div class="flex items-center">
+                                        <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                            <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-400' : 'text-gray-300'; ?>" 
+                                                 fill="currentColor" viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                            </svg>
+                                        <?php endfor; ?>
+                                        <span class="text-sm text-gray-600 ml-2"><?php echo number_format($average_rating, 1); ?></span>
+                                    </div>
+                                    <span class="text-sm text-gray-500">
+                                        (<?php echo $rating_count; ?> hinnangut)
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <!-- 3. Short Description -->
+                        <?php if ($product->get_short_description()) : ?>
+                            <div>
+                                <p class="text-gray-600 text-base leading-tight"><?php echo $product->get_short_description(); ?></p>
+                            </div>
+                        <?php endif; ?>
 
-                        <!-- Price -->
-                        <div class="space-y-2">
+                        <!-- 4. Price -->
+                        <div>
                             <?php if ($product->is_on_sale()) : ?>
                                 <?php 
                                 $regular_price = $product->get_regular_price();
@@ -319,63 +347,100 @@ get_header('shop'); ?>
                                 </div>
                             <?php endif; ?>
                         </div>
-
-                        <!-- Product Categories -->
-                        <?php 
-                        $product_categories = get_the_terms($product->get_id(), 'product_cat');
-                        if ($product_categories && !is_wp_error($product_categories)) :
-                        ?>
-                            <div class="flex flex-wrap gap-2">
-                                <?php foreach (array_slice($product_categories, 0, 3) as $category) : ?>
-                                    <a href="<?php echo get_term_link($category); ?>" 
-                                       class="inline-block bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 text-sm px-3 py-1 rounded-full transition-colors no-underline hover:no-underline cursor-pointer">
-                                        <?php echo esc_html($category->name); ?>
-                                    </a>
-                                <?php endforeach; ?>
+                        
+                        <!-- 5. Tarneaeg + Saadavus Row -->
+                        <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
+                            <!-- Delivery Time -->
+                            <?php 
+                            $tarneaeg_min = get_post_meta($product->get_id(), '_blankpage_tarneaeg_min', true);
+                            $tarneaeg_max = get_post_meta($product->get_id(), '_blankpage_tarneaeg_max', true);
+                            if ($tarneaeg_min && $tarneaeg_max) : 
+                            ?>
+                                <div class="flex items-center space-x-2 text-sm">
+                                    <span class="font-semibold text-gray-700">Tarneaeg:</span>
+                                    <span class="text-gray-600"><?php echo esc_html($tarneaeg_min); ?> - <?php echo esc_html($tarneaeg_max); ?> tööpäeva</span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <!-- Availability Info -->
+                            <div class="flex items-center space-x-2 text-sm">
+                                <span class="font-semibold text-gray-700">Saadavus:</span>
+                                <?php 
+                                // Determine availability status
+                                if ($product->is_in_stock()) {
+                                    if ($product->get_stock_status() === 'onbackorder') {
+                                        $status = 'Järeltellimisel';
+                                        $status_class = 'text-yellow-600 font-bold';
+                                    } else {
+                                        $status = 'Saadaval';
+                                        $status_class = 'text-green-600 font-bold';
+                                    }
+                                } else {
+                                    $status = 'Laost otsas';
+                                    $status_class = 'text-red-600 font-bold';
+                                }
+                                ?>
+                                <span class="<?php echo $status_class; ?>"><?php echo $status; ?></span>
+                                
+                                <?php 
+                                // Add smart quantity info if available
+                                if ($product->managing_stock() && $product->is_in_stock()) {
+                                    $stock_quantity = $product->get_stock_quantity();
+                                    if ($stock_quantity !== null && $stock_quantity > 0) {
+                                        // Smart quantity display: show "5+ tk" if > 5, else show real number
+                                        $display_quantity = $stock_quantity > 5 ? '5+' : $stock_quantity;
+                                        echo ' <span class="text-gray-500">|</span> <span class="text-gray-600 font-semibold">' . esc_html($display_quantity) . 'tk laos</span>';
+                                    }
+                                }
+                                ?>
                             </div>
-                        <?php endif; ?>
-
+                        </div>
+                        
                         <!-- Add to Cart Form -->
                         <?php if ($product->is_purchasable() && $product->is_in_stock()) : ?>
-                            <form class="cart space-y-4" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
-                                
-                                <!-- Variable Product Attributes -->
-                                <?php if ($product->is_type('variable')) : ?>
-                                    <div class="space-y-4">
-                                        <?php foreach ($product->get_variation_attributes() as $attribute_name => $options) : ?>
-                                            <div>
-                                                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                                    <?php echo wc_attribute_label($attribute_name); ?>
-                                                </label>
-                                                <select name="attribute_<?php echo sanitize_title($attribute_name); ?>" 
-                                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                                    <option value="">Vali <?php echo wc_attribute_label($attribute_name); ?></option>
-                                                    <?php foreach ($options as $option) : ?>
-                                                        <option value="<?php echo esc_attr($option); ?>"><?php echo esc_html($option); ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
+                        <form class="cart space-y-4" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
+                            
+                            <!-- Variable Product Attributes -->
+                            <?php if ($product->is_type('variable')) : ?>
+                                <div class="space-y-4">
+                                    <?php foreach ($product->get_variation_attributes() as $attribute_name => $options) : ?>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                                <?php echo wc_attribute_label($attribute_name); ?>
+                                            </label>
+                                            <select name="attribute_<?php echo sanitize_title($attribute_name); ?>" 
+                                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="">Vali <?php echo wc_attribute_label($attribute_name); ?></option>
+                                                <?php foreach ($options as $option) : ?>
+                                                    <option value="<?php echo esc_attr($option); ?>"><?php echo esc_html($option); ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
 
-                                <!-- Quantity Selector -->
-                                <div class="flex items-center space-x-4">
+                            <!-- Separator Line -->
+                            <div class="border-t border-gray-200 pt-0"></div>
+
+                            <!-- 6. Quantity + Buttons Row -->
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <!-- Quantity Selector - More Compact -->
+                                <div class="flex items-center space-x-3">
                                     <label class="text-sm font-semibold text-gray-700">Kogus:</label>
                                     <div class="flex items-center border border-gray-300 rounded-lg">
-                                        <button type="button" class="px-3 py-2 text-gray-600 hover:text-gray-800 quantity-minus cursor-pointer">−</button>
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 quantity-minus cursor-pointer">−</button>
                                         <input type="number" 
                                                name="quantity" 
                                                value="<?php echo esc_attr(isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : 1); ?>" 
                                                min="1" 
                                                max="<?php echo esc_attr(0 < $product->get_max_purchase_quantity() ? $product->get_max_purchase_quantity() : ''); ?>"
-                                               class="w-16 text-center border-0 focus:ring-0 quantity-input">
-                                        <button type="button" class="px-3 py-2 text-gray-600 hover:text-gray-800 quantity-plus cursor-pointer">+</button>
+                                              class="w-12 text-center border-0 focus:ring-0 quantity-input [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 quantity-plus cursor-pointer">+</button>
                                     </div>
                                 </div>
-
                                 <!-- Action Buttons -->
-                                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                                <div class="flex gap-3 flex-1">
                                     <!-- Add to Cart Button -->
                                     <button type="submit" 
                                             name="add-to-cart" 
@@ -395,36 +460,93 @@ get_header('shop'); ?>
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                         </svg>
                                         Osta kohe
-                                    </button>
+                                     </button>
                                 </div>
-                            </form>
+                            </div>
+                        </form>
                         <?php else : ?>
                             <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                                 <p class="text-red-600 font-semibold">Toode pole hetkel saadaval</p>
                             </div>
                         <?php endif; ?>
+                        
+                        <!-- Separator Line -->
+                        <div class="border-t border-gray-200 pt-4">
+                        
+                        <!-- 7. Brand & SKU Row -->
+                        <?php 
+                        $brand_terms = get_the_terms($product->get_id(), 'product_brand');
+                        
+                        $sku = $product->get_sku();
+                        
+                        if (!empty($brand_terms) && !is_wp_error($brand_terms) || $sku) : 
+                        ?>
+                            <div class="flex items-center justify-between text-sm">
+                                <!-- Brand - Left Side -->
+                                <?php if (!empty($brand_terms) && !is_wp_error($brand_terms)) : ?>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-semibold text-gray-700">Bränd:</span>
+                                        <span class="text-gray-600">
+                                            <?php 
+                                            $brand_names = wp_list_pluck($brand_terms, 'name');
+                                            echo esc_html(implode(', ', $brand_names));
+                                            ?>
+                                        </span>
+                                    </div>
+                                <?php else : ?>
+                                    <div></div> <!-- Empty div for spacing -->
+                                <?php endif; ?>
+                                
+                                <!-- SKU - Right Side -->
+                                <?php if ($sku) : ?>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-semibold text-gray-700">Tootekood:</span>
+                                        <span class="text-gray-600"><?php echo esc_html($sku); ?></span>
+                                    </div>
+                                <?php else : ?>
+                                    <div></div> <!-- Empty div for spacing -->
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <!-- 8. Categories & EAN Row -->
+                        <?php 
+                        $product_categories = get_the_terms($product->get_id(), 'product_cat');
+                        $ean = get_post_meta($product->get_id(), '_global_unique_id', true); // EAN stored in _global_unique_id
+                        
+                        if ($product_categories && !is_wp_error($product_categories) || $ean) :
+                        ?>
+                            <div class="flex items-center justify-between text-sm">
+                                <!-- Categories - Left Side -->
+                                <?php if ($product_categories && !is_wp_error($product_categories)) : ?>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-semibold text-gray-700">Kategooriad:</span>
+                                        <span class="text-gray-600">
+                                            <?php 
+                                            $category_names = array_map(function($category) {
+                                                return $category->name;
+                                            }, array_slice($product_categories, 0, 5));
+                                            echo esc_html(implode(', ', $category_names));
+                                            ?>
+                                        </span>
+                                    </div>
+                                <?php else : ?>
+                                    <div></div> <!-- Empty div for spacing -->
+                                <?php endif; ?>
+                                
+                                <!-- EAN - Right Side -->
+                                <?php if ($ean) : ?>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-semibold text-gray-700">EAN:</span>
+                                        <span class="text-gray-600"><?php echo esc_html($ean); ?></span>
+                                    </div>
+                                <?php else : ?>
+                                    <div></div> <!-- Empty div for spacing -->
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
 
-                        <!-- Product Meta -->
-                        <div class="pt-6 border-t border-gray-200 space-y-2 text-sm text-gray-600">
-                            <?php if ($product->get_sku()) : ?>
-                                <div><span class="font-semibold">Tootekood:</span> <?php echo $product->get_sku(); ?></div>
-                            <?php endif; ?>
-                            
-                            <?php 
-                            $product_tags = get_the_terms($product->get_id(), 'product_tag');
-                            if ($product_tags && !is_wp_error($product_tags)) :
-                            ?>
-                                <div>
-                                    <span class="font-semibold">Märksõnad:</span>
-                                    <?php 
-                                    $tag_names = array_map(function($tag) {
-                                        return '<a href="' . get_term_link($tag) . '" class="text-blue-600 hover:text-blue-800 no-underline hover:underline">' . $tag->name . '</a>';
-                                    }, array_slice($product_tags, 0, 3));
-                                    echo implode(', ', $tag_names);
-                                    ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
+                        </div> <!-- Close separator div -->
                     </div>
                 </div>
             </div>

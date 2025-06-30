@@ -56,6 +56,23 @@
 - **Enhanced Active Sizes Block:** Displays real dimensions matching admin table logic
 - **Production-Ready Interface:** Removed all debug output for clean professional UI
 
+#### 🏧 ARCHITECTURAL DECISION: Programmatic Custom Fields (v0.5.7 - June 30, 2025)
+**STRATEGIC CHOICE: Native WordPress Custom Fields instead of ACF Plugin**
+
+- **Decision Rationale:** Performance, security, and integration benefits over ACF plugin approach
+- **Implementation:** Uses native WordPress `meta_box` API and `wp_postmeta` for all custom field requirements
+- **Performance Gain:** ~200KB reduction by avoiding ACF plugin overhead
+- **Security Advantage:** Full control, no third-party dependencies, avoids ACF/WordPress.org conflicts
+- **Integration Benefit:** Perfect fit with TailPress theme architecture and Tailwind CSS styling
+- **Scope Fit:** Optimal for small custom field requirements (SEO title, description, meta data)
+- **Maintenance:** Zero plugin dependencies, no update conflicts, version control friendly
+
+**JUHISED ADAPTATION RULE:** All guide steps mentioning ACF are implemented programmatically:
+- `ACF plugin install` → `add_meta_box()` API
+- `ACF field groups` → Custom meta boxes with Tailwind CSS styling
+- `get_field()` → `get_post_meta()` with custom validation
+- `ACF JSON export` → Version control in functions.php
+
 #### 🧠 Smart Consolidation Logic
 - **Cropped Size Matching:** Exact width AND height must match for consolidation
 - **Uncropped Size Matching:** Only width needs to match (height is 'auto' and varies)
