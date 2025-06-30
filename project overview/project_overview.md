@@ -42,12 +42,22 @@
   - Inglise keele tugi (default)
 - **Staatus:** ✅ Eesti keele tugi implementeeritud WooCommerce elementides
 
-## 🚀 Project Status (v0.5.7 - June 2025)
+## 🚀 Project Status (v0.5.8 - July 2025)
 
-### ⭐ LATEST MAJOR ACHIEVEMENT: Smart Consolidation System ✅
-**Implemented intelligent WordPress/WooCommerce image size consolidation with real-time optimization and accurate savings calculation**
+### ⭐ LATEST MAJOR ACHIEVEMENT: WooCommerce Design System Integration ✅
+**Successfully integrated Tailwind CSS 4.0 design system with WooCommerce, replacing all default product cards with custom-designed components**
 
-#### 🔥 Smart Consolidation Features (v0.5.7 - June 30, 2025)
+#### 🔥 WooCommerce Product Card Integration (v0.5.8 - July 1, 2025)
+- **Complete Template Override:** Custom `woocommerce/content-product.php` template with design system styling
+- **Advanced Action Row:** Two-button system with "Lisa korvi" and "Vaata toodet" actions
+- **Dynamic Pricing Display:** Sale price handling with percentage discount badges
+- **Smart Stock Management:** Out-of-stock overlays and disabled states
+- **Icon System Integration:** SVG icons with consistent stroke width (1px) and hover effects
+- **Responsive Design:** Mobile-first approach with card layout optimization
+- **Estonian Localization:** Full Estonian language support in product templates
+- **Design System Showcase:** Living component library at `/design-system-showcase.php`
+
+#### 🎨 Previous Achievement: Smart Consolidation System (v0.5.7 - June 30, 2025)
 - **Smart Consolidation Detection:** Automatically detects when WordPress and WooCommerce image sizes share identical dimensions
 - **Accurate File Count Display:** Shows both active size count (6) and actual generated file count (4) considering consolidation
 - **Real Savings Calculation:** Percentage reflects actual disk space saved from disabled sizes + smart file sharing
