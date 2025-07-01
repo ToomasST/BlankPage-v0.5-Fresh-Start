@@ -1,4 +1,25 @@
-# 🚀 TAILWIND CSS 4.0 - PARIMAD PRAKTIKAD JA UUED FUNKTSIONAALSUSED
+# 🎨 TAILWIND CSS 4.0 BEST PRACTICES
+**BlankPage v0.5 Projekti Juhend**
+
+## ⚠️ KRIITILINE PROJEKTI REEGEL
+
+### **ALATI TAILWIND CSS FIRST + ALPINE.JS FIRST**
+
+**See on projekti põhiline filosoofia ja kohustuslik lähenemine:**
+
+1. **TAILWIND CSS FIRST** - Kõik disain, layout, spacing, värvid, tüpograafia PEAB kasutama Tailwind utility klasse enne custom CSS-i kirjutamist
+2. **ALPINE.JS FIRST** - Kõik interaktiivsus ja dünaamiline käitumine PEAB kasutama Alpine.js direktiive enne custom JavaScript'i
+3. **UURI ALATI SÜNTAKSIT** - Kui Tailwind/Alpine süntaks pole teada, uuri interneti kaudu enne custom lahenduse tegemist
+4. **Custom CSS ainult viimase võimalusena** - Ainult väga spetsiifiliste komponentide jaoks, mida Tailwind utilities ei kata
+
+**Implementeerimise järjekord:**
+- ✅ **1. Esmalt:** Kas saab Tailwind utilities'ga? (padding, margin, flexbox, grid, colors, typography)
+- ✅ **2. Teiseks:** Kas saab Alpine.js'iga? (x-data, x-show, x-on, transitions)
+- ❌ **3. Viimane võimalus:** Custom CSS/JS ainult kui absoluutselt vajalik
+
+---
+
+## 🚀 TAILWIND CSS 4.0 - PARIMAD PRAKTIKAD JA UUED FUNKTSIONAALSUSED
 **Versioon: 1.0 - BlankPage Projektile Kohandatud**
 **Kuupäev: 30. Juuni 2025**
 

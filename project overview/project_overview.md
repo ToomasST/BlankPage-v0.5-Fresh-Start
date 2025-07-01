@@ -42,6 +42,37 @@
   - Inglise keele tugi (default)
 - **Staatus:** ✅ Eesti keele tugi implementeeritud WooCommerce elementides
 
+## ⚠️ KRIITILINE PROJEKTI FILOSOOFIA
+
+### **ALATI TAILWIND CSS FIRST + ALPINE.JS FIRST**
+
+**See on projekti põhiline arhitektuuriline nõue ja kohustuslik lähenemine:**
+
+#### 🎯 Implementeerimise hierarhia:
+1. **✅ ESMALT: Tailwind CSS utilities** - Kõik layout, spacing, colors, typography
+2. **✅ TEISEKS: Alpine.js direktiivid** - Kõik interaktiivsus ja dünaamiline käitumine  
+3. **❌ VIIMANE VÕIMALUS: Custom CSS/JS** - Ainult kui Tailwind/Alpine ei kata vajadust
+
+#### 📋 Praktiline rakendamine:
+- **Layout:** `flex`, `grid`, `space-x-4` mitte custom CSS
+- **Spacing:** `p-4`, `mb-6`, `gap-2` mitte custom margins/paddings
+- **Colors:** `bg-blue-500`, `text-gray-900` mitte custom color values
+- **Typography:** `text-lg`, `font-bold` mitte custom font rules
+- **Transitions:** `transition-all`, `hover:scale-105` mitte custom animations
+- **Interactivity:** `x-show`, `x-on:click` mitte custom JavaScript
+
+#### 🚫 Keelatud praktikad:
+- Custom CSS utilities'te jaoks, mida Tailwind juba pakub
+- Custom JavaScript Alpine.js'i asemel
+- Tailwind süntaksi "äraarvamine" - alati uuri dokumentatsiooni
+
+#### 📚 Ressursid süntaksi uurimiseks:
+- `juhised/TAILWIND_CSS_4.0_BEST_PRACTICES.md`
+- https://tailwindcss.com/docs
+- https://alpinejs.dev/start-here
+
+---
+
 ## 🚀 Project Status (v0.5.8 - July 2025)
 
 ### ⭐ LATEST MAJOR ACHIEVEMENT: WooCommerce Design System Integration ✅
@@ -221,6 +252,32 @@
 - ✅ **Performance First:** Utilize automatic content detection and CSS variables
 
 **📋 Required Reading:** `juhised/TAILWIND_CSS_4.0_BEST_PRACTICES.md`
+
+### 🚨 CSS ORGANIZATION & DRY PRINCIPLE (CRITICAL)
+**⚠️ MANDATORY: Prevent CSS duplication mistakes**
+
+#### CSS Source of Truth:
+- **🎯 Product Cards CSS:** `resources/css/app.css` (lines 644+)
+  - Already includes: 1:1 aspect ratio, object-cover, hover effects
+  - Used by BOTH design system showcase AND WooCommerce shop
+  - ❌ **NEVER duplicate in woocommerce.css**
+
+- **🎯 Icon Sizing CSS:** `resources/css/app.css` (lines 529+)
+  - Includes: `.icon`, `.icon-xs`, `.icon-sm`, `.icon-lg`, etc.
+  - ❌ **NEVER duplicate in woocommerce.css**
+
+#### File-Specific Rules:
+- **`app.css`:** Main design system components (product cards, icons, buttons)
+- **`woocommerce.css`:** Only WooCommerce-specific fixes and overrides
+- **Design System Showcase:** Uses same CSS classes as shop - changes auto-apply
+
+#### Before Adding CSS:
+1. ✅ Check if styles already exist in `app.css`
+2. ✅ Search codebase: `grep -r "class-name" resources/css/`
+3. ✅ Only add to `woocommerce.css` if WooCommerce-specific
+4. ❌ Never duplicate existing styles
+
+**📍 Documentation:** See red warning box in design system showcase for details
 
 ## 📊 CURRENT PROJECT STATUS (v0.5.6 - 2025-06-27)
 
@@ -561,5 +618,5 @@ npm run watch
 
 ---
 
-**Last Updated:** 2025-06-30  
-**Document Version:** 1.7
+**Last Updated:** 2025-07-01  
+**Document Version:** 1.8

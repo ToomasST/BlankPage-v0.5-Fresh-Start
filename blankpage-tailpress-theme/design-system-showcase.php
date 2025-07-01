@@ -625,44 +625,64 @@ get_header(); ?>
         <section class="mb-16">
             <h2 class="text-3xl font-semibold text-gray-900 mb-8">WooCommerce Product Cards</h2>
             
+            <!-- IMPORTANT CSS SOURCE OF TRUTH -->
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+                <div class="flex items-start gap-3">
+                    <svg class="icon icon-lg text-red-600 flex-shrink-0 mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                    </svg>
+                    <div>
+                        <h3 class="text-lg font-semibold text-red-800 mb-2">⚠️ CSS SOURCE OF TRUTH</h3>
+                        <div class="text-red-700 space-y-2">
+                            <p><strong>Product card CSS on defineeritud failis:</strong> <code class="bg-red-100 px-2 py-1 rounded font-mono text-sm">resources/css/app.css</code></p>
+                            <p><strong>MITTE KUNAGI ära kopeeri product-card CSS-i teistesse failidesse!</strong></p>
+                            <p>• Design system showcase ja WooCommerce pood kasutavad <strong>samu CSS klasse</strong></p>
+                            <p>• Muudatused app.css failis rakenduvad automaatselt mõlemale</p>
+                            <p>• woocommerce.css on ainult WooCommerce-spetsiifiliste fixide jaoks</p>
+                            <p>• Product card juba sisaldab: 1:1 aspect ratio, object-cover, hover effects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Product Card Variants -->
             <div class="mb-8">
                 <h3 class="text-xl font-semibold text-gray-900 mb-4">Product Card Variants</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
                     <!-- Standard Product Card -->
-                    <div class="product-card">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Demo Product" style="background-color: #f3f4f6;" />
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative aspect-square overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Demo Product" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             </a>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Standard Product Name</a>
+                        <div class="p-4 flex flex-col flex-1">
+                            <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Standard Product Name</a>
                             </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <div class="text-lg font-bold text-gray-900">
                                     <span>29.99 €</span>
                                 </div>
-                                <div class="product-card__rating">
-                                    <div class="product-card__rating-stars">
+                                <div class="flex items-center gap-1 text-warning-500 text-sm">
+                                    <div class="flex gap-px">
                                         <span class="text-warning-500">★★★★☆</span>
                                     </div>
-                                    <span class="product-card__rating-count">(23)</span>
+                                    <span class="text-gray-500 text-xs ml-1">(23)</span>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <a href="#" class="product-card__action-btn" title="Lisa ostukorvi">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2 transition-colors duration-150 hover:border-brand-400 relative">
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
                                     <span class="action-text">Lisa korvi</span>
                                 </a>
-                                <div class="product-card__action-divider"></div>
-                                <a href="#" class="product-card__action-btn" title="Vaata toodet">
+                                <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
                                     <span class="action-text">Vaata toodet</span>
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
                                 </a>
@@ -671,42 +691,42 @@ get_header(); ?>
                     </div>
                     
                     <!-- Product Card with Sale Badge -->
-                    <div class="product-card">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Sale Product" style="background-color: #fef2f2;" />
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative aspect-square overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Sale Product" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             </a>
-                            <span class="product-card__badge product-card__badge--sale">
+                            <span class="absolute top-2 left-2 z-10 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wide bg-red-500 text-white">
                                 -25%
                             </span>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Sale Product with Long Name That Wraps</a>
+                        <div class="p-4 flex flex-col flex-1">
+                            <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Sale Product with Long Name That Wraps</a>
                             </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price product-card__price--on-sale">
-                                    <span class="price-sale">19.99 €</span>
-                                    <span class="price-original">39.99 €</span>
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg font-bold text-red-600">19.99 €</span>
+                                    <span class="text-sm font-normal text-gray-500 line-through">39.99 €</span>
                                 </div>
-                                <div class="product-card__rating">
-                                    <div class="product-card__rating-stars">
+                                <div class="flex items-center gap-1 text-warning-500 text-sm">
+                                    <div class="flex gap-px">
                                         <span class="text-warning-500">★★★★★</span>
                                     </div>
-                                    <span class="product-card__rating-count">(89)</span>
+                                    <span class="text-gray-500 text-xs ml-1">(89)</span>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <a href="#" class="product-card__action-btn" title="Lisa ostukorvi">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2 transition-colors duration-150  relative">
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
                                     <span class="action-text">Lisa korvi</span>
                                 </a>
-                                <div class="product-card__action-divider"></div>
-                                <a href="#" class="product-card__action-btn" title="Vaata toodet">
+                                <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
                                     <span class="action-text">Vaata toodet</span>
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
                                 </a>
@@ -715,41 +735,41 @@ get_header(); ?>
                     </div>
                     
                     <!-- Featured Product Card -->
-                    <div class="product-card">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Featured Product" style="background-color: #eff6ff;" />
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative aspect-square overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Featured Product" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             </a>
-                            <span class="product-card__badge product-card__badge--featured">
+                            <span class="absolute top-2 left-2 z-10 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wide bg-brand-500 text-white">
                                 Soovitatud
                             </span>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Featured Product</a>
+                        <div class="p-4 flex flex-col flex-1">
+                            <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Featured Product</a>
                             </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <div class="text-lg font-bold text-gray-900">
                                     <span>49.99 €</span>
                                 </div>
-                                <div class="product-card__rating">
-                                    <div class="product-card__rating-stars">
+                                <div class="flex items-center gap-1 text-warning-500 text-sm">
+                                    <div class="flex gap-px">
                                         <span class="text-warning-500">★★★★☆</span>
                                     </div>
-                                    <span class="product-card__rating-count">(156)</span>
+                                    <span class="text-gray-500 text-xs ml-1">(156)</span>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <a href="#" class="product-card__action-btn" title="Lisa ostukorvi">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2 transition-colors duration-150  relative">
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
                                     <span class="action-text">Lisa korvi</span>
                                 </a>
-                                <div class="product-card__action-divider"></div>
-                                <a href="#" class="product-card__action-btn" title="Vaata toodet">
+                                <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
                                     <span class="action-text">Vaata toodet</span>
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
                                 </a>
@@ -758,34 +778,34 @@ get_header(); ?>
                     </div>
                     
                     <!-- Product without Image -->
-                    <div class="product-card">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <div class="product-card__image-placeholder">
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative aspect-square overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
                                     <span>Pilt puudub</span>
                                 </div>
                             </a>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Product Without Image</a>
+                        <div class="p-4 flex flex-col flex-1">
+                            <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Product Without Image</a>
                             </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <div class="text-lg font-bold text-gray-900">
                                     <span>15.99 €</span>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <a href="#" class="product-card__action-btn" title="Lisa ostukorvi">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2 transition-colors duration-150  relative">
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
                                     <span class="action-text">Lisa korvi</span>
                                 </a>
-                                <div class="product-card__action-divider"></div>
-                                <a href="#" class="product-card__action-btn" title="Vaata toodet">
+                                <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
                                     <span class="action-text">Vaata toodet</span>
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
                                 </a>
@@ -794,30 +814,30 @@ get_header(); ?>
                     </div>
                     
                     <!-- Out of Stock Product -->
-                    <div class="product-card">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Out of Stock" style="opacity: 0.6; background-color: #f3f4f6;" />
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative aspect-square overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Out of Stock" class="w-full h-full object-cover opacity-60" />
                             </a>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Out of Stock Product</a>
+                        <div class="p-4 flex flex-col flex-1">
+                            <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Out of Stock Product</a>
                             </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <div class="text-lg font-bold text-gray-900">
                                     <span>25.99 €</span>
                                 </div>
-                                <div class="product-card__rating">
-                                    <div class="product-card__rating-stars">
-                                        <span class="text-warning-500">★★★☆☆</span>
+                                <div class="flex items-center gap-1">
+                                    <div class="text-yellow-400 text-sm">
+                                        <span>★★★☆☆</span>
                                     </div>
-                                    <span class="product-card__rating-count">(7)</span>
+                                    <span class="text-xs text-gray-500">(7)</span>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <span class="product-card__add-to-cart" style="background-color: var(--color-gray-400); cursor: not-allowed;">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2">
+                                <span class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-gray-400 text-white cursor-not-allowed text-xs font-medium uppercase rounded">
+                                    <svg class="w-6 h-6 stroke-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                     </svg>
                                     Pole saadaval
@@ -827,35 +847,35 @@ get_header(); ?>
                     </div>
                     
                     <!-- Compact Variant -->
-                    <div class="product-card product-card--compact">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Compact Product" style="background-color: #f0fdf4;" />
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative aspect-square overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Compact Product" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             </a>
-                            <span class="product-card__badge product-card__badge--new">
+                            <span class="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
                                 Uus
                             </span>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Compact Card</a>
+                        <div class="p-4 flex flex-col flex-1">
+                            <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Compact Card</a>
                             </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <div class="text-lg font-bold text-gray-900">
                                     <span>12.99 €</span>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <a href="#" class="product-card__action-btn" title="Lisa ostukorvi">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2 transition-colors duration-150  relative">
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
                                     <span class="action-text">Lisa korvi</span>
                                 </a>
-                                <div class="product-card__action-divider"></div>
-                                <a href="#" class="product-card__action-btn" title="Vaata toodet">
+                                <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
                                     <span class="action-text">Vaata toodet</span>
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
                                 </a>
@@ -870,42 +890,44 @@ get_header(); ?>
             <div class="mb-8">
                 <h3 class="text-xl font-semibold text-gray-900 mb-4">Wide Product Card Variant</h3>
                 <div class="max-w-2xl">
-                    <div class="product-card product-card--wide">
-                        <div class="product-card__image">
-                            <a href="#" class="block">
-                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Wide Product" style="background-color: #fef3c7;" />
+                    <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-row h-full hover:shadow-xl hover:-translate-y-0.5">
+                        <div class="relative w-48 flex-shrink-0 overflow-hidden">
+                            <a href="#" class="block w-full h-full no-underline">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Wide Product" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style="background-color: #fef3c7;" />
                             </a>
-                            <span class="product-card__badge product-card__badge--sale">
+                            <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
                                 -30%
                             </span>
                         </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">
-                                <a href="#">Wide Layout Product Card for Lists</a>
-                            </h3>
-                            <div class="product-card__meta">
-                                <div class="product-card__price product-card__price--on-sale">
-                                    <span class="price-sale">69.99 €</span>
-                                    <span class="price-original">99.99 €</span>
-                                </div>
-                                <div class="product-card__rating">
-                                    <div class="product-card__rating-stars">
-                                        <span class="text-warning-500">★★★★★</span>
+                        <div class="p-4 flex flex-col flex-1 justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-3 leading-tight line-clamp-2">
+                                    <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Wide Layout Product Card for Lists</a>
+                                </h3>
+                                <div class="flex items-center justify-between mb-4 gap-4">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xl font-bold text-red-600">69.99 €</span>
+                                        <span class="text-sm text-gray-500 line-through">99.99 €</span>
                                     </div>
-                                    <span class="product-card__rating-count">(234)</span>
+                                    <div class="flex items-center gap-1">
+                                        <div class="text-yellow-400 text-base">
+                                            <span>★★★★★</span>
+                                        </div>
+                                        <span class="text-sm text-gray-500">(234)</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="product-card__actions">
-                                <a href="#" class="product-card__action-btn" title="Lisa ostukorvi">
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <div class="flex items-center justify-center gap-0 border-t border-gray-200 pt-3 transition-colors duration-150  relative">
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-sm font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
                                     <span class="action-text">Lisa korvi</span>
                                 </a>
-                                <div class="product-card__action-divider"></div>
-                                <a href="#" class="product-card__action-btn" title="Vaata toodet">
+                                <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                <a href="#" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-sm font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
                                     <span class="action-text">Vaata toodet</span>
-                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                                    <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
                                 </a>
@@ -943,6 +965,380 @@ get_header(); ?>
                     </div>
                 </div>
             </div>
+        </section>
+
+        <!-- Product Detail Page Layout -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-semibold text-gray-900 mb-8">Product Detail Page Layout</h2>
+            <p class="text-gray-600 mb-8">Complete product detail page layout with image gallery, product information, and purchase form using Tailwind CSS and Alpine.js. This is a 1:1 demo of the WooCommerce single product page layout.</p>
+            
+            <!-- Main Product Section -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 lg:p-8">
+                    
+                    <!-- Images container: Complete Gallery Implementation -->
+                    <div class="gallery-container">
+                        <div
+                            x-data="{ 
+                                active: 0, 
+                                displayImages: [
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_6-600x600.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_5-600x600.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_4-600x600.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_mood_1-600x400.webp'
+                                ],
+                                lightboxImages: [
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_6.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_5.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_4.webp',
+                                    'http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_mood_1.webp'
+                                ],
+                                topOpacity: 0, 
+                                bottomOpacity: 0,
+                                leftOpacity: 0,
+                                rightOpacity: 0,
+                                fadeDistance: 80,
+                                imageLoaded: true
+                            }"
+                            class="flex flex-col lg:flex-row gap-4"
+                        >
+                            <!-- THUMBS - First on desktop (left side), second on mobile (below) -->
+                            <div class="relative w-full lg:w-24 flex-shrink-0 order-2 lg:order-1">
+                                <div 
+                                    class="flex lg:flex-col gap-4 overflow-x-auto lg:overflow-y-auto lg:overflow-x-visible lg:h-full p-1 lg:max-h-[464px] scrollbar-hide"
+                                    x-ref="scrollContainer"
+                                    @wheel="
+                                        const el = $refs.scrollContainer;
+                                        // Only handle horizontal scroll on smaller screens
+                                        if (window.innerWidth < 1024) {
+                                            $event.preventDefault();
+                                            // Smooth scroll by reducing the increment
+                                            el.scrollLeft += $event.deltaY * 0.5;
+                                        }
+                                        // On desktop, let normal vertical scroll work (no preventDefault)
+                                    "
+                                    @scroll="
+                                        const el = $refs.scrollContainer;
+                                        const fade = fadeDistance;
+                                        
+                                        // Desktop: vertical scroll gradients
+                                        if (window.innerWidth >= 1024) {
+                                            topOpacity = Math.min(el.scrollTop / fade, 1);
+                                            const scrollBottom = el.scrollTop + el.clientHeight;
+                                            const distanceFromBottom = el.scrollHeight - scrollBottom;
+                                            bottomOpacity = el.scrollHeight > el.clientHeight ? Math.min(distanceFromBottom / fade, 1) : 0;
+                                            leftOpacity = 0;
+                                            rightOpacity = 0;
+                                        } 
+                                        // Mobile: horizontal scroll gradients
+                                        else {
+                                            leftOpacity = Math.min(el.scrollLeft / fade, 1);
+                                            const scrollRight = el.scrollLeft + el.clientWidth;
+                                            const distanceFromRight = el.scrollWidth - scrollRight;
+                                            rightOpacity = el.scrollWidth > el.clientWidth ? Math.min(distanceFromRight / fade, 1) : 0;
+                                            topOpacity = 0;
+                                            bottomOpacity = 0;
+                                        }
+                                    "
+                                    x-init="
+                                        $nextTick(() => {
+                                            const el = $refs.scrollContainer;
+                                            if (window.innerWidth >= 1024) {
+                                                // Desktop: vertical gradients
+                                                topOpacity = 0;
+                                                bottomOpacity = el.scrollHeight > el.clientHeight ? 1 : 0;
+                                                leftOpacity = 0;
+                                                rightOpacity = 0;
+                                            } else {
+                                                // Mobile: horizontal gradients
+                                                leftOpacity = 0;
+                                                rightOpacity = el.scrollWidth > el.clientWidth ? 1 : 0;
+                                                topOpacity = 0;
+                                                bottomOpacity = 0;
+                                            }
+                                        });
+                                    "
+                                >
+                                    <template x-for="(image, index) in displayImages" :key="index">
+                                        <button
+                                            @click="
+                                                imageLoaded = false; 
+                                                setTimeout(() => { 
+                                                    active = index; 
+                                                    imageLoaded = true; 
+                                                }, 150);
+                                            "
+                                            :class="{'shadow-xl scale-105': active === index }"
+                                            class="aspect-square w-24 lg:w-full flex-shrink-0 rounded overflow-hidden focus:outline-none transform transition-all duration-300 cursor-pointer"
+                                        >
+                                            <img :src="image" class="w-full h-full object-cover" />
+                                        </button>
+                                    </template>
+                                    
+                                    <!-- Vertical gradients (desktop only) -->
+                                    <!-- Top gradient -->
+                                    <div 
+                                        x-show="topOpacity > 0" 
+                                        :style="{ opacity: topOpacity }"
+                                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                                        x-transition:leave="transition-opacity duration-250 ease-in"
+                                        class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white via-white/70 to-transparent pointer-events-none hidden lg:block z-10"
+                                    ></div>
+                                    
+                                    <!-- Bottom gradient -->
+                                    <div 
+                                        x-show="bottomOpacity > 0" 
+                                        :style="{ opacity: bottomOpacity }"
+                                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                                        x-transition:leave="transition-opacity duration-250 ease-in"
+                                        class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none hidden lg:block z-10"
+                                    ></div>
+                                    
+                                    <!-- Horizontal gradients (mobile only) -->
+                                    <!-- Left gradient -->
+                                    <div 
+                                        x-show="leftOpacity > 0" 
+                                        :style="{ opacity: leftOpacity }"
+                                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                                        x-transition:leave="transition-opacity duration-250 ease-in"
+                                        class="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none block lg:hidden z-10"
+                                    ></div>
+                                    
+                                    <!-- Right gradient -->
+                                    <div 
+                                        x-show="rightOpacity > 0" 
+                                        :style="{ opacity: rightOpacity }"
+                                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                                        x-transition:leave="transition-opacity duration-250 ease-in"
+                                        class="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white via-white/70 to-transparent pointer-events-none block lg:hidden z-10"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <!-- MAIN IMAGE (1:1) - First on mobile, second on desktop -->
+                            <div class="relative flex-1 aspect-square order-1 lg:order-2">
+                                <!-- Fancybox Gallery - Main Visible Image -->
+                                <a
+                                    href="#"
+                                    @click.prevent="document.querySelectorAll('[data-fancybox=product-gallery-demo]')[active].click()"
+                                    class="block w-full h-full rounded-lg overflow-hidden bg-gray-50 border border-gray-200 transition-all duration-500 ease-out cursor-pointer"
+                                    :class="imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'"
+                                >
+                                    <img
+                                        :src="displayImages[active]"
+                                        alt="Product image"
+                                        class="w-full h-full object-contain"
+                                        loading="lazy"
+                                        @load="imageLoaded = true"
+                                    >
+
+                                    <!-- Zoom/Lightbox-trigger -->
+                                    <span class="absolute top-2 right-2 p-1 bg-white/80 rounded-full shadow cursor-zoom-in" aria-label="Open image gallery">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                                        </svg>
+                                    </span>
+                                </a>
+                                
+                                <!-- Hidden Gallery Links for Fancybox Navigation -->
+                                <div class="hidden">
+                                    <a
+                                        href="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3.webp"
+                                        data-fancybox="product-gallery-demo"
+                                        data-index="0"
+                                        data-caption="Product detail view - Main"
+                                    ></a>
+                                    <a
+                                        href="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_6.webp"
+                                        data-fancybox="product-gallery-demo"
+                                        data-index="1"
+                                        data-caption="Product detail view - Side angle"
+                                    ></a>
+                                    <a
+                                        href="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_5.webp"
+                                        data-fancybox="product-gallery-demo"
+                                        data-index="2"
+                                        data-caption="Product detail view - Close-up"
+                                    ></a>
+                                    <a
+                                        href="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_4.webp"
+                                        data-fancybox="product-gallery-demo"
+                                        data-index="3"
+                                        data-caption="Product detail view - Extended"
+                                    ></a>
+                                    <a
+                                        href="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_mood_1.webp"
+                                        data-fancybox="product-gallery-demo"
+                                        data-index="4"
+                                        data-caption="Product lifestyle view"
+                                    ></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Details - Right Side -->
+                    <div class="order-2 space-y-3">
+                        
+                        <!-- 1. Product Title with Brand Logo -->
+                        <div class="flex items-start justify-between gap-4 mb-1">
+                            <h1 class="text-xl font-bold text-gray-900 flex-1 mb-0">Pikendatav Söögilaud Strada Valge ilus laud- Pikendatav Söögilaud Strada Valge</h1>
+                            
+                            <!-- Sample Brand Logo -->
+                            <div class="flex-shrink-0">
+                                <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" 
+                                     alt="Brand logo" 
+                                     class="max-h-16 max-w-[150px] w-auto object-contain transition-opacity duration-200 hover:opacity-80"
+                                     style="max-height: 64px; max-width: 150px;">
+                            </div>
+                        </div>
+                        
+                        <!-- 2. Rating -->
+                        <div class="flex items-center space-x-2">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                                </svg>
+                                <span class="text-sm text-gray-600 ml-2">4.2</span>
+                            </div>
+                            <span class="text-sm text-gray-500">(18 hinnangut)</span>
+                        </div>
+                        
+                        <!-- 3. Short Description -->
+                        <div>
+                            <p class="text-gray-600 text-sm leading-tight">Kaasaegne ja funktsionaalne pikendatav söögilaud, mis sobib ideaalselt nii igapäevaseks kasutamiseks kui ka külaliste vastuvõtmiseks.</p>
+                        </div>
+
+                        <!-- 4. Price -->
+                        <div>
+                            <div class="flex items-baseline space-x-3">
+                                <span class="text-sm text-gray-400 line-through">899,99 €</span>
+                                <span class="text-3xl font-bold text-green-600">699,99 €</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 5. Tarneaeg + Saadavus Row -->
+                        <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
+                            <div class="flex items-center space-x-2 text-sm">
+                                <span class="font-semibold text-gray-700">Tarneaeg:</span>
+                                <span class="text-gray-600">2 - 5 tööpäeva</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-sm">
+                                <span class="font-semibold text-gray-700">Saadavus:</span>
+                                <span class="text-green-600 font-bold">Saadaval</span>
+                                <span class="text-gray-500">|</span> 
+                                <span class="text-gray-600 font-semibold">5+tk laos</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Form -->
+                        <form class="cart space-y-4">
+                            <div class="border-t border-gray-200 pt-0"></div>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <div class="flex items-center space-x-3">
+                                    <label class="text-sm font-semibold text-gray-700">Kogus:</label>
+                                    <div class="flex items-center border border-gray-300 rounded-lg">
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer">−</button>
+                                        <input type="number" value="1" min="1" class="w-12 text-center border-0 focus:ring-0">
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer">+</button>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 flex-1">
+                                    <button type="submit" class="flex-1 flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                        </svg>
+                                        Lisa korvi
+                                    </button>
+                                    <button type="button" class="flex-1 flex items-center justify-center bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                        </svg>
+                                        Osta kohe
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Meta Info -->
+                        <div class="border-t border-gray-200 pt-4">
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-semibold text-gray-700">Bränd:</span>
+                                    <span class="text-gray-600">Demo Brand</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-semibold text-gray-700">Tootekood:</span>
+                                    <span class="text-gray-600">DEMO-12345</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-semibold text-gray-700">Kategooriad:</span>
+                                    <span class="text-gray-600">Mööbel, Söögilauad</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-semibold text-gray-700">EAN:</span>
+                                    <span class="text-gray-600">1234567890123</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fancybox Initialization Script for Product Detail Page Demo -->
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize Fancybox with custom options for demo gallery
+                Fancybox.bind('[data-fancybox="product-gallery-demo"]', {
+                    infinite: true,
+                    keyboard: true,
+                    wheel: false,
+                    touch: {
+                        vertical: true,
+                        momentum: true
+                    },
+                    buttons: [
+                        "zoom",
+                        "slideShow", 
+                        "fullScreen",
+                        "download",
+                        "thumbs",
+                        "close"
+                    ],
+                    Toolbar: {
+                        display: {
+                            left: ["infobar"],
+                            middle: [
+                                "zoomIn",
+                                "zoomOut", 
+                                "toggle1to1",
+                                "rotateCCW",
+                                "rotateCW",
+                                "flipX",
+                                "flipY"
+                            ],
+                            right: ["slideshow", "thumbs", "close"]
+                        }
+                    }
+                });
+            });
+            </script>
         </section>
 
         <!-- Design Tokens -->

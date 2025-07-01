@@ -261,11 +261,11 @@ get_header('shop'); ?>
                     </div>
 
                     <!-- Product Details - Right Side -->
-                    <div class="order-2 space-y-4">
+                    <div class="order-2 space-y-3">
                         
                         <!-- 1. Product Title with Brand Logo -->
-                        <div class="flex items-start justify-between gap-4">
-                            <h1 class="text-2xl font-bold text-gray-900 flex-1"><?php the_title(); ?></h1>
+                        <div class="flex items-start justify-between gap-4 mb-1">
+                            <h1 class="text-xl font-bold text-gray-900 flex-1 mb-0"><?php the_title(); ?></h1>
                             
                             <?php 
                             // Display brand logo if available
@@ -320,7 +320,7 @@ get_header('shop'); ?>
                         <!-- 3. Short Description -->
                         <?php if ($product->get_short_description()) : ?>
                             <div>
-                                <p class="text-gray-600 text-base leading-tight"><?php echo $product->get_short_description(); ?></p>
+                                <p class="text-gray-600 text-sm leading-tight"><?php echo $product->get_short_description(); ?></p>
                             </div>
                         <?php endif; ?>
 

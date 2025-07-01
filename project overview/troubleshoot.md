@@ -4,6 +4,112 @@
 
 ### 🚨 CRITICAL ISSUES
 
+#### **Fancybox Lightbox Not Opening in Design System** (v0.5.6 - July 1, 2025) 🔥
+
+**Problem:** Fancybox lightbox did not open from Product Detail Page gallery in design-system-showcase.php despite working in WooCommerce single-product.php
+
+**Symptoms:**
+- Clicking gallery images shows no lightbox
+- No JavaScript errors in console
+- Alpine.js gallery state management working correctly
+- Fancybox CDN loaded properly in header.php
+
+**Root Cause:** Missing Fancybox hidden gallery links and initialization script
+
+**✅ SOLUTION:**
+```php
+<!-- Hidden gallery links for Fancybox navigation -->
+<div style="display: none;">
+    <template x-for="(image, index) in images" :key="index">
+        <a :href="image.full" 
+           data-fancybox="product-gallery" 
+           :data-caption="image.caption">
+        </a>
+    </template>
+</div>
+
+<!-- Initialize Fancybox -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    Fancybox.bind('[data-fancybox="product-gallery"]', {
+        Toolbar: {
+            display: {
+                left: ["infobar"],
+                middle: ["zoomIn", "zoomOut", "toggle1to1", "rotateCCW", "rotateCW", "flipX", "flipY"],
+                right: ["slideshow", "fullscreen", "thumbs", "close"]
+            }
+        }
+    });
+});
+</script>
+```
+
+**Key Lesson:** Design system showcase requires full Fancybox implementation, not just CDN inclusion
+
+---
+
+#### **UI Typography and Spacing Inconsistencies** (v0.5.6 - July 1, 2025) 📐
+
+**Problem:** Inconsistent text sizing and spacing between product title and rating across design system and WooCommerce templates
+
+**Issues Found:**
+- Product card short description too large (`text-base` instead of `text-sm`)
+- Excessive vertical gap between product title and rating
+- Redundant margin-bottom on both container and title elements
+- Inconsistency between design-system-showcase.php and single-product.php
+
+**✅ SOLUTIONS APPLIED:**
+```html
+<!-- Before: Large text and excessive spacing -->
+<div class="space-y-4">
+    <h1 class="text-2xl font-bold mb-2">Product Title</h1>
+    <p class="text-base text-gray-600">Short description</p>
+</div>
+
+<!-- After: Optimized typography and spacing -->
+<div class="space-y-3">
+    <h1 class="text-xl font-bold mb-0">Product Title</h1>
+    <p class="text-sm text-gray-600">Short description</p>
+</div>
+```
+
+**Changes Made:**
+1. Changed product title: `text-2xl` → `text-xl`
+2. Changed short description: `text-base` → `text-sm`
+3. Reduced container spacing: `space-y-4` → `space-y-3`
+4. Added `mb-0` to product titles to remove redundant margin
+5. Applied changes consistently in both design-system-showcase.php and single-product.php
+
+**Key Lesson:** UI improvements must be applied consistently across all templates and components
+
+---
+
+#### **Product Detail Page Migration Complexity** (v0.5.6 - July 1, 2025) 🏗️
+
+**Problem:** Migrating WooCommerce single product layout to design system showcase required complete 1:1 recreation with functional Alpine.js gallery
+
+**Challenges:**
+- Converting dynamic WooCommerce data to static sample data
+- Maintaining Alpine.js gallery functionality outside WooCommerce context
+- Ensuring Fancybox lightbox integration works independently
+- Preserving responsive design and all interactive elements
+
+**✅ SOLUTION APPROACH:**
+1. **Sample Data Creation:** Created realistic product data array with multiple images
+2. **Alpine.js State Management:** Implemented complete gallery state with thumbnail navigation
+3. **Fancybox Integration:** Added full lightbox functionality with hidden gallery links
+4. **Responsive Design:** Maintained all Tailwind utility classes and responsive breakpoints
+5. **Meta Information:** Included all product meta (SKU, EAN, brand, categories, etc.)
+
+**Key Files Modified:**
+- `design-system-showcase.php`: Added complete Product Detail Page Layout element
+- Used diverse product images for realistic demo experience
+- Maintained semantic HTML structure and accessibility
+
+**Key Lesson:** Design system showcase must be fully functional 1:1 replica, not simplified placeholder
+
+---
+
 #### Smart Consolidation Detection Issues (v0.5.7 - June 30, 2025) 🧠 BREAKTHROUGH FIXES
 
 **Problem:** Smart consolidation logic wasn't properly detecting when WordPress and WooCommerce image sizes share identical dimensions, causing inaccurate file count and savings calculations
