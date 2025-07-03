@@ -1,6 +1,18 @@
 # 🎨 TAILWIND DESIGN SYSTEM JUHEND
 **Versioon: 1.0 - Töökindel ja Testitud**
 
+⚠️ **OLULINE MÄRKUS - TAILWIND CSS VERSIOON**
+
+**See juhend on loodud Tailwind CSS 3.x jaoks, kuid BlankPage projekt kasutab Tailwind CSS 4.0+**
+
+**Tuvastatud erinevused:**
+- Juhend kasutab `tailwind.config.js` (v3.x) vs. projekt kasutab CSS `@theme` direktiivi (v4.0)
+- Juhendis soovitatud `@apply` direktiivid vs. Tailwind 4.0 eelistab inline utilities
+- Projekti showcase kasutab OKLCH värvipaletti (Tailwind 4.0 feature)
+- CSS arhitektuur vajab kohandamist Tailwind 4.0 nõuetele
+
+**Lahendus:** Design-system-showcase.php süstemaatiline parandamine Tailwind 4.0 best practices järgi
+
 ---
 
 ## 📋 EELTINGIMUSED
