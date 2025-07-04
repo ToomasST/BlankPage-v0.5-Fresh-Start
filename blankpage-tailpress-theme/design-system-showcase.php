@@ -1684,6 +1684,220 @@ get_header(); ?>
                 </div>
             </div>
             
+            <!-- Related Products Block (Horizontal Scroll) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Related Products Block (Horizontal Scroll)</h3>
+                <p class="text-sm text-gray-600 mb-6">Responsive Wide Product Cards: Desktop 40% width, Mobile 60% width</p>
+                
+                <!-- Horizontal Scroll Container -->
+                <div class="relative" x-data="{ leftOpacity: 0, rightOpacity: 0, fadeDistance: 50 }">
+                    
+                    <div 
+                        class="flex gap-4 overflow-x-auto pb-4 px-4 scroll-smooth" 
+                        id="horizontal-scroll-container"
+                        x-ref="relatedContainer"
+                        @scroll="
+                            const el = $refs.relatedContainer;
+                            const fade = fadeDistance;
+                            
+                            // Calculate left and right gradient opacities
+                            leftOpacity = Math.min(el.scrollLeft / fade, 1);
+                            const scrollRight = el.scrollLeft + el.clientWidth;
+                            const distanceFromRight = el.scrollWidth - scrollRight;
+                            rightOpacity = el.scrollWidth > el.clientWidth ? Math.min(distanceFromRight / fade, 1) : 0;
+                        "
+                        x-init="
+                            $nextTick(() => {
+                                const el = $refs.relatedContainer;
+                                // Initialize right gradient if content overflows
+                                leftOpacity = 0;
+                                rightOpacity = el.scrollWidth > el.clientWidth ? 1 : 0;
+                            });
+                        ">
+                        
+                        <!-- Related Product 1 -->
+                        <div class="flex-shrink-0 w-[60%] md:w-[40%]">
+                            <div class="group bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 flex flex-row h-full hover:shadow-lg hover:-translate-y-0.5">
+                                <div class="relative w-32 md:w-48 flex-shrink-0 overflow-hidden">
+                                    <a href="#" class="block w-full h-full no-underline">
+                                        <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Related Product 1" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style="background-color: #fef3c7;" />
+                                    </a>
+                                    <span class="absolute top-2 left-2 z-10 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-500 to-green-600 text-white">
+                                        Uus
+                                    </span>
+                                </div>
+                                <div class="p-3 md:p-4 flex flex-col flex-1 justify-between">
+                                    <div>
+                                        <h4 class="text-sm md:text-base font-semibold text-gray-900 mb-2 md:mb-3 leading-tight line-clamp-2">
+                                            <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Sarnane toode 1 - Laud tammepuidust</a>
+                                        </h4>
+                                        <div class="flex items-center justify-between mb-2 md:mb-4 gap-2">
+                                            <div class="flex items-center gap-1 md:gap-2">
+                                                <span class="text-lg md:text-xl font-bold text-gray-900">129.99 €</span>
+                                            </div>
+                                            <div class="flex items-center gap-1">
+                                                <div class="text-yellow-400 text-sm">
+                                                    <span>★★★★☆</span>
+                                                </div>
+                                                <span class="text-xs text-gray-500">(15)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-0 border-t border-gray-200 pt-1 transition-colors duration-150 relative">
+                                        <a href="#" class="flex-1 flex flex-row items-center justify-center gap-1 md:gap-2 p-1 md:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                            <svg class="w-4 h-4 md:w-6 md:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            </svg>
+                                            <span class="action-text hidden md:inline">Lisa korvi</span>
+                                        </a>
+                                        <div class="w-px h-6 md:h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                        <a href="#" class="flex-1 flex flex-row items-center justify-center gap-1 md:gap-2 p-1 md:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
+                                            <span class="action-text hidden md:inline">Vaata</span>
+                                            <svg class="w-4 h-4 md:w-6 md:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Related Product 2 -->
+                        <div class="flex-shrink-0 w-[60%] md:w-[40%]">
+                            <div class="group bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 flex flex-row h-full hover:shadow-lg hover:-translate-y-0.5">
+                                <div class="relative w-32 md:w-48 flex-shrink-0 overflow-hidden">
+                                    <a href="#" class="block w-full h-full no-underline">
+                                        <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Related Product 2" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style="background-color: #ddd6fe;" />
+                                    </a>
+                                </div>
+                                <div class="p-3 md:p-4 flex flex-col flex-1 justify-between">
+                                    <div>
+                                        <h4 class="text-sm md:text-base font-semibold text-gray-900 mb-2 md:mb-3 leading-tight line-clamp-2">
+                                            <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Sarnane toode 2 - Teine variant</a>
+                                        </h4>
+                                        <div class="flex items-center justify-between mb-2 md:mb-4 gap-2">
+                                            <div class="flex items-center gap-1 md:gap-2">
+                                                <span class="text-lg md:text-xl font-bold text-red-600">89.99 €</span>
+                                                <span class="text-sm text-gray-500 line-through">119.99 €</span>
+                                            </div>
+                                            <div class="flex items-center gap-1">
+                                                <div class="text-yellow-400 text-sm">
+                                                    <span>★★★★★</span>
+                                                </div>
+                                                <span class="text-xs text-gray-500">(45)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-0 border-t border-gray-200 pt-1 transition-colors duration-150 relative">
+                                        <a href="#" class="flex-1 flex flex-row items-center justify-center gap-1 md:gap-2 p-1 md:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                            <svg class="w-4 h-4 md:w-6 md:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            </svg>
+                                            <span class="action-text hidden md:inline">Lisa korvi</span>
+                                        </a>
+                                        <div class="w-px h-6 md:h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                        <a href="#" class="flex-1 flex flex-row items-center justify-center gap-1 md:gap-2 p-1 md:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
+                                            <span class="action-text hidden md:inline">Vaata</span>
+                                            <svg class="w-4 h-4 md:w-6 md:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Related Product 3 -->
+                        <div class="flex-shrink-0 w-[60%] md:w-[40%]">
+                            <div class="group bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 flex flex-row h-full hover:shadow-lg hover:-translate-y-0.5">
+                                <div class="relative w-32 md:w-48 flex-shrink-0 overflow-hidden">
+                                    <a href="#" class="block w-full h-full no-underline">
+                                        <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Related Product 3" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style="background-color: #fde68a;" />
+                                    </a>
+                                </div>
+                                <div class="p-3 md:p-4 flex flex-col flex-1 justify-between">
+                                    <div>
+                                        <h4 class="text-sm md:text-base font-semibold text-gray-900 mb-2 md:mb-3 leading-tight line-clamp-2">
+                                            <a href="#" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">Sarnane toode 3 - Kolmas variant</a>
+                                        </h4>
+                                        <div class="flex items-center justify-between mb-2 md:mb-4 gap-2">
+                                            <div class="flex items-center gap-1 md:gap-2">
+                                                <span class="text-lg md:text-xl font-bold text-gray-900">199.99 €</span>
+                                            </div>
+                                            <div class="flex items-center gap-1">
+                                                <div class="text-yellow-400 text-sm">
+                                                    <span>★★★☆☆</span>
+                                                </div>
+                                                <span class="text-xs text-gray-500">(8)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-0 border-t border-gray-200 pt-1 transition-colors duration-150 relative">
+                                        <a href="#" class="flex-1 flex flex-row items-center justify-center gap-1 md:gap-2 p-1 md:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                            <svg class="w-4 h-4 md:w-6 md:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            </svg>
+                                            <span class="action-text hidden md:inline">Lisa korvi</span>
+                                        </a>
+                                        <div class="w-px h-6 md:h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                        <a href="#" class="flex-1 flex flex-row items-center justify-center gap-1 md:gap-2 p-1 md:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
+                                            <span class="action-text hidden md:inline">Vaata</span>
+                                            <svg class="w-4 h-4 md:w-6 md:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Left Gradient Overlay -->
+                    <div 
+                        x-show="leftOpacity > 0" 
+                        :style="{ opacity: leftOpacity }"
+                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                        x-transition:leave="transition-opacity duration-250 ease-in"
+                        class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-gray-50 via-gray-50/70 to-transparent pointer-events-none z-10"
+                    ></div>
+                    
+                    <!-- Right Gradient Overlay -->
+                    <div 
+                        x-show="rightOpacity > 0" 
+                        :style="{ opacity: rightOpacity }"
+                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                        x-transition:leave="transition-opacity duration-250 ease-in"
+                        class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-gray-50 via-gray-50/70 to-transparent pointer-events-none z-10"
+                    ></div>
+                    
+                    <!-- Scroll Indicators (Optional) -->
+                    <div class="text-xs text-gray-500 mt-2">
+                        💡 Horizontal scroll enabled • Desktop: 40% width • Mobile: 60% width • Mouse wheel horizontal scroll supported
+                    </div>
+                    
+                    <script>
+                    // Horizontal scroll with mouse wheel for related products
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const scrollContainer = document.getElementById('horizontal-scroll-container');
+                        if (scrollContainer) {
+                            scrollContainer.addEventListener('wheel', function(e) {
+                                if (e.deltaY !== 0) {
+                                    e.preventDefault();
+                                    // Smoother scroll with faster scroll amount
+                                    const scrollAmount = e.deltaY * 1.2;
+                                    scrollContainer.scrollBy({
+                                        left: scrollAmount,
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    </script>
+                </div>
+            </div>
+            
 
         </section>
 
@@ -2050,7 +2264,7 @@ get_header(); ?>
                                     // Render meta items with conditional dividers
                                     foreach ($meta_items as $index => $item) {
                                         echo '<div class="rounded-lg p-1 min-w-20">';
-                                        echo '    <div class="text-[10px] text-gray-400 uppercase tracking-wide leading-tight">' . esc_html($item['label']) . '</div>';
+                                        echo '    <div class="text-2xs text-gray-400 uppercase tracking-wide leading-tight">' . esc_html($item['label']) . '</div>';
                                         
                                         // Render value as link if clickable
                                         if (!empty($item['clickable']) && $item['clickable']) {
@@ -2119,7 +2333,7 @@ get_header(); ?>
                                     
                                     foreach ($meta_items_2 as $index => $item) {
                                         echo '<div class="rounded-lg p-1 min-w-20">';
-                                        echo '    <div class="text-[10px] text-gray-400 uppercase tracking-wide leading-tight">' . esc_html($item['label']) . '</div>';
+                                        echo '    <div class="text-2xs text-gray-400 uppercase tracking-wide leading-tight">' . esc_html($item['label']) . '</div>';
                                         
                                         // Render value as link if clickable
                                         if (!empty($item['clickable']) && $item['clickable']) {
@@ -2385,7 +2599,11 @@ get_header(); ?>
                                     const el = $refs.reviewsContainer;
                                     $event.preventDefault();
                                     // Smooth horizontal scroll with mouse wheel
-                                    el.scrollLeft += $event.deltaY * 0.5;
+                                    const scrollAmount = $event.deltaY * 1.2;
+                                    el.scrollBy({
+                                        left: scrollAmount,
+                                        behavior: 'smooth'
+                                    });
                                 "
                                 @scroll="
                                     const el = $refs.reviewsContainer;

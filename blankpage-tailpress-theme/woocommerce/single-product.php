@@ -398,7 +398,7 @@ get_header('shop'); ?>
                         
                         <!-- Add to Cart Form -->
                         <?php if ($product->is_purchasable() && $product->is_in_stock()) : ?>
-                        <form class="cart space-y-4" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
+                        <form class="cart space-y-3" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
                             
                             <!-- Variable Product Attributes -->
                             <?php if ($product->is_type('variable')) : ?>
@@ -423,44 +423,44 @@ get_header('shop'); ?>
                             <!-- Separator Line -->
                             <div class="border-t border-gray-200 pt-0"></div>
 
-                            <!-- 6. Quantity + Buttons Row -->
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <!-- Quantity Selector - More Compact -->
+                            <!-- Quantity + Buttons Row (Design System Showcase Match) -->
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <!-- Quantity Selector -->
                                 <div class="flex items-center space-x-3">
                                     <label class="text-sm font-semibold text-gray-700">Kogus:</label>
                                     <div class="flex items-center border border-gray-300 rounded-lg">
-                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 quantity-minus cursor-pointer">−</button>
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer quantity-minus">−</button>
                                         <input type="number" 
                                                name="quantity" 
                                                value="<?php echo esc_attr(isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : 1); ?>" 
                                                min="1" 
                                                max="<?php echo esc_attr(0 < $product->get_max_purchase_quantity() ? $product->get_max_purchase_quantity() : ''); ?>"
-                                              class="w-12 text-center border-0 focus:ring-0 quantity-input [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 quantity-plus cursor-pointer">+</button>
+                                               class="w-12 py-2 text-center border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer quantity-plus">+</button>
                                     </div>
                                 </div>
                                 <!-- Action Buttons -->
                                 <div class="flex gap-3 flex-1">
-                                    <!-- Add to Cart Button -->
+                                    <!-- Add to Cart Button (Showcase Design) -->
                                     <button type="submit" 
                                             name="add-to-cart" 
                                             value="<?php echo esc_attr($product->get_id()); ?>" 
-                                            class="flex-1 flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline whitespace-nowrap cursor-pointer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 flex-shrink-0">
+                                            class="flex-1 inline-flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-md shadow-sm hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
+                                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                         </svg>
                                         Lisa korvi
                                     </button>
 
-                                    <!-- Buy Now Button (instead of wishlist) -->
+                                    <!-- Buy Now Button (Showcase Design) -->
                                     <button type="button" 
                                             onclick="buyNow(this)"
-                                            class="flex-1 flex items-center justify-center bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 no-underline hover:no-underline whitespace-nowrap cursor-pointer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 flex-shrink-0">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                                        </svg>
+                                            class="flex-1 inline-flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-emerald-600 rounded-md shadow-sm hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200">
                                         Osta kohe
-                                     </button>
+                                        <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -470,96 +470,811 @@ get_header('shop'); ?>
                             </div>
                         <?php endif; ?>
                         
-                        <!-- Separator Line -->
+                        <!-- Product Meta Information (Showcase Design) -->
                         <div class="border-t border-gray-200 pt-4">
-                        
-                        <!-- 7. Brand & SKU Row -->
-                        <?php 
-                        $brand_terms = get_the_terms($product->get_id(), 'product_brand');
-                        
-                        $sku = $product->get_sku();
-                        
-                        if (!empty($brand_terms) && !is_wp_error($brand_terms) || $sku) : 
-                        ?>
-                            <div class="flex items-center justify-between text-sm">
-                                <!-- Brand - Left Side -->
-                                <?php if (!empty($brand_terms) && !is_wp_error($brand_terms)) : ?>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="font-semibold text-gray-700">Bränd:</span>
-                                        <span class="text-gray-600">
-                                            <?php 
-                                            $brand_names = wp_list_pluck($brand_terms, 'name');
-                                            echo esc_html(implode(', ', $brand_names));
-                                            ?>
-                                        </span>
-                                    </div>
-                                <?php else : ?>
-                                    <div></div> <!-- Empty div for spacing -->
-                                <?php endif; ?>
+                            <?php 
+                            // Gather meta information using project-specific approach
+                            $brand_terms = get_the_terms($product->get_id(), 'product_brand');
+                            $product_categories = get_the_terms($product->get_id(), 'product_cat');
+                            $sku = $product->get_sku();
+                            $ean = get_post_meta($product->get_id(), '_global_unique_id', true);
+                            
+                            $meta_items = [];
+                            
+                            // Collect available meta items (Showcase Logic)
+                            if (!empty($brand_terms) && !is_wp_error($brand_terms)) {
+                                $brand_names = wp_list_pluck($brand_terms, 'name');
+                                $first_brand = $brand_terms[0];
+                                $brand_link = get_term_link($first_brand, 'product_brand');
                                 
-                                <!-- SKU - Right Side -->
-                                <?php if ($sku) : ?>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="font-semibold text-gray-700">Tootekood:</span>
-                                        <span class="text-gray-600"><?php echo esc_html($sku); ?></span>
-                                    </div>
-                                <?php else : ?>
-                                    <div></div> <!-- Empty div for spacing -->
-                                <?php endif; ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <!-- 8. Categories & EAN Row -->
-                        <?php 
-                        $product_categories = get_the_terms($product->get_id(), 'product_cat');
-                        $ean = get_post_meta($product->get_id(), '_global_unique_id', true); // EAN stored in _global_unique_id
-                        
-                        if ($product_categories && !is_wp_error($product_categories) || $ean) :
-                        ?>
-                            <div class="flex items-center justify-between text-sm">
-                                <!-- Categories - Left Side -->
-                                <?php if ($product_categories && !is_wp_error($product_categories)) : ?>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="font-semibold text-gray-700">Kategooriad:</span>
-                                        <span class="text-gray-600">
-                                            <?php 
-                                            $category_names = array_map(function($category) {
-                                                return $category->name;
-                                            }, array_slice($product_categories, 0, 5));
-                                            echo esc_html(implode(', ', $category_names));
-                                            ?>
-                                        </span>
-                                    </div>
-                                <?php else : ?>
-                                    <div></div> <!-- Empty div for spacing -->
-                                <?php endif; ?>
+                                $meta_items[] = [
+                                    'label' => 'Bränd',
+                                    'value' => implode(', ', $brand_names),
+                                    'link' => !is_wp_error($brand_link) ? $brand_link : '',
+                                    'clickable' => !is_wp_error($brand_link)
+                                ];
+                            }
+                            
+                            if (!empty($product_categories) && !is_wp_error($product_categories)) {
+                                $category_names = array_map(function($category) {
+                                    return $category->name;
+                                }, array_slice($product_categories, 0, 3)); // Limit to first 3
+                                $first_category = $product_categories[0];
+                                $category_link = get_term_link($first_category, 'product_cat');
                                 
-                                <!-- EAN - Right Side -->
-                                <?php if ($ean) : ?>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="font-semibold text-gray-700">EAN:</span>
-                                        <span class="text-gray-600"><?php echo esc_html($ean); ?></span>
-                                    </div>
-                                <?php else : ?>
-                                    <div></div> <!-- Empty div for spacing -->
-                                <?php endif; ?>
-                            </div>
-                        <?php endif; ?>
-
-                        </div> <!-- Close separator div -->
+                                $meta_items[] = [
+                                    'label' => 'Kategooriad',
+                                    'value' => implode(', ', $category_names),
+                                    'link' => !is_wp_error($category_link) ? $category_link : '',
+                                    'clickable' => !is_wp_error($category_link)
+                                ];
+                            }
+                            
+                            if (!empty($sku)) {
+                                $meta_items[] = [
+                                    'label' => 'Tootekood',
+                                    'value' => $sku,
+                                    'clickable' => false
+                                ];
+                            }
+                            
+                            if (!empty($ean)) {
+                                $meta_items[] = [
+                                    'label' => 'EAN',
+                                    'value' => $ean,
+                                    'clickable' => false
+                                ];
+                            }
+                            
+                            // Render meta items if any exist
+                            if (!empty($meta_items)) :
+                            ?>
+                                <div class="flex items-center">
+                                    <?php 
+                                    // Render meta items with conditional dividers (Showcase Pattern)
+                                    foreach ($meta_items as $index => $item) {
+                                        echo '<div class="rounded-lg p-1 min-w-20">';
+                                        echo '    <div class="text-2xs text-gray-400 uppercase tracking-wide leading-tight">' . esc_html($item['label']) . '</div>';
+                                        
+                                        // Render value as link if clickable
+                                        if (!empty($item['clickable']) && $item['clickable']) {
+                                            echo '    <div class="text-xs font-medium"><a href="' . esc_url($item['link']) . '" class="text-gray-900 hover:text-blue-600">' . esc_html($item['value']) . '</a></div>';
+                                        } else {
+                                            echo '    <div class="text-xs font-medium text-gray-900">' . esc_html($item['value']) . '</div>';
+                                        }
+                                        
+                                        echo '</div>';
+                                        
+                                        // Add divider if not the last item (Smart Divider Logic)
+                                        if ($index < count($meta_items) - 1) {
+                                            echo '<div class="h-8 w-px bg-gray-200 mx-2"></div>';
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            <?php endif; ?>
+                        </div> <!-- Close meta info section -->
                     </div>
                 </div>
             </div>
 
-            <!-- Product Data Tabs -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12">
-                <div class="p-8">
-                    <?php woocommerce_output_product_data_tabs(); ?>
+            <?php 
+            // Related Products Block - Only show if kokkusobivad SKUs exist
+            $kokkusobivad_skus = get_post_meta(get_the_ID(), '_blankpage_kokkusobivad_sku', true);
+            
+            if (!empty($kokkusobivad_skus)) :
+                // Clean and split SKUs
+                $skus_array = array_filter(array_map('trim', explode(',', $kokkusobivad_skus)));
+                
+                if (!empty($skus_array)) :
+                    // Fetch related products by SKU
+                    $related_products = array();
+                    foreach ($skus_array as $sku) {
+                        $product_id = wc_get_product_id_by_sku($sku);
+                        if ($product_id && $product_id != get_the_ID()) {
+                            $product = wc_get_product($product_id);
+                            if ($product && $product->is_visible()) {
+                                $related_products[] = $product;
+                            }
+                        }
+                    }
+                    
+                    if (!empty($related_products)) :
+            ?>
+            
+            <!-- Kokkusobivad tooted Section -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-400 mb-6 px-4">Kokkusobivad tooted</h3>
+                
+                <!-- Horizontal Scroll Container -->
+                <div class="relative" x-data="{ leftOpacity: 0, rightOpacity: 0, fadeDistance: 50 }">
+                    
+                    <div 
+                        class="flex gap-4 overflow-x-auto pb-4 px-4 scroll-smooth" 
+                        id="horizontal-scroll-container"
+                        x-ref="relatedContainer"
+                        @scroll="
+                            const el = $refs.relatedContainer;
+                            const fade = fadeDistance;
+                            
+                            // Calculate left and right gradient opacities
+                            leftOpacity = Math.min(el.scrollLeft / fade, 1);
+                            const scrollRight = el.scrollLeft + el.clientWidth;
+                            const distanceFromRight = el.scrollWidth - scrollRight;
+                            rightOpacity = el.scrollWidth > el.clientWidth ? Math.min(distanceFromRight / fade, 1) : 0;
+                        "
+                        x-init="
+                            $nextTick(() => {
+                                const el = $refs.relatedContainer;
+                                // Initialize right gradient if content overflows
+                                leftOpacity = 0;
+                                rightOpacity = el.scrollWidth > el.clientWidth ? 1 : 0;
+                            });
+                        ">
+                        
+                        <?php foreach ($related_products as $related_product) : 
+                            $product_id = $related_product->get_id();
+                            $product_name = $related_product->get_name();
+                            $product_url = get_permalink($product_id);
+                            $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'woocommerce_thumbnail');
+                            $product_image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
+                            $product_price = $related_product->get_price_html();
+                            $product_rating = $related_product->get_average_rating();
+                            $product_review_count = $related_product->get_review_count();
+                            $is_on_sale = $related_product->is_on_sale();
+                            $is_new = (strtotime($related_product->get_date_created()) > strtotime('-30 days'));
+                        ?>
+                        
+                        <!-- Related Product -->
+                        <div class="flex-shrink-0 w-[75%] sm:w-[480px] lg:w-[40%]">
+                            <div class="group bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 flex flex-row h-full hover:shadow-lg hover:-translate-y-0.5">
+                                <div class="relative w-32 lg:w-48 flex-shrink-0 overflow-hidden">
+                                    <a href="<?php echo esc_url($product_url); ?>" class="block w-full h-full no-underline">
+                                        <img src="<?php echo esc_url($product_image_url); ?>" alt="<?php echo esc_attr($product_name); ?>" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                                    </a>
+                                    <?php if ($is_new) : ?>
+                                    <span class="absolute top-2 left-2 z-10 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-500 to-green-600 text-white">
+                                        Uus
+                                    </span>
+                                    <?php elseif ($is_on_sale) : ?>
+                                    <span class="absolute top-2 left-2 z-10 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-red-500 to-red-600 text-white">
+                                        Soodustus
+                                    </span>
+                                    <?php endif; ?>
+                                </div>
+                                <!-- Product Info - Always visible -->
+                                <div class="flex p-3 lg:p-4 flex-col flex-1 justify-between">
+                                    <div>
+                                        <h4 class="text-xs lg:text-base font-semibold text-gray-900 mb-2 lg:mb-3 leading-tight line-clamp-2">
+                                            <a href="<?php echo esc_url($product_url); ?>" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600"><?php echo esc_html($product_name); ?></a>
+                                        </h4>
+                                        <div class="flex items-center justify-between mb-2 lg:mb-4 gap-2">
+                                            <div class="flex items-center gap-1 lg:gap-2 text-sm lg:text-lg font-bold">
+                                                <?php echo $product_price; ?>
+                                            </div>
+                                            <?php if ($product_rating > 0) : ?>
+                                            <div class="flex items-center gap-1">
+                                                <div class="text-yellow-400 text-sm">
+                                                    <?php 
+                                                    $stars = '';
+                                                    $full_stars = floor($product_rating);
+                                                    $half_star = ($product_rating - $full_stars) >= 0.5;
+                                                    
+                                                    for ($i = 1; $i <= 5; $i++) {
+                                                        if ($i <= $full_stars) {
+                                                            $stars .= '★';
+                                                        } elseif ($i == $full_stars + 1 && $half_star) {
+                                                            $stars .= '☆';
+                                                        } else {
+                                                            $stars .= '☆';
+                                                        }
+                                                    }
+                                                    echo '<span>' . $stars . '</span>';
+                                                    ?>
+                                                </div>
+                                                <span class="text-xs text-gray-500">(<?php echo $product_review_count; ?>)</span>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-0 border-t border-gray-200 pt-1 transition-colors duration-150 relative">
+                                        <?php if ($related_product->is_purchasable() && $related_product->is_in_stock()) : ?>
+                                        <a href="<?php echo esc_url('?add-to-cart=' . $product_id); ?>" class="flex-1 flex flex-row items-center justify-center gap-1 lg:gap-2 p-1 lg:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi">
+                                            <svg class="w-4 h-4 lg:w-6 lg:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            </svg>
+                                            <span class="action-text hidden lg:inline">Lisa korvi</span>
+                                        </a>
+                                        <?php else : ?>
+                                        <span class="flex-1 flex flex-row items-center justify-center gap-1 lg:gap-2 p-1 lg:p-2 text-gray-400 text-xs font-medium uppercase">
+                                            <span class="action-text hidden lg:inline">Pole saadaval</span>
+                                        </span>
+                                        <?php endif; ?>
+                                        <div class="w-px h-6 lg:h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                        <a href="<?php echo esc_url($product_url); ?>" class="flex-1 flex flex-row items-center justify-center gap-1 lg:gap-2 p-1 lg:p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
+                                            <span class="action-text hidden lg:inline">Vaata</span>
+                                            <svg class="w-4 h-4 lg:w-6 lg:h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <?php endforeach; ?>
+                        
+                    </div>
+                    
+                    <!-- Left Gradient Overlay -->
+                    <div 
+                        x-show="leftOpacity > 0" 
+                        :style="{ opacity: leftOpacity }"
+                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                        x-transition:leave="transition-opacity duration-250 ease-in"
+                        class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-gray-50 via-gray-50/70 to-transparent pointer-events-none z-10"
+                    ></div>
+                    
+                    <!-- Right Gradient Overlay -->
+                    <div 
+                        x-show="rightOpacity > 0" 
+                        :style="{ opacity: rightOpacity }"
+                        x-transition:enter="transition-opacity duration-250 ease-out" 
+                        x-transition:leave="transition-opacity duration-250 ease-in"
+                        class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-gray-50 via-gray-50/70 to-transparent pointer-events-none z-10"
+                    ></div>
+                    
+                    <script>
+                    // Horizontal scroll with mouse wheel for related products
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const scrollContainer = document.getElementById('horizontal-scroll-container');
+                        if (scrollContainer) {
+                            scrollContainer.addEventListener('wheel', function(e) {
+                                if (e.deltaY !== 0) {
+                                    e.preventDefault();
+                                    const scrollAmount = e.deltaY * 1.2;
+                                    scrollContainer.scrollBy({
+                                        left: scrollAmount,
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    </script>
+                </div>
+            </div>
+            
+            <?php 
+                    endif; // End if related products found
+                endif; // End if skus_array not empty
+            endif; // End if variatsiooni_skus not empty
+            ?>
+
+            <div x-data="{ openAccordion: null }">
+                <!-- Single Container: Description + Accordion -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
+                    <!-- Product Description -->
+                    <div class="p-6 border-b border-gray-200">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Toote kirjeldus</h4>
+                        <div class="prose max-w-none">
+                            <?php 
+                            // Get product description
+                            $product_description = get_the_content();
+                            if (!empty($product_description)) :
+                                echo apply_filters('the_content', $product_description);
+                            else :
+                                echo '<p class="text-gray-500 italic">Toote kirjeldus pole saadaval.</p>';
+                            endif;
+                            ?>
+                        </div>
+                    </div>
+                            
+                            <!-- Accordion -->
+                            <!-- Lisainfo Accordion Item -->
+                            <div class="border-b border-gray-200 last:border-b-0">
+                                <button 
+                                    @click="openAccordion = openAccordion === 'additional' ? null : 'additional'"
+                                    class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                                >
+                                    <span class="font-medium text-gray-900">Lisainfo</span>
+                                    <svg 
+                                        :class="openAccordion === 'additional' ? 'rotate-180' : ''"
+                                        class="w-5 h-5 text-gray-500 transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke-width="1.5" 
+                                        stroke="currentColor"
+                                    >
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <div 
+                                    x-show="openAccordion === 'additional'" 
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 max-h-0"
+                                    x-transition:enter-end="opacity-100 max-h-96"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 max-h-96"
+                                    x-transition:leave-end="opacity-0 max-h-0"
+                                    class="px-6 pb-4 overflow-hidden"
+                                >
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <?php
+                                        // Get product attributes and meta data
+                                        global $product;
+                                        $attributes = $product->get_attributes();
+                                        $product_id = $product->get_id();
+                                        
+                                        // Collect all product info
+                                        $product_info = [];
+                                        
+                                        // Add product attributes
+                                        if (!empty($attributes)) {
+                                            foreach ($attributes as $attribute) {
+                                                if ($attribute->get_visible()) {
+                                                    $name = wc_attribute_label($attribute->get_name());
+                                                    $values = array();
+                                                    if ($attribute->is_taxonomy()) {
+                                                        $attribute_taxonomy = $attribute->get_taxonomy_object();
+                                                        $attribute_values = wc_get_product_terms($product_id, $attribute->get_name(), array('fields' => 'names'));
+                                                        foreach ($attribute_values as $attribute_value) {
+                                                            $values[] = esc_html($attribute_value);
+                                                        }
+                                                    } else {
+                                                        $values = $attribute->get_options();
+                                                        foreach ($values as &$value) {
+                                                            $value = make_clickable(esc_html($value));
+                                                        }
+                                                    }
+                                                    $product_info[$name] = implode(', ', $values);
+                                                }
+                                            }
+                                        }
+                                        
+                                        // Add standard product data
+                                        if ($product->has_weight()) {
+                                            $product_info['Kaal'] = wc_format_weight($product->get_weight());
+                                        }
+                                        if ($product->has_dimensions()) {
+                                            $product_info['Mõõdud'] = wc_format_dimensions($product->get_dimensions(false));
+                                        }
+                                        
+                                        // Add SKU if available
+                                        if ($product->get_sku()) {
+                                            $product_info['SKU'] = $product->get_sku();
+                                        }
+                                        
+                                        // Add custom meta fields
+                                        $custom_fields = [
+                                            '_blankpage_ean' => 'EAN',
+                                            '_blankpage_brand' => 'Bränd',
+                                            '_blankpage_material' => 'Materjal',
+                                            '_blankpage_color' => 'Värv',
+                                            '_blankpage_origin' => 'Päritolumaa',
+                                            '_blankpage_warranty' => 'Garantii',
+                                            '_blankpage_care' => 'Hooldus'
+                                        ];
+                                        
+                                        foreach ($custom_fields as $meta_key => $label) {
+                                            $meta_value = get_post_meta($product_id, $meta_key, true);
+                                            if (!empty($meta_value)) {
+                                                $product_info[$label] = esc_html($meta_value);
+                                            }
+                                        }
+                                        
+                                        if (!empty($product_info)) :
+                                            // Split into two columns
+                                            $info_items = array_chunk($product_info, ceil(count($product_info) / 2), true);
+                                        ?>
+                                        <div class="grid md:grid-cols-2 gap-6">
+                                            <?php foreach ($info_items as $column_items) : ?>
+                                            <div class="space-y-3">
+                                                <?php foreach ($column_items as $label => $value) : ?>
+                                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                                    <span class="font-medium text-gray-700"><?php echo esc_html($label); ?>:</span>
+                                                    <span class="text-gray-600"><?php echo wp_kses_post($value); ?></span>
+                                                </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <?php else : ?>
+                                        <p class="text-gray-500 italic">Lisainfo pole saadaval.</p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            
+                            <!-- Tarneinfo Accordion Item -->
+                            <div class="border-b border-gray-200 last:border-b-0">
+                                <button 
+                                    @click="openAccordion = openAccordion === 'shipping' ? null : 'shipping'"
+                                    class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                                >
+                                    <span class="font-medium text-gray-900">Tarneinfo</span>
+                                    <svg 
+                                        :class="openAccordion === 'shipping' ? 'rotate-180' : ''"
+                                        class="w-5 h-5 text-gray-500 transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke-width="1.5" 
+                                        stroke="currentColor"
+                                    >
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <div 
+                                    x-show="openAccordion === 'shipping'" 
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 max-h-0"
+                                    x-transition:enter-end="opacity-100 max-h-96"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 max-h-96"
+                                    x-transition:leave-end="opacity-0 max-h-0"
+                                    class="px-6 pb-4 overflow-hidden"
+                                >
+                                    <div class="grid md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h5 class="font-semibold text-gray-900 mb-3">📦 Tarneviisid</h5>
+                                            <div class="space-y-3">
+                                                <?php
+                                                // Get shipping methods for current product
+                                                $shipping_zones = WC_Shipping_Zones::get_zones();
+                                                $shipping_methods_found = false;
+                                                
+                                                foreach ($shipping_zones as $zone) {
+                                                    $zone_obj = new WC_Shipping_Zone($zone['zone_id']);
+                                                    $shipping_methods = $zone_obj->get_shipping_methods(true);
+                                                    
+                                                    foreach ($shipping_methods as $method) {
+                                                        if ($method->enabled === 'yes') {
+                                                            $shipping_methods_found = true;
+                                                            $cost = $method->get_option('cost', '');
+                                                            $free_shipping_min = $method->get_option('min_amount', '');
+                                                            
+                                                            // Determine background color based on cost
+                                                            $bg_class = 'bg-gray-50';
+                                                            $text_class = 'text-gray-900';
+                                                            if ($cost == '0' || empty($cost)) {
+                                                                $bg_class = 'bg-green-50';
+                                                                $text_class = 'text-green-600';
+                                                            }
+                                                            
+                                                            echo '<div class="flex justify-between items-center p-3 ' . $bg_class . ' rounded-md">';
+                                                            echo '<span class="text-gray-700">' . esc_html($method->get_title()) . '</span>';
+                                                            
+                                                            if (!empty($free_shipping_min) && $cost == '0') {
+                                                                echo '<span class="font-medium ' . $text_class . '">Tasuta (üle ' . wc_price($free_shipping_min) . ')</span>';
+                                                            } elseif (!empty($cost) && $cost !== '0') {
+                                                                echo '<span class="font-medium ' . $text_class . '">' . wc_price($cost) . '</span>';
+                                                            } else {
+                                                                echo '<span class="font-medium ' . $text_class . '">Tasuta</span>';
+                                                            }
+                                                            echo '</div>';
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                if (!$shipping_methods_found) {
+                                                    echo '<div class="flex justify-between items-center p-3 bg-gray-50 rounded-md">';
+                                                    echo '<span class="text-gray-700">Tarne</span>';
+                                                    echo '<span class="font-medium text-gray-900">Hinnakirja järgi</span>';
+                                                    echo '</div>';
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-gray-900 mb-3">🔄 Tagastamine</h5>
+                                            <div class="space-y-2 text-gray-700">
+                                                <?php
+                                                // Get return policy from options or use defaults
+                                                $return_policy = get_option('blankpage_return_policy', '');
+                                                if (!empty($return_policy)) {
+                                                    echo wpautop(esc_html($return_policy));
+                                                } else {
+                                                    // Default return policy
+                                                    echo '<p>• 14-päevane tagastusõigus</p>';
+                                                    echo '<p>• Toode peab olema kasutamata</p>';
+                                                    echo '<p>• Originaalpakend vajalik</p>';
+                                                    echo '<p>• Tagastuskulud ostja kanda</p>';
+                                                    echo '<p>• Raha tagasi 3-5 tööpäeva jooksul</p>';
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Separate Reviews Block -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" x-data="{ 
+                            showReviewModal: false,
+                            leftOpacity: 0,
+                            rightOpacity: 0,
+                            fadeDistance: 80
+                        }">
+                            <div class="flex items-center justify-between mb-6">
+                                <?php
+                                global $product;
+                                $review_count = $product->get_review_count();
+                                ?>
+                                <h4 class="text-lg font-semibold text-gray-900">Klientide arvustused (<?php echo $review_count; ?>)</h4>
+                                <button 
+                                    @click="showReviewModal = true"
+                                    class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                                >
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                    Lisa arvustus
+                                </button>
+                            </div>
+                            
+                            <!-- Horizontal Reviews Cards with Overflow Scroll and Progressive Gradients -->
+                            <div class="relative -mx-2">
+                                <div 
+                                    class="flex gap-6 overflow-x-auto pb-4 px-2"
+                                    x-ref="reviewsContainer"
+                                    @wheel="
+                                        const el = $refs.reviewsContainer;
+                                        $event.preventDefault();
+                                        // Smooth horizontal scroll with mouse wheel
+                                        const scrollAmount = $event.deltaY * 1.2;
+                                        el.scrollBy({
+                                            left: scrollAmount,
+                                            behavior: 'smooth'
+                                        });
+                                    "
+                                    @scroll="
+                                        const el = $refs.reviewsContainer;
+                                        const fade = fadeDistance;
+                                        
+                                        // Calculate left and right gradient opacities
+                                        leftOpacity = Math.min(el.scrollLeft / fade, 1);
+                                        const scrollRight = el.scrollLeft + el.clientWidth;
+                                        const distanceFromRight = el.scrollWidth - scrollRight;
+                                        rightOpacity = el.scrollWidth > el.clientWidth ? Math.min(distanceFromRight / fade, 1) : 0;
+                                    "
+                                    x-init="
+                                        $nextTick(() => {
+                                            const el = $refs.reviewsContainer;
+                                            // Initialize right gradient if content overflows
+                                            leftOpacity = 0;
+                                            rightOpacity = el.scrollWidth > el.clientWidth ? 1 : 0;
+                                        });
+                                    "
+                                >
+                                <?php
+                                // Get WooCommerce reviews for this product
+                                $comments = get_comments(array(
+                                    'post_id' => $product->get_id(),
+                                    'status' => 'approve',
+                                    'type' => 'review',
+                                    'number' => 10, // Limit to 10 reviews
+                                    'orderby' => 'comment_date',
+                                    'order' => 'DESC'
+                                ));
+                                
+                                $gradient_colors = [
+                                    'from-blue-500 to-purple-500',
+                                    'from-green-500 to-emerald-500', 
+                                    'from-pink-500 to-rose-500',
+                                    'from-indigo-500 to-blue-500',
+                                    'from-orange-500 to-red-500',
+                                    'from-purple-500 to-pink-500',
+                                    'from-teal-500 to-cyan-500',
+                                    'from-red-500 to-orange-500',
+                                    'from-yellow-500 to-orange-500',
+                                    'from-emerald-500 to-teal-500'
+                                ];
+                                
+                                if (!empty($comments)) :
+                                    foreach ($comments as $index => $comment) :
+                                        $rating = get_comment_meta($comment->comment_ID, 'rating', true);
+                                        $author_name = $comment->comment_author;
+                                        $comment_date = mysql2date('j. F Y', $comment->comment_date);
+                                        $comment_content = $comment->comment_content;
+                                        
+                                        // Generate initials
+                                        $name_parts = explode(' ', $author_name);
+                                        $initials = '';
+                                        foreach ($name_parts as $part) {
+                                            if (!empty($part)) {
+                                                $initials .= strtoupper(substr($part, 0, 1));
+                                                if (strlen($initials) >= 2) break;
+                                            }
+                                        }
+                                        if (strlen($initials) < 2 && strlen($author_name) > 0) {
+                                            $initials = strtoupper(substr($author_name, 0, 2));
+                                        }
+                                        
+                                        // Get gradient color for this review
+                                        $gradient = $gradient_colors[$index % count($gradient_colors)];
+                                        
+                                        // Generate stars
+                                        $stars = '';
+                                        for ($i = 1; $i <= 5; $i++) {
+                                            $stars .= ($i <= $rating) ? '★' : '☆';
+                                        }
+                                ?>
+                                <!-- Review Card -->
+                                <div class="bg-gray-50 rounded-lg p-6 w-[60%] md:w-[40%] flex-shrink-0 border border-gray-200">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="w-12 h-12 bg-gradient-to-r <?php echo $gradient; ?> rounded-full flex items-center justify-center text-white font-semibold">
+                                            <?php echo esc_html($initials); ?>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-gray-900"><?php echo esc_html($author_name); ?></div>
+                                            <div class="flex items-center gap-2">
+                                                <div class="flex text-yellow-400">
+                                                    <span><?php echo $stars; ?></span>
+                                                </div>
+                                                <span class="text-sm text-gray-500"><?php echo esc_html($comment_date); ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-700 leading-relaxed">"<?php echo esc_html($comment_content); ?>"</p>
+                                </div>
+                                <?php 
+                                    endforeach;
+                                else :
+                                ?>
+                                <!-- No Reviews Message -->
+                                <div class="bg-gray-50 rounded-lg p-6 w-full text-center border border-gray-200">
+                                    <p class="text-gray-500 italic">Selle toote kohta pole veel ühtegi arvustust.</p>
+                                    <p class="text-sm text-gray-400 mt-2">Ole esimene, kes jagab oma kogemust!</p>
+                                </div>
+                                <?php endif; ?>
+                                </div>
+                                
+                                <!-- Left Gradient Overlay -->
+                                <div 
+                                    x-show="leftOpacity > 0" 
+                                    :style="{ opacity: leftOpacity }"
+                                    x-transition:enter="transition-opacity duration-250 ease-out" 
+                                    x-transition:leave="transition-opacity duration-250 ease-in"
+                                    class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none z-10"
+                                ></div>
+                                
+                                <!-- Right Gradient Overlay -->
+                                <div 
+                                    x-show="rightOpacity > 0" 
+                                    :style="{ opacity: rightOpacity }"
+                                    x-transition:enter="transition-opacity duration-250 ease-out" 
+                                    x-transition:leave="transition-opacity duration-250 ease-in"
+                                    class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-white via-white/70 to-transparent pointer-events-none z-10"
+                                ></div>
+                            </div>
+                            
+                            <!-- Scroll Indicator -->
+                            <div class="flex justify-center mt-4">
+                                <div class="text-sm text-gray-500 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l3-3m0 0l3 3m-3-3v12" transform="rotate(90)"></path>
+                                    </svg>
+                                    Keri horisontaalselt, et näha kõiki arvustusi
+                                </div>
+                            </div>
+                            
+                            <!-- Review Modal -->
+                            <div 
+                                x-show="showReviewModal"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="fixed inset-0 z-50 overflow-y-auto"
+                                @click.away="showReviewModal = false"
+                                style="display: none;"
+                            >
+                                <!-- Modal Background -->
+                                <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                                    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+                                    
+                                    <!-- Modal Content -->
+                                    <div 
+                                        x-show="showReviewModal"
+                                        x-transition:enter="transition ease-out duration-300"
+                                        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                        x-transition:leave="transition ease-in duration-200"
+                                        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                                        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                        class="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+                                    >
+                                        <!-- Modal Header -->
+                                        <div class="flex items-center justify-between mb-6">
+                                            <h3 class="text-lg font-semibold text-gray-900">Lisa oma arvustus</h3>
+                                            <button 
+                                                @click="showReviewModal = false"
+                                                class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                                            >
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Modal Form -->
+                                        <form @submit.prevent="console.log('Review submitted')" class="space-y-6">
+                                            <!-- Name Field -->
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Nimi</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Sinu nimi"
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                                    required
+                                                >
+                                            </div>
+                                            
+                                            <!-- Rating Field -->
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Hinnang</label>
+                                                <div class="flex items-center gap-2" x-data="{ rating: 5 }">
+                                                    <template x-for="star in 5">
+                                                        <button 
+                                                            type="button"
+                                                            @click="rating = star"
+                                                            :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
+                                                            class="text-2xl hover:text-yellow-400 transition-colors duration-200"
+                                                        >
+                                                            ★
+                                                        </button>
+                                                    </template>
+                                                    <span class="ml-2 text-sm text-gray-600" x-text="rating + '/5 tähte'"></span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Review Text -->
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Arvustus</label>
+                                                <textarea 
+                                                    rows="4"
+                                                    placeholder="Kirjuta oma arvustus siia..."
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
+                                                    required
+                                                ></textarea>
+                                            </div>
+                                            
+                                            <!-- Modal Actions -->
+                                            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+                                                <button 
+                                                    type="button"
+                                                    @click="showReviewModal = false"
+                                                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                                                >
+                                                    Tühista
+                                                </button>
+                                                <button 
+                                                    type="submit"
+                                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                                                >
+                                                    Lisa arvustus
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Related Products -->
-            <?php woocommerce_output_related_products(); ?>
+            <div class="container mx-auto px-4 max-w-7xl">
+                <?php woocommerce_output_related_products(); ?>
+            </div>
 
         <?php endwhile; ?>
 
@@ -572,6 +1287,19 @@ get_header('shop'); ?>
 /* WordPress 6.6.0 underline bug fix */
 :root :where(a:where(:not(.wp-element-button))) {
     text-decoration: none;
+}
+
+/* Remove white background from WooCommerce related products */
+.related.products {
+    background: none !important;
+}
+
+.related.products .products {
+    background: none !important;
+}
+
+.single-product .related.products {
+    background: transparent !important;
 }
 </style>
 

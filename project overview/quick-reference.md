@@ -218,6 +218,14 @@ Common Issues & Solutions
         - Problem: Using standard WooCommerce meta keys instead of project-specific ones
         - Common mistake: Using `_wc_gtin` instead of `_global_unique_id` for EAN
         - Fix: Always use project-specific meta keys documented above
+
+    WooCommerce Template Alignment Issues:
+        - Problem: WooCommerce functions like `woocommerce_output_related_products()` generate content outside intended containers
+        - Symptoms: Full-width sections that don't align with main content, white backgrounds spanning entire screen
+        - Root cause: WooCommerce default functions ignore parent container constraints
+        - Fix: Wrap WooCommerce functions in manual container divs
+        - Example: `<div class="container mx-auto px-4 max-w-7xl"><?php woocommerce_output_related_products(); ?></div>`
+        - CSS Override: Use `!important` declarations to override WooCommerce default styles when needed
         - Verify: Check data import scripts and existing product data
 
     Design System Bypass:

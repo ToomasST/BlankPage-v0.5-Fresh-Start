@@ -4,6 +4,57 @@
 
 ---
 
+## [0.5.9] - 2025-07-04 (Responsive Design & Alignment Fixes) 📱
+
+### WooCommerce Related Products Alignment & Responsive Optimization Complete
+**Release Date:** 2025-07-04  
+**Focus:** Related Products Block Alignment, Responsive Design Improvements, Layout Fixes
+
+### 🎯 MILESTONE: Related Products Layout & Responsive Design Complete ✅
+**Complete fix for related products alignment issues and comprehensive responsive design optimization**
+
+#### Related Products Alignment Fixes ✅
+- **Container Alignment**: Fixed WooCommerce default related products block alignment by moving inside main container
+- **Duplicate Block Removal**: Removed accidentally created duplicate "Kokkusobivad tooted" block
+- **Background Fix**: Removed unwanted full-width white background from WooCommerce default related products with CSS override
+- **Layout Consistency**: Ensured proper alignment with main content container (`container mx-auto px-4 max-w-7xl`)
+
+#### Comprehensive Responsive Design Implementation ✅
+- **Multi-Breakpoint Card Sizing**: 
+  - `<640px (sm)`: 75% width for mobile optimization
+  - `640px-1024px (sm-lg)`: 480px fixed width for tablets
+  - `≥1024px (lg+)`: 40% width for desktop
+- **Typography Scaling**: Proportional font size relationships maintained across all breakpoints
+  - Product titles: `text-xs` → `text-base` (12px → 16px)
+  - Product prices: `text-sm` → `text-lg` (14px → 18px)
+- **Responsive Logic**: Prevented infinite-width cards from long product titles with fixed width constraints
+
+#### Technical Implementation Details ✅
+- **Tailwind Responsive Classes**: `w-[75%] sm:w-[480px] lg:w-[40%]` for progressive enhancement
+- **CSS Override Strategy**: Targeted WooCommerce default styles with `!important` declarations
+- **Container Structure**: Proper nesting within main layout containers
+- **Breakpoint Consistency**: Unified `lg` breakpoint (1024px) usage across all components
+
+### 🔧 CRITICAL LESSONS LEARNED
+
+#### Layout Alignment Best Practices
+- **WooCommerce Default Templates**: Always check if WooCommerce functions like `woocommerce_output_related_products()` generate content outside intended containers
+- **Container Wrapping**: WooCommerce default functions may need manual container wrapping for proper alignment
+- **CSS Override Strategy**: Use targeted CSS with `!important` to override WooCommerce default styles when needed
+
+#### Responsive Design Methodology
+- **Fixed Width Strategy**: Use fixed pixel widths (e.g., `480px`) instead of `min-width` to prevent content-driven expansion
+- **Proportional Scaling**: Maintain consistent font size relationships across breakpoints
+- **Progressive Enhancement**: Start with mobile-first approach and enhance for larger screens
+
+### 🎨 USER EXPERIENCE IMPROVEMENTS
+- **Mobile Optimization**: 75% card width on small screens for better mobile experience
+- **Visual Hierarchy**: Consistent typography scaling maintains design balance
+- **Layout Stability**: Fixed-width cards prevent layout shifts from varying content lengths
+- **Professional Polish**: Eliminated alignment inconsistencies and visual bugs
+
+---
+
 ## [0.5.6] - 2025-07-01 (Product Detail Page & UI Improvements) 🎨
 
 ### Product Detail Page Design System Integration Complete
