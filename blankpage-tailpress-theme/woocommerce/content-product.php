@@ -59,7 +59,7 @@ if (empty($product) || !$product->is_visible()) {
             <?php if ($product->is_on_sale()) : ?>
                 <div class="flex items-center gap-2">
                     <span class="text-lg font-bold text-red-600"><?php echo wc_price($product->get_sale_price()); ?></span>
-                    <span class="text-sm text-gray-500 line-through"><?php echo wc_price($product->get_regular_price()); ?></span>
+                    <span class="text-sm font-normal text-gray-500 line-through"><?php echo wc_price($product->get_regular_price()); ?></span>
                 </div>
             <?php else : ?>
                 <div class="text-lg font-bold text-gray-900">
@@ -74,16 +74,18 @@ if (empty($product) || !$product->is_visible()) {
                 
                 if ($average_rating > 0) :
                 ?>
-                    <div class="flex items-center gap-1">
-                        <div class="text-yellow-400 text-sm">
+                    <div class="flex items-center gap-1 text-warning-500 text-sm">
+                        <div class="flex gap-px">
                             <?php
+                            $stars = '';
                             for ($i = 1; $i <= 5; $i++) {
                                 if ($i <= $average_rating) {
-                                    echo '<span>★</span>';
+                                    $stars .= '★';
                                 } else {
-                                    echo '<span class="text-gray-300">★</span>';
+                                    $stars .= '☆';
                                 }
                             }
+                            echo '<span class="text-warning-500">' . $stars . '</span>';
                             ?>
                         </div>
                         <?php if ($rating_count > 0) : ?>

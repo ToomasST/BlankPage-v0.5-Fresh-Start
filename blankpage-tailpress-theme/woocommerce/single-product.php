@@ -31,7 +31,48 @@ get_header('shop'); ?>
             </nav>
 
             <!-- Main Product Section -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-12" x-data="{ showCartModal: false, openAccordion: null, cartProduct: null, cartQuantity: 0 }">
+                
+                <!-- Cart Confirmation Modal -->
+                <div x-show="showCartModal" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="showCartModal = false">
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" @click.stop x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+                        <div class="text-center">
+                            <!-- Success Icon -->
+                            <div class="mx-auto flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                                <svg class="icon icon-xl text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                </svg>
+                            </div>
+                            
+                            <!-- Product Info -->
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Toode lisatud ostukorvi!</h3>
+                            <p class="text-gray-600 mb-6">Sinu ostukorvi on edukalt lisatud <strong><span x-text="cartQuantity"></span>x <span x-text="cartProduct"></span></strong></p>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col gap-3">
+                                <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all duration-200">
+                                    <svg class="icon icon-md mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                    </svg>
+                                    Vaata ostukorvi
+                                </a>
+                                <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200">
+                                    <svg class="icon icon-md mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                    </svg>
+                                    Mine maksma
+                                </a>
+                                <button 
+                                    @click="showCartModal = false"
+                                    class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
+                                >
+                                    Jätka ostlemist
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 lg:p-8">
                     
                     <!-- Images container: Custom Gallery Implementation -->
@@ -398,7 +439,7 @@ get_header('shop'); ?>
                         
                         <!-- Add to Cart Form -->
                         <?php if ($product->is_purchasable() && $product->is_in_stock()) : ?>
-                        <form class="cart space-y-3" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
+                        <form class="cart space-y-3" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data' @submit.prevent>
                             
                             <!-- Variable Product Attributes -->
                             <?php if ($product->is_type('variable')) : ?>
@@ -420,6 +461,9 @@ get_header('shop'); ?>
                                 </div>
                             <?php endif; ?>
 
+                            <!-- WooCommerce Required Hidden Field -->
+                            <input type="hidden" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" />
+                            
                             <!-- Separator Line -->
                             <div class="border-t border-gray-200 pt-0"></div>
 
@@ -429,35 +473,112 @@ get_header('shop'); ?>
                                 <div class="flex items-center space-x-3">
                                     <label class="text-sm font-semibold text-gray-700">Kogus:</label>
                                     <div class="flex items-center border border-gray-300 rounded-lg">
-                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer quantity-minus">−</button>
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer transition-colors duration-150 quantity-minus">−</button>
                                         <input type="number" 
                                                name="quantity" 
-                                               value="<?php echo esc_attr(isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : 1); ?>" 
+                                               value="<?php echo esc_attr(isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : 1); ?>"
                                                min="1" 
                                                max="<?php echo esc_attr(0 < $product->get_max_purchase_quantity() ? $product->get_max_purchase_quantity() : ''); ?>"
-                                               class="w-12 py-2 text-center border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer quantity-plus">+</button>
+                                               class="w-12 py-2 text-center border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none quantity-input">
+                                        <button type="button" class="px-2 py-2 text-gray-600 hover:text-gray-800 cursor-pointer transition-colors duration-150 quantity-plus">+</button>
                                     </div>
                                 </div>
                                 <!-- Action Buttons -->
                                 <div class="flex gap-3 flex-1">
-                                    <!-- Add to Cart Button (Showcase Design) -->
-                                    <button type="submit" 
-                                            name="add-to-cart" 
-                                            value="<?php echo esc_attr($product->get_id()); ?>" 
-                                            class="flex-1 inline-flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-md shadow-sm hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
-                                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <!-- Add to Cart Button (WooCommerce Standard) -->
+                                    <button type="button" 
+                                            class="flex-1 bg-blue-600 text-white text-sm px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                            @click="
+                                                console.log('🔥 Button clicked!');
+                                                console.log('Alpine context:', { showCartModal, cartProduct, cartQuantity });
+                                                
+                                                const quantity = document.querySelector('input[name=quantity]').value;
+                                                console.log('📦 Quantity:', quantity);
+                                                
+                                                console.log('🚀 Sending AJAX request to /wordpress/?wc-ajax=add_to_cart');
+                                                
+                                                fetch('/wordpress/?wc-ajax=add_to_cart', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                                                    },
+                                                    body: new URLSearchParams({
+                                                        product_id: '<?php echo esc_attr($product->get_id()); ?>',
+                                                        quantity: quantity
+                                                    })
+                                                })
+                                                .then(response => {
+                                                    console.log('✅ Response received:', response.status);
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    console.log('📋 Response data:', data);
+                                                    if (data.error) {
+                                                        console.error('❌ WooCommerce error:', data);
+                                                        alert('Toote lisamine ostukorvi ebaõnnestus. Palun proovi uuesti.');
+                                                        return;
+                                                    }
+                                                    console.log('🎉 Success! Opening modal...');
+                                                    cartQuantity = parseInt(quantity);
+                                                    cartProduct = '<?php echo esc_js($product->get_name()); ?>';
+                                                    showCartModal = true;
+                                                    console.log('🔄 Alpine state updated:', { cartQuantity, cartProduct, showCartModal });
+                                                })
+                                                .catch(error => {
+                                                    console.error('💥 AJAX error:', error);
+                                                    alert('Tehniline viga! Palun proovi hiljem uuesti.');
+                                                });
+                                            "
+                                            class="single_add_to_cart_button flex-1 inline-flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-md shadow-sm hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
+                                        <svg class="icon icon-lg mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                         </svg>
                                         Lisa korvi
                                     </button>
 
-                                    <!-- Buy Now Button (Showcase Design) -->
+                                    <!-- Buy Now Button (AJAX + Redirect) -->
                                     <button type="button" 
-                                            onclick="buyNow(this)"
+                                            @click="
+                                                console.log('🚀 Buy Now clicked!');
+                                                
+                                                // Get quantity from form
+                                                const quantity = document.querySelector('input[name=quantity]').value || 1;
+                                                console.log('📦 Quantity:', quantity);
+                                                
+                                                // Add to cart via AJAX
+                                                fetch('/wordpress/?wc-ajax=add_to_cart', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                                                    },
+                                                    body: new URLSearchParams({
+                                                        product_id: '<?php echo esc_attr($product->get_id()); ?>',
+                                                        quantity: quantity
+                                                    })
+                                                })
+                                                .then(response => {
+                                                    console.log('✅ Response received:', response.status);
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    console.log('📋 Response data:', data);
+                                                    if (data.error) {
+                                                        console.error('❌ WooCommerce error:', data);
+                                                        alert('Toote lisamine ostukorvi ebaõnnestus. Palun proovi uuesti.');
+                                                        return;
+                                                    }
+                                                    console.log('🎉 Success! Redirecting to checkout...');
+                                                    // Redirect to checkout page
+                                                    window.location.href = '<?php echo esc_url(wc_get_checkout_url()); ?>';
+                                                })
+                                                .catch(error => {
+                                                    console.error('💥 AJAX error:', error);
+                                                    alert('Tehniline viga! Palun proovi hiljem uuesti.');
+                                                });
+                                            "
                                             class="flex-1 inline-flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-emerald-600 rounded-md shadow-sm hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200">
                                         Osta kohe
-                                        <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <svg class="icon icon-lg ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                                         </svg>
                                     </button>
@@ -587,7 +708,7 @@ get_header('shop'); ?>
                 <h3 class="text-xl font-semibold text-gray-400 mb-6 px-4">Kokkusobivad tooted</h3>
                 
                 <!-- Horizontal Scroll Container -->
-                <div class="relative" x-data="{ leftOpacity: 0, rightOpacity: 0, fadeDistance: 50 }">
+                <div class="relative mb-4" x-data="{ leftOpacity: 0, rightOpacity: 0, fadeDistance: 50 }">
                     
                     <div 
                         class="flex gap-4 overflow-x-auto pb-4 px-4 scroll-smooth" 
@@ -743,17 +864,17 @@ get_header('shop'); ?>
                     });
                     </script>
                 </div>
-            </div>
             
             <?php 
                     endif; // End if related products found
                 endif; // End if skus_array not empty
             endif; // End if variatsiooni_skus not empty
             ?>
-
+            
+            <!-- Accordion Section (now inside x-data scope) -->
             <div x-data="{ openAccordion: null }">
                 <!-- Single Container: Description + Accordion -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
+                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 overflow-hidden mb-8">
                     <!-- Product Description -->
                     <div class="p-6 border-b border-gray-200">
                         <h4 class="text-lg font-semibold text-gray-900 mb-4">Toote kirjeldus</h4>
@@ -792,6 +913,7 @@ get_header('shop'); ?>
                                 </button>
                                 <div 
                                     x-show="openAccordion === 'additional'" 
+                                    x-cloak
                                     x-transition:enter="transition ease-out duration-300"
                                     x-transition:enter-start="opacity-0 max-h-0"
                                     x-transition:enter-end="opacity-100 max-h-96"
@@ -910,6 +1032,7 @@ get_header('shop'); ?>
                                 </button>
                                 <div 
                                     x-show="openAccordion === 'shipping'" 
+                                    x-cloak
                                     x-transition:enter="transition ease-out duration-300"
                                     x-transition:enter-start="opacity-0 max-h-0"
                                     x-transition:enter-end="opacity-100 max-h-96"
@@ -992,288 +1115,508 @@ get_header('shop'); ?>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Separate Reviews Block -->
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" x-data="{ 
-                            showReviewModal: false,
+            </div>
+            
+            <!-- Klientide arvustused -->                       
+                        <div class="bg-white rounded-2xl shadow-lg container mx-auto p-8 max-w-7xl" x-data="{
+                            showModal: false, 
+                            showSuccessModal: false,
                             leftOpacity: 0,
                             rightOpacity: 0,
                             fadeDistance: 80
                         }">
-                            <div class="flex items-center justify-between mb-6">
                                 <?php
-                                global $product;
-                                $review_count = $product->get_review_count();
+                                // Get product reviews
+                                $product_id = get_the_ID();
+                                $reviews = get_comments([
+                                    'post_id' => $product_id,
+                                    'status'  => 'approve',
+                                    'type'    => 'review'
+                                ]);
                                 ?>
-                                <h4 class="text-lg font-semibold text-gray-900">Klientide arvustused (<?php echo $review_count; ?>)</h4>
-                                <button 
-                                    @click="showReviewModal = true"
-                                    class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
-                                >
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                    Lisa arvustus
-                                </button>
-                            </div>
+                                
+                                <div class="flex items-center justify-between mb-6">
+                                    <h2 class="text-xl font-semibold text-gray-900">Klientide arvustused</h2>
+                                    <button 
+                                        @click="showModal = true" 
+                                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                                    >
+                                        <svg class="icon icon-md mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                        Lisa arvustus
+                                    </button>
+                                </div>
                             
-                            <!-- Horizontal Reviews Cards with Overflow Scroll and Progressive Gradients -->
-                            <div class="relative -mx-2">
-                                <div 
-                                    class="flex gap-6 overflow-x-auto pb-4 px-2"
-                                    x-ref="reviewsContainer"
-                                    @wheel="
-                                        const el = $refs.reviewsContainer;
-                                        $event.preventDefault();
-                                        // Smooth horizontal scroll with mouse wheel
-                                        const scrollAmount = $event.deltaY * 1.2;
-                                        el.scrollBy({
-                                            left: scrollAmount,
-                                            behavior: 'smooth'
-                                        });
-                                    "
-                                    @scroll="
-                                        const el = $refs.reviewsContainer;
-                                        const fade = fadeDistance;
-                                        
-                                        // Calculate left and right gradient opacities
-                                        leftOpacity = Math.min(el.scrollLeft / fade, 1);
-                                        const scrollRight = el.scrollLeft + el.clientWidth;
-                                        const distanceFromRight = el.scrollWidth - scrollRight;
-                                        rightOpacity = el.scrollWidth > el.clientWidth ? Math.min(distanceFromRight / fade, 1) : 0;
-                                    "
-                                    x-init="
-                                        $nextTick(() => {
+                            <?php if (empty($reviews)) : ?>
+                                <div class="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
+                                    <p class="text-gray-600 mb-4">Selle toote kohta pole veel arvustusi.</p>
+                                    <p class="text-gray-500">Ole esimene, kes kirjutab arvustuse!</p>
+                                </div>
+                            <?php else : ?>
+                                <!-- Horizontal Reviews Cards with Overflow Scroll and Progressive Gradients -->
+                                <div class="relative -mx-2">
+                                    <div 
+                                        class="flex gap-6 overflow-x-auto pb-4 px-2"
+                                        x-ref="reviewsContainer"
+                                        @wheel="
                                             const el = $refs.reviewsContainer;
-                                            // Initialize right gradient if content overflows
-                                            leftOpacity = 0;
-                                            rightOpacity = el.scrollWidth > el.clientWidth ? 1 : 0;
-                                        });
-                                    "
-                                >
-                                <?php
-                                // Get WooCommerce reviews for this product
-                                $comments = get_comments(array(
-                                    'post_id' => $product->get_id(),
-                                    'status' => 'approve',
-                                    'type' => 'review',
-                                    'number' => 10, // Limit to 10 reviews
-                                    'orderby' => 'comment_date',
-                                    'order' => 'DESC'
-                                ));
-                                
-                                $gradient_colors = [
-                                    'from-blue-500 to-purple-500',
-                                    'from-green-500 to-emerald-500', 
-                                    'from-pink-500 to-rose-500',
-                                    'from-indigo-500 to-blue-500',
-                                    'from-orange-500 to-red-500',
-                                    'from-purple-500 to-pink-500',
-                                    'from-teal-500 to-cyan-500',
-                                    'from-red-500 to-orange-500',
-                                    'from-yellow-500 to-orange-500',
-                                    'from-emerald-500 to-teal-500'
-                                ];
-                                
-                                if (!empty($comments)) :
-                                    foreach ($comments as $index => $comment) :
-                                        $rating = get_comment_meta($comment->comment_ID, 'rating', true);
-                                        $author_name = $comment->comment_author;
-                                        $comment_date = mysql2date('j. F Y', $comment->comment_date);
-                                        $comment_content = $comment->comment_content;
+                                            $event.preventDefault();
+                                            // Smooth horizontal scroll with mouse wheel
+                                            const scrollAmount = $event.deltaY * 1.2;
+                                            el.scrollBy({
+                                                left: scrollAmount,
+                                                behavior: 'smooth'
+                                            });
+                                        "
+                                        @scroll="
+                                            const el = $refs.reviewsContainer;
+                                            const fade = fadeDistance;
+                                            
+                                            // Calculate left and right gradient opacities
+                                            leftOpacity = Math.min(el.scrollLeft / fade, 1);
+                                            const scrollRight = el.scrollLeft + el.clientWidth;
+                                            const distanceFromRight = el.scrollWidth - scrollRight;
+                                            rightOpacity = el.scrollWidth > el.clientWidth ? Math.min(distanceFromRight / fade, 1) : 0;
+                                        "
+                                        x-init="
+                                            $nextTick(() => {
+                                                const el = $refs.reviewsContainer;
+                                                // Initialize right gradient if content overflows
+                                                leftOpacity = 0;
+                                                rightOpacity = el.scrollWidth > el.clientWidth ? 1 : 0;
+                                            });
+                                        "
+                                    >
+                                    <?php foreach ($reviews as $review) : ?>
+                                        <?php 
+                                        // Kommentaariandmed
+                                        $author   = esc_html($review->comment_author);
+                                        $date     = date_i18n('j. F Y', strtotime($review->comment_date));
+                                        $content  = wp_kses_post($review->comment_content);
+                                        $rating   = intval(get_comment_meta($review->comment_ID, 'rating', true));
                                         
-                                        // Generate initials
-                                        $name_parts = explode(' ', $author_name);
+                                        // Nime initsiaalid (esimene ja viimane täht)
+                                        $parts = explode(' ', $author);
                                         $initials = '';
-                                        foreach ($name_parts as $part) {
-                                            if (!empty($part)) {
-                                                $initials .= strtoupper(substr($part, 0, 1));
-                                                if (strlen($initials) >= 2) break;
+                                        if (!empty($parts)) {
+                                            $initials = strtoupper(substr($parts[0], 0, 1));
+                                            if (count($parts) > 1) {
+                                                $initials .= strtoupper(substr(end($parts), 0, 1));
                                             }
                                         }
-                                        if (strlen($initials) < 2 && strlen($author_name) > 0) {
-                                            $initials = strtoupper(substr($author_name, 0, 2));
-                                        }
-                                        
-                                        // Get gradient color for this review
-                                        $gradient = $gradient_colors[$index % count($gradient_colors)];
-                                        
-                                        // Generate stars
-                                        $stars = '';
-                                        for ($i = 1; $i <= 5; $i++) {
-                                            $stars .= ($i <= $rating) ? '★' : '☆';
-                                        }
-                                ?>
-                                <!-- Review Card -->
-                                <div class="bg-gray-50 rounded-lg p-6 w-[60%] md:w-[40%] flex-shrink-0 border border-gray-200">
-                                    <div class="flex items-center gap-3 mb-4">
-                                        <div class="w-12 h-12 bg-gradient-to-r <?php echo $gradient; ?> rounded-full flex items-center justify-center text-white font-semibold">
-                                            <?php echo esc_html($initials); ?>
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-gray-900"><?php echo esc_html($author_name); ?></div>
-                                            <div class="flex items-center gap-2">
-                                                <div class="flex text-yellow-400">
-                                                    <span><?php echo $stars; ?></span>
+                                        ?>
+                                        <div class="bg-gray-50 rounded-lg p-6 w-[60%] md:w-[40%] flex-shrink-0 border border-gray-200">
+                                            <div class="flex items-center gap-3 mb-4">
+                                                <!-- Avatar with initials -->
+                                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                                    <?php echo $initials; ?>
                                                 </div>
-                                                <span class="text-sm text-gray-500"><?php echo esc_html($comment_date); ?></span>
+                                                <div>
+                                                    <div class="font-medium text-gray-900"><?php echo $author; ?></div>
+                                                    <div class="flex items-center gap-2">
+                                                        <!-- Tähtede hind (★ = täis, ☆ = tühi) -->
+                                                        <div class="flex text-yellow-400">
+                                                            <?php 
+                                                            for ($i = 1; $i <= 5; $i++) {
+                                                                echo $i <= $rating ? '★' : '☆';
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                        <span class="text-sm text-gray-500"><?php echo $date; ?></span>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <p class="text-gray-700 leading-relaxed"><?php echo $content; ?></p>
                                         </div>
-                                    </div>
-                                    <p class="text-gray-700 leading-relaxed">"<?php echo esc_html($comment_content); ?>"</p>
+                                    <?php endforeach; ?>
                                 </div>
-                                <?php 
-                                    endforeach;
-                                else :
-                                ?>
-                                <!-- No Reviews Message -->
-                                <div class="bg-gray-50 rounded-lg p-6 w-full text-center border border-gray-200">
-                                    <p class="text-gray-500 italic">Selle toote kohta pole veel ühtegi arvustust.</p>
-                                    <p class="text-sm text-gray-400 mt-2">Ole esimene, kes jagab oma kogemust!</p>
-                                </div>
-                                <?php endif; ?>
-                                </div>
-                                
-                                <!-- Left Gradient Overlay -->
-                                <div 
-                                    x-show="leftOpacity > 0" 
-                                    :style="{ opacity: leftOpacity }"
-                                    x-transition:enter="transition-opacity duration-250 ease-out" 
-                                    x-transition:leave="transition-opacity duration-250 ease-in"
-                                    class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none z-10"
-                                ></div>
-                                
-                                <!-- Right Gradient Overlay -->
-                                <div 
-                                    x-show="rightOpacity > 0" 
-                                    :style="{ opacity: rightOpacity }"
-                                    x-transition:enter="transition-opacity duration-250 ease-out" 
-                                    x-transition:leave="transition-opacity duration-250 ease-in"
-                                    class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-white via-white/70 to-transparent pointer-events-none z-10"
-                                ></div>
-                            </div>
+                            <?php endif; ?>
                             
-                            <!-- Scroll Indicator -->
-                            <div class="flex justify-center mt-4">
-                                <div class="text-sm text-gray-500 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l3-3m0 0l3 3m-3-3v12" transform="rotate(90)"></path>
-                                    </svg>
-                                    Keri horisontaalselt, et näha kõiki arvustusi
-                                </div>
-                            </div>
-                            
-                            <!-- Review Modal -->
+                            <!-- Left Gradient Overlay -->
                             <div 
-                                x-show="showReviewModal"
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                class="fixed inset-0 z-50 overflow-y-auto"
-                                @click.away="showReviewModal = false"
-                                style="display: none;"
-                            >
-                                <!-- Modal Background -->
-                                <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                                    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
-                                    
-                                    <!-- Modal Content -->
-                                    <div 
-                                        x-show="showReviewModal"
-                                        x-transition:enter="transition ease-out duration-300"
-                                        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                        x-transition:leave="transition ease-in duration-200"
-                                        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                        class="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
-                                    >
-                                        <!-- Modal Header -->
+                                x-show="leftOpacity > 0" 
+                                :style="{ opacity: leftOpacity }"
+                                x-transition:enter="transition-opacity duration-250 ease-out" 
+                                x-transition:leave="transition-opacity duration-250 ease-in"
+                                class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none z-10"
+                            ></div>
+                            
+                            <!-- Right Gradient Overlay -->
+                            <div 
+                                x-show="rightOpacity > 0" 
+                                :style="{ opacity: rightOpacity }"
+                                x-transition:enter="transition-opacity duration-250 ease-out" 
+                                x-transition:leave="transition-opacity duration-250 ease-in"
+                                class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-white via-white/70 to-transparent pointer-events-none z-10"
+                            ></div>
+                        </div>
+                        
+                        <!-- Scroll Indicator -->
+                        <div class="flex justify-center mt-4">
+                            <div class="text-sm text-gray-500 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l3-3m0 0l3 3m-3-3v12" transform="rotate(90)"></path>
+                                </svg>
+                                Keri horisontaalselt, et näha kõiki arvustusi
+                            </div>
+                        </div>
+                            
+                            <!-- Modal -->
+                            <template x-if="showModal">
+                                <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50" @click="showModal = false">
+                                    <div @click.stop class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 mx-4" 
+                                         x-data="{
+                                             name: '',
+                                             email: '',
+                                             comment: '',
+                                             rating: 0,
+                                             isSubmitting: false,
+                                             errors: {}
+                                         }">
                                         <div class="flex items-center justify-between mb-6">
-                                            <h3 class="text-lg font-semibold text-gray-900">Lisa oma arvustus</h3>
-                                            <button 
-                                                @click="showReviewModal = false"
-                                                class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-                                            >
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <h3 class="text-xl font-semibold text-gray-900">Kirjuta arvustus</h3>
+                                            <button @click="showModal = false" class="text-gray-400 hover:text-gray-600">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
                                             </button>
                                         </div>
-                                        
-                                        <!-- Modal Form -->
-                                        <form @submit.prevent="console.log('Review submitted')" class="space-y-6">
+
+                                        <form @submit.prevent="
+                                            isSubmitting = true;
+                                            errors = {};
+                                            
+                                            // Client-side validation
+                                            if (!name.trim()) errors.name = 'Nimi on kohustuslik';
+                                            if (!email.trim()) errors.email = 'E-mail on kohustuslik';
+                                            if (!comment.trim()) errors.comment = 'Arvustus on kohustuslik';
+                                            if (rating === 0) errors.rating = 'Palun vali hinnang';
+                                            
+                                            if (Object.keys(errors).length > 0) {
+                                                isSubmitting = false;
+                                                return;
+                                            }
+                                            
+                                            // AJAX submission
+                                            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                },
+                                                body: new URLSearchParams({
+                                                    action: 'bp_submit_review',
+                                                    nonce: '<?php echo wp_create_nonce('review_nonce'); ?>',
+                                                    product_id: <?php echo get_the_ID(); ?>,
+                                                    name: name,
+                                                    email: email,
+                                                    comment: comment,
+                                                    rating: rating
+                                                })
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                isSubmitting = false;
+                                                if (data.success) {
+                                                    // Reset form and close modal
+                                                    name = '';
+                                                    email = '';
+                                                    comment = '';
+                                                    rating = 0;
+                                                    showModal = false;
+                                                    // Show success modal
+                                                    showSuccessModal = true;
+                                                    // Auto-close success modal after 15 seconds
+                                                    setTimeout(() => {
+                                                        showSuccessModal = false;
+                                                    }, 15000);
+                                                } else {
+                                                    errors.general = data.data.message || 'Viga arvustuse lisamisel';
+                                                }
+                                            })
+                                            .catch(error => {
+                                                isSubmitting = false;
+                                                errors.general = 'Viga serveri ühenduses';
+                                            });
+                                        ">
                                             <!-- Name Field -->
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-2">Nimi</label>
+                                            <div class="mb-4">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Nimi *</label>
                                                 <input 
                                                     type="text" 
-                                                    placeholder="Sinu nimi"
-                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                                    required
+                                                    x-model="name"
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                                    :class="errors.name ? 'border-red-500' : ''"
+                                                    placeholder="Teie nimi"
                                                 >
+                                                <p x-show="errors.name" x-text="errors.name" class="text-red-500 text-sm mt-1"></p>
                                             </div>
-                                            
+
+                                            <!-- Email Field -->
+                                            <div class="mb-4">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">E-mail *</label>
+                                                <input 
+                                                    type="email" 
+                                                    x-model="email"
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                                    :class="errors.email ? 'border-red-500' : ''"
+                                                    placeholder="teie@email.ee"
+                                                    oninvalid="this.setCustomValidity('Palun sisestage kehtiv e-posti aadress')"
+                                                    oninput="this.setCustomValidity('')"
+                                                >
+                                                <p x-show="errors.email" x-text="errors.email" class="text-red-500 text-sm mt-1"></p>
+                                            </div>
+
                                             <!-- Rating Field -->
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-2">Hinnang</label>
-                                                <div class="flex items-center gap-2" x-data="{ rating: 5 }">
-                                                    <template x-for="star in 5">
+                                            <div class="mb-4">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Hinnang *</label>
+                                                <div class="flex gap-1">
+                                                    <template x-for="star in [1,2,3,4,5]" :key="star">
                                                         <button 
                                                             type="button"
                                                             @click="rating = star"
+                                                            class="text-2xl transition-colors duration-150"
                                                             :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
-                                                            class="text-2xl hover:text-yellow-400 transition-colors duration-200"
                                                         >
                                                             ★
                                                         </button>
                                                     </template>
-                                                    <span class="ml-2 text-sm text-gray-600" x-text="rating + '/5 tähte'"></span>
                                                 </div>
+                                                <p x-show="errors.rating" x-text="errors.rating" class="text-red-500 text-sm mt-1"></p>
                                             </div>
-                                            
-                                            <!-- Review Text -->
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-2">Arvustus</label>
+
+                                            <!-- Comment Field -->
+                                            <div class="mb-6">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Arvustus *</label>
                                                 <textarea 
+                                                    x-model="comment"
                                                     rows="4"
-                                                    placeholder="Kirjuta oma arvustus siia..."
-                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
-                                                    required
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 resize-none"
+                                                    :class="errors.comment ? 'border-red-500' : ''"
+                                                    placeholder="Jagage oma kogemust selle tootega..."
                                                 ></textarea>
+                                                <p x-show="errors.comment" x-text="errors.comment" class="text-red-500 text-sm mt-1"></p>
                                             </div>
-                                            
-                                            <!-- Modal Actions -->
-                                            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+
+                                            <!-- General Error -->
+                                            <div x-show="errors.general" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                <p x-text="errors.general" class="text-red-600 text-sm"></p>
+                                            </div>
+
+                                            <!-- Submit Buttons -->
+                                            <div class="flex justify-end gap-3">
                                                 <button 
                                                     type="button"
-                                                    @click="showReviewModal = false"
-                                                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                                                    @click="showModal = false" 
+                                                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-150"
+                                                    :disabled="isSubmitting"
                                                 >
                                                     Tühista
                                                 </button>
                                                 <button 
                                                     type="submit"
-                                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                                                    class="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                                    :disabled="isSubmitting"
                                                 >
-                                                    Lisa arvustus
+                                                    <span x-show="isSubmitting">
+                                                        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <span x-text="isSubmitting ? 'Saadan...' : 'Saada arvustus'"></span>
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
+                            </template>
+                            
+                            <!-- Success Confirmation Modal -->
+                            <template x-if="showSuccessModal">
+                                <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                                    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8 mx-4 text-center">
+                                        <!-- Success Icon -->
+                                        <div class="mx-auto flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+                                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        
+                                        <!-- Success Message -->
+                                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Aitäh tagasiside eest!</h3>
+                                        <p class="text-gray-600 mb-6 leading-relaxed">
+                                            Teie arvustus on edukalt lisatud ja ootab modereerimist. 
+                                            See ilmub lehel pärast meie poolt ülevaatamist.
+                                        </p>
+                                        
+                                        <!-- Progress Animation -->
+                                        <div class="mb-6">
+                                            <div class="text-sm text-gray-500 mb-2">Sulgun automaatselt 15 sekundi pärast...</div>
+                                            <div class="w-full bg-gray-200 rounded-full h-1">
+                                                <div class="bg-brand-600 h-1 rounded-full" style="width: 100%; animation: progress 15s linear;"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Manual Close Button -->
+                                        <button 
+                                            @click="showSuccessModal = false;"
+                                            class="text-brand-600 hover:text-brand-700 text-sm font-medium underline"
+                                        >
+                                            Jätka kohe sirvimist
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
                             </div>
                         </div>
+                        
+                        <!-- CSS for progress animation -->
+                        <style>
+                            /* Hide elements with x-cloak until Alpine.js loads */
+                            [x-cloak] {
+                                display: none !important;
+                            }
+                            
+                            @keyframes progress {
+                                from { width: 0%; }
+                                to { width: 100%; }
+                            }
+                        </style>
+
+            </div>
+            <!-- End Alpine.js container -->
+
+<!-- Related Products -->
+            <div class="container mx-auto px-4 max-w-7xl py-12">
+                <?php
+                // Custom Related Products Implementation
+                $product_id = get_the_ID();
+                $product = wc_get_product($product_id);
+                
+                if ($product) {
+                    // Get related products using same logic as WooCommerce (categories and tags)
+                    $related_ids = wc_get_related_products($product_id, 12); // Max 12 products
+                    
+                    if (!empty($related_ids)) {
+                        $related_products = wc_get_products(array(
+                            'include' => $related_ids,
+                            'limit' => 12,
+                            'status' => 'publish'
+                        ));
+                        
+                        if (!empty($related_products)) {
+                ?>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Seotud tooted</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+                        <?php foreach ($related_products as $related_product) : ?>
+                            <div class="group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:-translate-y-0.5">
+                                <div class="relative aspect-square overflow-hidden">
+                                    <a href="<?php echo esc_url($related_product->get_permalink()); ?>" class="block w-full h-full no-underline">
+                                        <?php
+                                        $image_id = $related_product->get_image_id();
+                                        if ($image_id) {
+                                            echo wp_get_attachment_image($image_id, 'woocommerce_single', false, array(
+                                                'class' => 'w-full h-full object-cover transition-transform duration-300 group-hover:scale-105',
+                                                'alt' => esc_attr($related_product->get_name())
+                                            ));
+                                        } else {
+                                            echo '<div class="w-full h-full bg-gray-200 flex items-center justify-center">';
+                                            echo '<span class="text-gray-500">No image</span>';
+                                            echo '</div>';
+                                        }
+                                        ?>
+                                    </a>
+                                    <?php if ($related_product->is_on_sale()) : ?>
+                                        <span class="absolute top-2 left-2 z-10 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-red-500 to-red-600 text-white">
+                                            <?php
+                                            $regular_price = $related_product->get_regular_price();
+                                            $sale_price = $related_product->get_sale_price();
+                                            if ($regular_price && $sale_price) {
+                                                $discount = round((($regular_price - $sale_price) / $regular_price) * 100);
+                                                echo '-' . $discount . '%';
+                                            } else {
+                                                echo 'Sale';
+                                            }
+                                            ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="p-4 flex flex-col flex-1">
+                                    <h3 class="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                        <a href="<?php echo esc_url($related_product->get_permalink()); ?>" class="text-gray-900 no-underline transition-colors duration-150 hover:text-brand-600">
+                                            <?php echo esc_html($related_product->get_name()); ?>
+                                        </a>
+                                    </h3>
+                                    <div class="flex items-center justify-between mb-3 gap-2">
+                                        <?php if ($related_product->is_on_sale()) : ?>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-lg font-bold text-red-600"><?php echo wc_price($related_product->get_sale_price()); ?></span>
+                                                <span class="text-sm font-normal text-gray-500 line-through"><?php echo wc_price($related_product->get_regular_price()); ?></span>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="text-lg font-bold text-gray-900">
+                                                <span><?php echo wc_price($related_product->get_price()); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php
+                                        $average_rating = $related_product->get_average_rating();
+                                        $rating_count = $related_product->get_rating_count();
+                                        if ($average_rating > 0) :
+                                        ?>
+                                            <div class="flex items-center gap-1 text-warning-500 text-sm">
+                                                <div class="flex gap-px">
+                                                    <?php
+                                                    $stars = '';
+                                                    for ($i = 1; $i <= 5; $i++) {
+                                                        if ($i <= $average_rating) {
+                                                            $stars .= '★';
+                                                        } else {
+                                                            $stars .= '☆';
+                                                        }
+                                                    }
+                                                    echo '<span class="text-warning-500">' . $stars . '</span>';
+                                                    ?>
+                                                </div>
+                                                <span class="text-gray-500 text-xs ml-1">(<?php echo $rating_count; ?>)</span>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="mt-auto flex items-center justify-center gap-0 border-t border-gray-200 pt-2 px-2 transition-colors duration-150 relative">
+                                        <?php if ($related_product->is_purchasable() && $related_product->is_in_stock()) : ?>
+                                            <a href="<?php echo esc_url(wc_get_cart_url() . '?add-to-cart=' . $related_product->get_id()); ?>" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Lisa ostukorvi" data-product_id="<?php echo $related_product->get_id(); ?>">
+                                                <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                                </svg>
+                                                <span class="action-text">Lisa korvi</span>
+                                            </a>
+                                        <?php else : ?>
+                                            <div class="flex-1 flex flex-row items-center justify-center gap-2 p-2 text-gray-400 text-xs font-medium uppercase">
+                                                <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                                </svg>
+                                                <span class="action-text">Ei saadaval</span>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="w-px h-8 bg-gray-300 mx-1 flex-shrink-0 transition-colors duration-150 hover:bg-brand-400"></div>
+                                        <a href="<?php echo esc_url($related_product->get_permalink()); ?>" class="flex-1 flex flex-row items-center justify-center gap-2 p-2 bg-transparent border-none text-gray-600 no-underline cursor-pointer text-xs font-medium uppercase transition-colors duration-150 hover:text-brand-600" title="Vaata toodet">
+                                            <span class="action-text">Vaata toodet</span>
+                                            <svg class="w-6 h-6 stroke-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-            </div>
-
-            <!-- Related Products -->
-            <div class="container mx-auto px-4 max-w-7xl">
-                <?php woocommerce_output_related_products(); ?>
+                <?php
+                        }
+                    }
+                }
+                ?>
             </div>
 
         <?php endwhile; ?>
@@ -1327,46 +1670,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// Buy Now functionality - Add to cart and redirect to checkout
-function buyNow(button) {
-    const form = button.closest('form.cart');
-    if (!form) return;
-    
-    // Show loading state
-    const originalText = button.innerHTML;
-    button.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Lisa korvi...';
-    button.disabled = true;
-    
-    // Create FormData from the form
-    const formData = new FormData(form);
-    
-    // Add AJAX parameters
-    formData.append('action', 'woocommerce_add_to_cart');
-    
-    // Send AJAX request
-    fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert('Viga: ' + data.error);
-            button.innerHTML = originalText;
-            button.disabled = false;
-        } else {
-            // Success - redirect to checkout
-            window.location.href = '<?php echo wc_get_checkout_url(); ?>';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Viga toote lisamisel. Palun proovige uuesti.');
-        button.innerHTML = originalText;
-        button.disabled = false;
-    });
-}
 </script>
 
 <?php get_footer('shop'); ?>

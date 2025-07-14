@@ -79,11 +79,62 @@ Build & Deployment Workflow
 
     Git Workflow: Use Git for source control at every step. Commit only the theme files (exclude build artifacts like node_modules). Use clear, descriptive commit messages for each logical change. Push branches to remote and merge according to project policies. Tag releases with v0.5.x when cutting a new version.
 
-Enforced Development Rules
+## Enforced Development Rules
 
     Tailwind-first CSS: Use Tailwind utility classes for all styling. Avoid custom CSS files or inline styles unless absolutely necessary. Rely on Tailwind v4 features (e.g. new cascade layers)
     daily.dev
     .
+
+## 🔥 CRITICAL: Alpine.js Modal Scoping Rules
+
+**MANDATORY PATTERNS** (learned from v0.5.6 crisis):
+
+### ✅ Modal Structure Requirements
+```php
+// CORRECT: Modal as direct child of x-data scope
+<div x-data="{ showModal: false, modalData: null }">
+    <div x-show="showModal" x-cloak>...</div>  <!-- Direct child -->
+    <div x-data="{ localVar: 0 }">...</div>   <!-- Other nested scopes -->
+</div>
+```
+
+### ❌ NEVER DO THIS
+```php
+// WRONG: Modal in nested scope
+<div x-data="{ showModal: false }">
+    <div x-data="{ other: 0 }">
+        <div x-show="showModal">...</div>  <!-- showModal undefined -->
+    </div>
+</div>
+```
+
+### 🛠️ Required Global CSS
+```css
+/* MANDATORY: Add to prevent FOUC */
+[x-cloak] { display: none !important; }
+```
+
+### 🚀 WooCommerce AJAX Pattern
+```javascript
+// Standard pattern for both "Lisa korvi" and "Osta kohe"
+fetch('/wordpress/?wc-ajax=add_to_cart', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+    body: new URLSearchParams({ product_id: id, quantity: qty })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.error) { alert('Error'); return; }
+    // Success: either show modal or redirect
+});
+```
+
+### 🎯 Testing Checklist
+- [ ] Modal hidden on page load (`showModal: false`)
+- [ ] Modal variables accessible in scope
+- [ ] Modal dismissible (button + backdrop)
+- [ ] No console errors about undefined variables
+- [ ] x-cloak prevents flash of unstyled content
 
     Alpine-first JS: Use Alpine.js (v3.x) for dynamic behavior. Do not use jQuery, heavy libraries, or raw <script> code unless no alternative. Use Alpine components and directives for interactivity.
 

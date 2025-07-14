@@ -182,6 +182,43 @@ function tailpress(): TailPress\Framework\Theme
 
 tailpress();
 
+/**
+ * Custom callback to render WooCommerce reviews with design system markup.
+ */
+if ( ! function_exists( 'blankpage_review_callback' ) ) {
+    function blankpage_review_callback( $comment, $args, $depth ) {
+        if ( 'comment' === $comment->comment_type ) {
+            // Skip plain comments (we only show reviews)
+            return;
+        }
+        $rating = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );
+        ?>
+        <li <?php comment_class( 'w-80 shrink-0 bg-gray-50 border border-gray-200 rounded-lg p-4' ); ?> id="comment-<?php comment_ID(); ?>">
+            <div class="shrink-0">
+                <?php echo get_avatar( $comment, 48, '', '', [ 'class' => 'rounded-full' ] ); ?>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="font-semibold text-gray-900"><?php echo get_comment_author(); ?></span>
+                    <span class="text-xs text-gray-500">· <?php echo human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) . ' ' . __( 'ago', 'blankpage' ); ?></span>
+                </div>
+                <?php if ( $rating ) : ?>
+                    <div class="flex items-center mb-2">
+                        <?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+                            <svg class="w-4 h-4 <?php echo $i <= $rating ? 'text-yellow-400' : 'text-gray-300'; ?>" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.146 3.549a1 1 0 00.95.69h3.741c.969 0 1.371 1.24.588 1.81l-3.023 2.197a1 1 0 00-.364 1.118l1.147 3.549c.3.921-.755 1.688-1.54 1.118l-3.023-2.197a1 1 0 00-1.176 0l-3.023 2.197c-.784.57-1.838-.197-1.539-1.118l1.146-3.549a1 1 0 00-.364-1.118L2.294 8.976c-.783-.57-.38-1.81.588-1.81h3.741a1 1 0 00.95-.69l1.146-3.55z"/></svg>
+                        <?php endfor; ?>
+                    </div>
+                <?php endif; ?>
+                <div class="prose text-gray-800 mb-2">
+                    <?php comment_text(); ?>
+                </div>
+            </div>
+        </li>
+        <?php
+    }
+}
+
+
 // Better debug timing - check at wp_loaded instead of wp_head
 function blankpage_debug_woocommerce_support() {
     if (isset($_GET['debug_templates'])) {
@@ -2147,3 +2184,105 @@ function blankpage_save_product_meta_boxes($post_id) {
     }
 }
 add_action('save_post', 'blankpage_save_product_meta_boxes');
+
+/**
+ * ====================================================================
+ * WOOCOMMERCE PRODUCT REVIEWS
+ * AJAX handler for submitting product reviews
+ * ====================================================================
+ */
+
+// AJAX handler for submitting product reviews
+add_action('wp_ajax_bp_submit_review', 'bp_submit_review');
+add_action('wp_ajax_nopriv_bp_submit_review', 'bp_submit_review');
+
+function bp_submit_review() {
+    // Security check with nonce
+    check_ajax_referer('review_nonce', 'nonce');
+
+    $product_id = intval($_POST['product_id']);
+    $author     = sanitize_text_field($_POST['name']);
+    $email      = sanitize_email($_POST['email']);
+    $comment    = sanitize_textarea_field($_POST['comment']);
+    $rating     = intval($_POST['rating']);
+
+    // Validation
+    if (!$product_id || empty($author) || empty($email) || empty($comment) || $rating < 1 || $rating > 5) {
+        wp_send_json_error(['message' => 'Palun täida kõik väljad korrektselt.']);
+    }
+
+    // Check if product exists
+    $product = wc_get_product($product_id);
+    if (!$product) {
+        wp_send_json_error(['message' => 'Toodet ei leitud.']);
+    }
+
+    // WordPress comment data
+    $data = [
+        'comment_post_ID'      => $product_id,
+        'comment_author'       => $author,
+        'comment_author_email' => $email,
+        'comment_content'      => $comment,
+        'comment_type'         => 'review',
+        'comment_approved'     => 0  // Leave for moderation
+    ];
+    
+    $comment_id = wp_insert_comment($data);
+    if (!$comment_id) {
+        wp_send_json_error(['message' => 'Arvustuse salvestamisel tekkis viga.']);
+    }
+
+    // Save rating as comment meta
+    add_comment_meta($comment_id, 'rating', $rating);
+
+    wp_send_json_success(['message' => 'Arvustus lisatud! Aitäh tagasiside eest. Arvustus ilmub pärast modereerimist.']);
+}
+
+// Register AJAX actions for add to cart
+add_action('wp_ajax_bp_add_to_cart', 'bp_add_to_cart');
+add_action('wp_ajax_nopriv_bp_add_to_cart', 'bp_add_to_cart');
+
+/**
+ * AJAX handler for adding product to cart
+ */
+function bp_add_to_cart() {
+    // Security check with nonce
+    check_ajax_referer('add_to_cart_nonce', 'nonce');
+
+    $product_id = intval($_POST['product_id']);
+    $quantity = intval($_POST['quantity']);
+
+    // Validation
+    if (!$product_id || $quantity < 1) {
+        wp_send_json_error(['message' => 'Vigased andmed.']);
+    }
+
+    // Check if product exists and is purchasable
+    $product = wc_get_product($product_id);
+    if (!$product || !$product->is_purchasable()) {
+        wp_send_json_error(['message' => 'Toode ei ole saadaval.']);
+    }
+
+    // Check stock
+    if (!$product->is_in_stock()) {
+        wp_send_json_error(['message' => 'Toode pole laos.']);
+    }
+
+    // Add to cart
+    $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity);
+    
+    if (!$cart_item_key) {
+        wp_send_json_error(['message' => 'Toote lisamine ostukorvi ebaõnnestus.']);
+    }
+
+    // Get cart totals
+    WC()->cart->calculate_totals();
+    
+    wp_send_json_success([
+        'message' => 'Toode lisatud ostukorvi!',
+        'cart_count' => WC()->cart->get_cart_contents_count(),
+        'cart_total' => WC()->cart->get_cart_total(),
+        'product_name' => $product->get_name(),
+        'product_price' => $product->get_price()
+    ]);
+}

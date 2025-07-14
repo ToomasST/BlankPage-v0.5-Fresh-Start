@@ -2992,11 +2992,319 @@ get_header(); ?>
             </div>
         </section>
 
+        <!-- Modal System & Alpine.js Patterns -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-semibold text-gray-900 mb-8">Modal System & Alpine.js Patterns</h2>
+            <p class="text-gray-600 mb-8">Comprehensive modal components using Alpine.js with AJAX integration, form validation, and UX best practices.</p>
+            
+            <!-- Review Modal System -->
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">WooCommerce Review Modal System</h3>
+                <p class="text-gray-600 mb-6">Complete implementation of product review system with dual modals, AJAX submission, and progress feedback.</p>
+                
+                <!-- Live Demo -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-200" x-data="{ showDemoModal: false, showDemoSuccess: false }">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Live Demo</h4>
+                    <button 
+                        @click="showDemoModal = true" 
+                        class="bg-brand-600 text-white px-4 py-2 rounded-lg hover:bg-brand-700 transition-colors duration-150 font-medium"
+                    >
+                        Lisa arvustus (Demo)
+                    </button>
+                    
+                    <!-- Demo Review Modal -->
+                    <template x-if="showDemoModal">
+                        <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50" @click="showDemoModal = false">
+                            <div @click.stop class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 mx-4" 
+                                 x-data="{
+                                     name: '',
+                                     email: '',
+                                     comment: '',
+                                     rating: 0,
+                                     errors: {}
+                                 }">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-900">Kirjuta arvustus</h3>
+                                    <button @click="showDemoModal = false" class="text-gray-400 hover:text-gray-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <form @submit.prevent="
+                                    errors = {};
+                                    if (!name.trim()) errors.name = 'Nimi on kohustuslik';
+                                    if (!email.trim()) errors.email = 'E-mail on kohustuslik';
+                                    if (!comment.trim()) errors.comment = 'Arvustus on kohustuslik';
+                                    if (rating === 0) errors.rating = 'Palun vali hinnang';
+                                    
+                                    if (Object.keys(errors).length === 0) {
+                                        showDemoModal = false;
+                                        showDemoSuccess = true;
+                                        setTimeout(() => showDemoSuccess = false, 15000);
+                                    }
+                                ">
+                                    <!-- Name Field -->
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nimi *</label>
+                                        <input 
+                                            type="text" 
+                                            x-model="name"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                            :class="errors.name ? 'border-red-500' : ''"
+                                            placeholder="Teie nimi"
+                                        >
+                                        <p x-show="errors.name" x-text="errors.name" class="text-red-500 text-sm mt-1"></p>
+                                    </div>
+
+                                    <!-- Email Field -->
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">E-mail *</label>
+                                        <input 
+                                            type="email" 
+                                            x-model="email"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                            :class="errors.email ? 'border-red-500' : ''"
+                                            placeholder="teie@email.ee"
+                                        >
+                                        <p x-show="errors.email" x-text="errors.email" class="text-red-500 text-sm mt-1"></p>
+                                    </div>
+
+                                    <!-- Rating Field -->
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Hinnang *</label>
+                                        <div class="flex gap-1">
+                                            <template x-for="star in [1,2,3,4,5]" :key="star">
+                                                <button 
+                                                    type="button"
+                                                    @click="rating = star"
+                                                    class="text-2xl transition-colors duration-150"
+                                                    :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
+                                                >
+                                                    ★
+                                                </button>
+                                            </template>
+                                        </div>
+                                        <p x-show="errors.rating" x-text="errors.rating" class="text-red-500 text-sm mt-1"></p>
+                                    </div>
+
+                                    <!-- Comment Field -->
+                                    <div class="mb-6">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Arvustus *</label>
+                                        <textarea 
+                                            x-model="comment"
+                                            rows="4"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 resize-none"
+                                            :class="errors.comment ? 'border-red-500' : ''"
+                                            placeholder="Jagage oma kogemust selle tootega..."
+                                        ></textarea>
+                                        <p x-show="errors.comment" x-text="errors.comment" class="text-red-500 text-sm mt-1"></p>
+                                    </div>
+
+                                    <!-- Submit Buttons -->
+                                    <div class="flex justify-end gap-3">
+                                        <button 
+                                            type="button"
+                                            @click="showDemoModal = false" 
+                                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-150"
+                                        >
+                                            Tühista
+                                        </button>
+                                        <button 
+                                            type="submit"
+                                            class="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors duration-150 flex items-center gap-2"
+                                        >
+                                            <span>Saada arvustus</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Demo Success Modal -->
+                    <template x-if="showDemoSuccess">
+                        <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                            <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8 mx-4 text-center">
+                                <!-- Success Icon -->
+                                <div class="mx-auto flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+                                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                
+                                <!-- Success Message -->
+                                <h3 class="text-xl font-semibold text-gray-900 mb-3">Aitäh tagasiside eest!</h3>
+                                <p class="text-gray-600 mb-6 leading-relaxed">
+                                    Teie arvustus on edukalt lisatud ja ootab modereerimist. 
+                                    See ilmub lehel pärast meie poolt ülevaatamist.
+                                </p>
+                                
+                                <!-- Progress Animation -->
+                                <div class="mb-6">
+                                    <div class="text-sm text-gray-500 mb-2">Sulgun automaatselt 15 sekundi pärast...</div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1">
+                                        <div class="bg-brand-600 h-1 rounded-full" style="width: 100%; animation: progress 15s linear;"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Manual Close Button -->
+                                <button 
+                                    @click="showDemoSuccess = false;"
+                                    class="text-brand-600 hover:text-brand-700 text-sm font-medium underline"
+                                >
+                                    Jätka kohe sirvimist
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Implementation Details -->
+                <div class="mt-8 grid md:grid-cols-2 gap-6">
+                    <!-- Alpine.js State Management -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="font-semibold text-gray-900 mb-3">Alpine.js State Management</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li>• <code class="bg-white px-1 rounded">showModal</code> - Review form modal visibility</li>
+                            <li>• <code class="bg-white px-1 rounded">showSuccessModal</code> - Success confirmation modal</li>
+                            <li>• <code class="bg-white px-1 rounded">isSubmitting</code> - AJAX loading state</li>
+                            <li>• <code class="bg-white px-1 rounded">errors</code> - Form validation error messages</li>
+                            <li>• Separate x-data scopes for form and container</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- AJAX Integration -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="font-semibold text-gray-900 mb-3">AJAX & Backend Integration</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li>• Action: <code class="bg-white px-1 rounded">bp_submit_review</code></li>
+                            <li>• Nonce verification for security</li>
+                            <li>• WordPress comment system integration</li>
+                            <li>• Comment meta for star ratings</li>
+                            <li>• Moderation workflow (comment_approved=0)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Code Examples -->
+                <div class="mt-8">
+                    <h4 class="font-semibold text-gray-900 mb-4">Key Code Patterns</h4>
+                    
+                    <!-- Alpine.js Modal Structure -->
+                    <div class="mb-6">
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">Alpine.js Modal Structure:</h5>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-green-400 text-sm overflow-x-auto"><code>&lt;div x-data="{ showModal: false, showSuccessModal: false }"&gt;
+  &lt;button @click="showModal = true"&gt;Open Modal&lt;/button&gt;
+  
+  &lt;template x-if="showModal"&gt;
+    &lt;div class="fixed inset-0 bg-black/50 z-50" @click="showModal = false"&gt;
+      &lt;div @click.stop class="bg-white rounded-lg"&gt;
+        &lt;!-- Modal content --&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <!-- AJAX Submission Pattern -->
+                    <div class="mb-6">
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">AJAX Submission Pattern:</h5>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-green-400 text-sm overflow-x-auto"><code>fetch('&lt;?php echo admin_url('admin-ajax.php'); ?&gt;', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({
+    action: 'bp_submit_review',
+    nonce: '&lt;?php echo wp_create_nonce('review_nonce'); ?&gt;',
+    // ... form data
+  })
+})
+.then(response =&gt; response.json())
+.then(data =&gt; {
+  if (data.success) {
+    showModal = false;
+    showSuccessModal = true;
+  }
+});</code></pre>
+                        </div>
+                    </div>
+                    
+                    <!-- PHP AJAX Handler -->
+                    <div class="mb-6">
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">PHP AJAX Handler:</h5>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-green-400 text-sm overflow-x-auto"><code>add_action('wp_ajax_bp_submit_review', 'bp_submit_review');
+add_action('wp_ajax_nopriv_bp_submit_review', 'bp_submit_review');
+
+function bp_submit_review() {
+    check_ajax_referer('review_nonce', 'nonce');
+    
+    // Sanitize and validate input
+    $product_id = intval($_POST['product_id']);
+    $rating = intval($_POST['rating']);
+    
+    // Insert comment
+    $comment_id = wp_insert_comment([
+        'comment_type' =&gt; 'review',
+        'comment_approved' =&gt; 0
+    ]);
+    
+    // Save rating meta
+    add_comment_meta($comment_id, 'rating', $rating);
+    
+    wp_send_json_success(['message' =&gt; 'Success']);
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Best Practices & Common Pitfalls -->
+                <div class="mt-8 grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                        <h4 class="font-semibold text-green-800 mb-3">✅ Best Practices</h4>
+                        <ul class="text-sm text-green-700 space-y-2">
+                            <li>• Use separate x-data scopes for complex forms</li>
+                            <li>• Always implement @click.stop on modal content</li>
+                            <li>• Include loading states and progress indicators</li>
+                            <li>• Validate both client-side and server-side</li>
+                            <li>• Use nonce verification for AJAX security</li>
+                            <li>• Provide clear user feedback and error messages</li>
+                            <li>• Auto-close with manual override options</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                        <h4 class="font-semibold text-red-800 mb-3">❌ Common Pitfalls</h4>
+                        <ul class="text-sm text-red-700 space-y-2">
+                            <li>• AJAX action name mismatch (frontend ≠ backend)</li>
+                            <li>• HTML entity encoding breaking JavaScript</li>
+                            <li>• Complex inline Alpine.js objects causing parse errors</li>
+                            <li>• Missing backdrop click handling</li>
+                            <li>• No loading states during AJAX calls</li>
+                            <li>• Forgetting nonce verification</li>
+                            <li>• Poor error handling and user feedback</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CSS Animation for Progress Bar -->
+        <style>
+            @keyframes progress {
+                from { width: 0%; }
+                to { width: 100%; }
+            }
+        </style>
+
         <!-- Footer -->
-        <footer class="text-center py-8 border-t border-gray-200">
-            <p class="text-gray-600">
-                <strong>BlankPage Design System</strong> - Estonian e-commerce theme built with 
-                <strong>Tailwind CSS 4.0</strong> and <strong>OKLCH color space</strong>
+        <footer class="py-16 border-t border-gray-200 bg-gray-50">
+            <p class="text-xl text-gray-700 text-center font-medium">
+                BlankPage Design System - Crafted with TailPress & Alpine.js
             </p>
             <p class="text-sm text-gray-500 mt-2">
                 All components use modern design tokens for consistency, accessibility, and performance.

@@ -751,7 +751,92 @@ cd blankpage-tailpress-theme
 
 ---
 
-**Last Updated:** 2025-06-25  
+## 🔥 CRITICAL: Alpine.js Modal Scoping Issues (v0.5.6)
+
+**MAJOR CRISIS SOLVED:** WooCommerce Single Product Page Modal Scoping
+
+### ❌ Problem Symptoms
+- Modal visible immediately on page load
+- Modal cannot be dismissed/closed
+- Alpine.js variables undefined in modal scope
+- Console errors: `showCartModal is not defined`, `cartProduct is not defined`
+- `$root` is undefined errors
+
+### 🔍 Root Cause Analysis
+**Multiple nested x-data scopes caused variable shadowing:**
+```php
+// ❌ PROBLEMATIC STRUCTURE
+<div x-data="{ showCartModal: false }">  <!-- Main scope -->
+    <div x-data="{ active: 0 }">           <!-- Gallery scope -->
+        <div x-data="{ openAccordion: null }"> <!-- Accordion scope -->
+            <!-- Modal tries to access parent variables -->
+            <div x-show="showCartModal">         <!-- ❌ UNDEFINED -->
+```
+
+### ✅ CRITICAL SOLUTION
+**Modal must be DIRECT child of x-data scope that owns the variables:**
+```php
+// ✅ CORRECT STRUCTURE
+<div x-data="{ showCartModal: false, cartProduct: null, cartQuantity: 0 }">
+    <!-- Modal as DIRECT child -->
+    <div x-show="showCartModal" x-cloak>...</div>
+    
+    <!-- Other nested scopes -->
+    <div x-data="{ active: 0 }"><!-- Gallery --></div>
+    <div x-data="{ openAccordion: null }"><!-- Accordion --></div>
+</div>
+```
+
+### 🚨 PREVENTION RULES
+1. **NEVER rely on `$root`** - unreliable in complex nested structures
+2. **Place modals as direct children** of the x-data scope declaring variables
+3. **Use local x-data scopes** for each component (tabs, accordions, modals)
+4. **Add global x-cloak CSS:** `[x-cloak] { display: none !important; }`
+5. **Test modal visibility immediately** after implementation
+
+### 🛠️ Required Global CSS
+```css
+/* MANDATORY: Add to prevent FOUC */
+[x-cloak] {
+    display: none !important;
+}
+```
+
+### 🔧 WooCommerce AJAX Implementation
+**Both buttons use same pattern:**
+```javascript
+// "Lisa korvi" button: AJAX → Modal display
+// "Osta kohe" button: AJAX → Direct redirect to checkout
+
+fetch('/wordpress/?wc-ajax=add_to_cart', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+    body: new URLSearchParams({
+        product_id: product_id,
+        quantity: quantity
+    })
+})
+```
+
+### 🎯 Debugging Tools Used
+- `console.log()` for Alpine.js state tracking
+- `x-init` for component initialization debugging
+- Browser DevTools for scope inspection
+- `grep_search` for finding all x-data scopes
+
+### ⏱️ Time Investment
+**Several hours of complex debugging** - This documentation prevents future occurrences!
+
+### 🚀 Final Working Features
+- ✅ "Lisa korvi" button: AJAX → Success modal
+- ✅ "Osta kohe" button: AJAX → Checkout redirect
+- ✅ Modal shows correct product info and quantity
+- ✅ Modal dismissable with button or backdrop click
+- ✅ Smooth Alpine.js transitions and animations
+
+---
+
+**Last Updated:** 2025-07-14  
 **Emergency Contact:** Check project documentation  
 **Backup Strategy:** Regular Git commits + manual backups
 
