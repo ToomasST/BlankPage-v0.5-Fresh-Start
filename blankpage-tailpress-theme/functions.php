@@ -1,7 +1,7 @@
 <?php
 
-if (is_file(__DIR__.'/vendor/autoload_packages.php')) {
-    require_once __DIR__.'/vendor/autoload_packages.php';
+if (is_file(__DIR__.'/vendor/autoload.php')) {
+    require_once __DIR__.'/vendor/autoload.php';
 }
 
 /**
@@ -1290,7 +1290,7 @@ function blankpage_image_admin_page() {
                                     echo '<td class="blankpage-td blankpage-td-mono">' . esc_html($width) . 'x' . esc_html($display_height) . ($crop ? ' <span class="blankpage-crop-note">(lõigatud)</span>' : ' <span class="blankpage-crop-note">(mitte lõigatud)</span>') . '</td>';
                                     echo '<td class="blankpage-td"><span class="blankpage-status-badge ' . $status_class . '">' . esc_html($status) . '</span></td>';
                                     echo '<td class="blankpage-td blankpage-usage">' . esc_html($usage) . '</td>';
-                                    echo '<td class="blankpage-td blankpage-td-center"><input type="checkbox" name="disabled_sizes[]" value="' . esc_attr($size) . '"' . ($is_disabled ? ' checked' : '') . ' class="blankpage-checkbox"></td>';
+                                    echo '<td class="blankpage-td blankpage-td-center"><input type="checkbox" name="disabled_sizes[]" value="' . esc_attr($size) . '"' . ($is_disabled ? ' checked' : '') . '></td>';
                                     echo '</tr>';
                                 }
                                 
@@ -2241,6 +2241,129 @@ function bp_submit_review() {
 // Register AJAX actions for add to cart
 add_action('wp_ajax_bp_add_to_cart', 'bp_add_to_cart');
 add_action('wp_ajax_nopriv_bp_add_to_cart', 'bp_add_to_cart');
+
+/**
+ * ====================================================================
+ * WOOCOMMERCE EMPTY CART OVERRIDE
+ * Custom empty cart message that follows our design system
+ * ====================================================================
+ */
+
+/**
+ * Custom empty cart message with design system styling
+ * This replaces the default WooCommerce "Your cart is currently empty." message
+ */
+function blankpage_custom_empty_cart_message() {
+    ?>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+        <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Teie ostukorv on tühi</h3>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">Avastage meie lai tootevalik ja lisage oma lemmikud ostukorvi</p>
+        <button onclick="window.location.href='<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>'" class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-md shadow-sm hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 cursor-pointer">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+            </svg>
+            Jätka ostlemist
+        </button>
+    </div>
+    <?php
+}
+
+// Remove ALL default WooCommerce empty cart content and notices
+remove_action( 'woocommerce_cart_is_empty', 'wc_empty_cart_message', 90 );
+remove_action( 'woocommerce_cart_is_empty', 'wc_empty_cart_message', 10 );
+
+// Remove WooCommerce notices from empty cart page - AGGRESSIVE
+function blankpage_remove_empty_cart_notices() {
+    if (is_cart() && WC()->cart->is_empty()) {
+        wc_clear_notices();
+    }
+}
+add_action( 'wp_loaded', 'blankpage_remove_empty_cart_notices', 1 );
+add_action( 'woocommerce_before_cart', 'blankpage_remove_empty_cart_notices', 1 );
+add_action( 'woocommerce_before_cart_table', 'blankpage_remove_empty_cart_notices', 1 );
+
+// Remove WooCommerce notices from cart page completely
+function blankpage_disable_cart_notices() {
+    if (is_cart()) {
+        remove_action( 'woocommerce_before_cart', 'woocommerce_output_all_notices', 10 );
+        remove_action( 'woocommerce_before_cart_table', 'woocommerce_output_all_notices', 10 );
+        remove_action( 'woocommerce_before_cart_contents', 'woocommerce_output_all_notices', 10 );
+    }
+}
+add_action( 'wp_loaded', 'blankpage_disable_cart_notices', 1 );
+
+// Add our custom empty cart message (replace everything)
+add_action( 'woocommerce_cart_is_empty', 'blankpage_custom_empty_cart_message', 5 );
+
+// Force white text color on empty cart button - override CSS layer utilities
+function blankpage_empty_cart_button_css() {
+    if (is_cart() && WC()->cart->is_empty()) {
+        echo '<style>
+            @layer utilities {
+                :is(.entry-content, .block-editor-block-list__layout, .woocommerce) :where(.bg-gradient-to-r a) {
+                    color: white !important;
+                }
+            }
+            /* Fallback for non-layer browsers */
+            .woocommerce .bg-gradient-to-r a,
+            .woocommerce .bg-gradient-to-r a:hover,
+            .woocommerce .bg-gradient-to-r a:focus,
+            .woocommerce .bg-gradient-to-r a:active {
+                color: white !important;
+                text-decoration: none !important;
+            }
+        </style>';
+    }
+}
+add_action( 'wp_head', 'blankpage_empty_cart_button_css' );
+
+// REMOVED: Custom checkout CSS - now using Tailwind classes in template
+
+/**
+ * Override WordPress container restrictions for checkout
+ */
+function blankpage_checkout_container_override() {
+    if (is_checkout()) {
+        ?>
+        <style>
+            /* Override WordPress entry-content max-width on checkout */
+            .woocommerce-checkout .entry-content {
+                max-width: none !important;
+            }
+            
+            /* Ensure checkout content uses full width */
+            .woocommerce-checkout .entry-content .wp-block-group {
+                max-width: none !important;
+            }
+        </style>
+        <?php
+    }
+}
+add_action( 'wp_head', 'blankpage_checkout_container_override' );
+
+/**
+ * Remove WooCommerce checkout duplicate headings
+ */
+function blankpage_remove_checkout_headings() {
+    if (is_checkout()) {
+        ?>
+        <style>
+            /* Hide WooCommerce duplicate section headings */
+            .woocommerce-checkout .woocommerce-billing-fields h3,
+            .woocommerce-checkout .woocommerce-shipping-fields h3,
+            .woocommerce-checkout .woocommerce-additional-fields h3 {
+                display: none !important;
+            }
+        </style>
+        <?php
+    }
+}
+add_action( 'wp_head', 'blankpage_remove_checkout_headings' );
 
 /**
  * AJAX handler for adding product to cart

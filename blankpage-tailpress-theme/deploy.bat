@@ -33,9 +33,30 @@ xcopy "screenshot.png" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-ta
 echo Theme assets copied!
 echo.
 
-echo [5/5] Copying resources folder...
+echo [5/8] Copying resources folder...
 xcopy "resources" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\resources" /E /Y /I
 echo Resources folder copied!
+echo.
+
+echo [6/8] Copying vendor folder (Composer dependencies)...
+xcopy "vendor" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\vendor" /E /Y /I
+echo Vendor folder copied!
+echo.
+
+echo [7/8] Copying includes folder (Framework files)...
+xcopy "includes" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\includes" /E /Y /I
+echo Includes folder copied!
+echo.
+
+echo [8/9] Copying src folder (Custom TailPress classes)...
+xcopy "src" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\src" /E /Y /I
+echo Src folder copied!
+echo.
+
+echo [9/9] Copying framework configuration files...
+xcopy "composer.json" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\" /Y 2>nul
+xcopy "composer.lock" "C:\xampp\htdocs\wordpress\wp-content\themes\blankpage-tailpress-theme\" /Y 2>nul
+echo Framework files copied!
 echo.
 
 echo ========================================

@@ -15,7 +15,11 @@
         </div>
     <?php endif; ?>
 
-    <div class="entry-content mx-auto max-w-3xl mt-10 sm:mt-20">
+    <?php if ( function_exists('is_cart') && is_cart() ) : ?>
+        <div class="entry-content mt-10 sm:mt-20">
+    <?php else : ?>
+        <div class="entry-content mx-auto max-w-3xl mt-10 sm:mt-20">
+    <?php endif; ?>
         <?php the_content(); ?>
     </div>
 </article>

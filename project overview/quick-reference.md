@@ -49,9 +49,69 @@ Design System Workflow (CRITICAL)
 
     The showcase file serves as the single source of truth for design tokens and component examples. Do not skip this step. Only once a design is finalized in the showcase should it be moved into the theme’s PHP templates or blocks.
 
+## CSS Audit Workflow (MANDATORY)
+
+**ALWAYS audit for existing CSS before adding new styles to prevent conflicts and duplicate CSS issues.**
+
+### Pre-Development CSS Check:
+```bash
+# Search for existing CSS related to your component/page
+grep -r "checkout\|billing\|shipping" resources/css/
+grep -r "cart\|product" resources/css/
+grep -r "button\|form\|input" resources/css/
+```
+
+### CSS Conflict Prevention Checklist:
+- ✅ **Search existing CSS files** for related selectors before adding new styles
+- ✅ **Check component CSS files** in `resources/css/components/`
+- ✅ **Review WooCommerce overrides** that might conflict
+- ✅ **Remove/comment out conflicting CSS** before implementing new styles
+- ✅ **Use Tailwind-first approach** - avoid custom CSS unless absolutely necessary
+- ✅ **Test in browser DevTools** for CSS specificity conflicts
+
+### Common Conflict Sources:
+- `resources/css/components/woocommerce.css` - WooCommerce specific styles
+- Legacy CSS from previous implementations
+- Default WooCommerce theme styles that haven't been overridden
+- Tailwind utility conflicts with custom CSS
+
+**GOLDEN RULE:** Better to delete/refactor existing CSS than to add more CSS on top!
+
 Build & Deployment Workflow
 
+## 🏗️ MIGRATION UPDATE (July 21, 2025): XAMPP → Local by Flywheel
+
+**Status:** ✅ Successfully migrated with full WooCommerce compatibility
+
+### Current Development Environment:
+- **Local:** Local by Flywheel (http://blankpage.local)
+- **Deploy:** `deploy-local.bat` (replaces `deploy.bat` for Local)
+- **Vite:** Fixed for Vite 6.x manifest.json compatibility
+
+### 🚨 CRITICAL: WooCommerce Template Override Fix (MANDATORY)
+
+**Problem:** WooCommerce 5.5+ uses Gutenberg blocks that ignore custom PHP templates
+
+**Required Steps (DO THIS AFTER EVERY WOOCOMMERCE INSTALL):**
+
+1. **Add to functions.php:**
+```php
+add_filter('woocommerce_cart_use_cart_block_page_template', '__return_false');
+add_filter('woocommerce_checkout_use_checkout_block_page_template', '__return_false');
+```
+
+2. **Manual Page Content Fix:**
+   - WordPress Admin → Pages → Cart → Replace ALL content with: `[woocommerce_cart]`
+   - WordPress Admin → Pages → Checkout → Replace ALL content with: `[woocommerce_checkout]`
+   - Save both pages
+
+**Result:** Forces WooCommerce to use theme template overrides (cart.php, form-checkout.php)
+
+---
+
     Local Environment Setup: Install XAMPP (or equivalent) and start Apache/MySQL. Create a new MySQL database and install WordPress in htdocs/ (e.g. at http://localhost/mysite).
+    
+    **NEW:** For Local by Flywheel, use the Local app to create a new WordPress site and clone the repository.
 
     Create TailPress Theme: Install the TailPress installer and scaffold the theme:
 

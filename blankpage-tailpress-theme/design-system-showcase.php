@@ -2897,17 +2897,17 @@ get_header(); ?>
                                     </td>
                                     <td class="text-center py-4 px-4 font-medium text-gray-900">299.99 €</td>
                                     <td class="text-center py-4 px-4">
-                                        <div class="inline-flex items-center border border-gray-300 rounded-md">
-                                            <button class="px-2 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors">-</button>
-                                            <input type="number" value="1" min="1" class="w-12 text-center py-1 border-0 focus:ring-0 text-sm">
-                                            <button class="px-2 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors">+</button>
+                                        <div class="inline-flex items-center border border-gray-300 rounded-md" x-data="{ quantity: 1 }">
+                                            <button @click="quantity = Math.max(1, quantity - 1)" class="px-2 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors">−</button>
+                                            <input type="number" x-model="quantity" min="1" class="w-12 text-center py-1 border-0 focus:ring-0 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                            <button @click="quantity = quantity + 1" class="px-2 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors">+</button>
                                         </div>
                                     </td>
-                                    <td class="text-center py-4 px-4 font-semibold text-gray-900">299.99 €</td>
+                                    <td class="text-center py-4 px-4 font-semibold text-gray-900" x-data="{ quantity: 1 }" x-text="'€' + (299.99 * quantity).toFixed(2)">299.99 €</td>
                                     <td class="text-center py-4 px-4">
-                                        <button class="text-red-500 hover:text-red-700 p-1 transition-colors">
+                                        <button class="text-red-500 hover:text-red-700 p-1 transition-colors" title="Eemalda ostukorvist">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                             </svg>
                                         </button>
                                     </td>
@@ -2987,6 +2987,238 @@ get_header(); ?>
                         <button class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-4 rounded-md font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200">
                             Vormista tellimus
                         </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Empty Cart State -->
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Empty Cart State</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                    <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Teie ostukorv on tühi</h3>
+                    <p class="text-gray-600 mb-8 max-w-md mx-auto">Avastage meie lai tootevalik ja lisage oma lemmikud ostukorvi</p>
+                    <a href="#" class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-md shadow-sm hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+                        </svg>
+                        Jätka ostlemist
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Cart Summary Component -->
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Cart Summary (Sidebar)</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-sm">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Ostukorv (2)</h4>
+                    
+                    <!-- Cart Items -->
+                    <div class="space-y-4 mb-6">
+                        <!-- Item 1 -->
+                        <div class="flex items-center gap-3">
+                            <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Product" class="w-12 h-12 rounded object-cover">
+                            <div class="flex-1 min-w-0">
+                                <h5 class="text-sm font-medium text-gray-900 truncate">Pikendatav söögilaud</h5>
+                                <p class="text-xs text-gray-500">1x 299.99 €</p>
+                            </div>
+                            <button class="text-red-500 hover:text-red-700 p-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Item 2 -->
+                        <div class="flex items-center gap-3">
+                            <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Product" class="w-12 h-12 rounded object-cover">
+                            <div class="flex-1 min-w-0">
+                                <h5 class="text-sm font-medium text-gray-900 truncate">Toolid komplekt</h5>
+                                <p class="text-xs text-gray-500">4x 49.99 €</p>
+                            </div>
+                            <button class="text-red-500 hover:text-red-700 p-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing -->
+                    <div class="border-t border-gray-200 pt-4 space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Vahesumma</span>
+                            <span class="font-medium">499.95 €</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Transport</span>
+                            <span class="font-medium">19.99 €</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">KM (20%)</span>
+                            <span class="font-medium">103.99 €</span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2 flex justify-between font-semibold">
+                            <span>Kokku</span>
+                            <span>623.93 €</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="mt-6 space-y-3">
+                        <button class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 px-4 rounded-md font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200">
+                            Vormista tellimus
+                        </button>
+                        <a href="#" class="block w-full text-center text-sm text-gray-600 hover:text-gray-900">
+                            Vaata ostukorvi
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shipping Options Component -->
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Shipping Options</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" x-data="{ selectedShipping: 'standard' }">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Valige tarneviis</h4>
+                    
+                    <div class="space-y-3">
+                        <!-- Standard Shipping -->
+                        <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors" :class="selectedShipping === 'standard' ? 'border-blue-500 bg-blue-50' : ''">
+                            <input type="radio" name="shipping" value="standard" x-model="selectedShipping" class="text-blue-600 focus:ring-blue-500">
+                            <div class="ml-3 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Tavaline tarne</p>
+                                        <p class="text-sm text-gray-500">5-7 tööpäeva</p>
+                                    </div>
+                                    <span class="text-sm font-semibold text-gray-900">19.99 €</span>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Express Shipping -->
+                        <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors" :class="selectedShipping === 'express' ? 'border-blue-500 bg-blue-50' : ''">
+                            <input type="radio" name="shipping" value="express" x-model="selectedShipping" class="text-blue-600 focus:ring-blue-500">
+                            <div class="ml-3 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Kiire tarne</p>
+                                        <p class="text-sm text-gray-500">1-2 tööpäeva</p>
+                                    </div>
+                                    <span class="text-sm font-semibold text-gray-900">39.99 €</span>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Free Shipping -->
+                        <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors" :class="selectedShipping === 'free' ? 'border-blue-500 bg-blue-50' : ''">
+                            <input type="radio" name="shipping" value="free" x-model="selectedShipping" class="text-blue-600 focus:ring-blue-500">
+                            <div class="ml-3 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Tasuta tarne</p>
+                                        <p class="text-sm text-gray-500">Tellimused üle 500 €</p>
+                                    </div>
+                                    <span class="text-sm font-semibold text-green-600">Tasuta</span>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Pickup -->
+                        <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors" :class="selectedShipping === 'pickup' ? 'border-blue-500 bg-blue-50' : ''">
+                            <input type="radio" name="shipping" value="pickup" x-model="selectedShipping" class="text-blue-600 focus:ring-blue-500">
+                            <div class="ml-3 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Kaubastu järeltulemine</p>
+                                        <p class="text-sm text-gray-500">Tallinn, Tartu, Pärnu</p>
+                                    </div>
+                                    <span class="text-sm font-semibold text-green-600">Tasuta</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <!-- Selected Shipping Info -->
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg" x-show="selectedShipping">
+                        <p class="text-sm text-blue-800">
+                            <span x-show="selectedShipping === 'standard'">Tavaline tarne: 5-7 tööpäeva, 19.99 €</span>
+                            <span x-show="selectedShipping === 'express'">Kiire tarne: 1-2 tööpäeva, 39.99 €</span>
+                            <span x-show="selectedShipping === 'free'">Tasuta tarne: üle 500 € tellimused</span>
+                            <span x-show="selectedShipping === 'pickup'">Järeltulemine: Tallinn, Tartu, Pärnu</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mini Cart (Dropdown) -->
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Mini Cart (Header Dropdown)</h3>
+                <div class="relative inline-block" x-data="{ isOpen: false }">
+                    <!-- Cart Toggle Button -->
+                    <button @click="isOpen = !isOpen" class="relative p-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
+                    </button>
+                    
+                    <!-- Dropdown Content -->
+                    <div x-show="isOpen" @click.away="isOpen = false" x-transition class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                        <div class="p-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Ostukorv</h4>
+                            
+                            <!-- Cart Items -->
+                            <div class="space-y-3 mb-4 max-h-60 overflow-y-auto">
+                                <div class="flex items-center gap-3">
+                                    <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Product" class="w-12 h-12 rounded object-cover">
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="text-sm font-medium text-gray-900 truncate">Pikendatav söögilaud</h5>
+                                        <p class="text-xs text-gray-500">1x 299.99 €</p>
+                                    </div>
+                                    <button class="text-red-500 hover:text-red-700 p-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <img src="http://localhost/wordpress/wp-content/uploads/2025/06/Pikendatav_soogilaud_Strada_valge_peitsiga_tammevineer_12017_exposed_3-600x600.webp" alt="Product" class="w-12 h-12 rounded object-cover">
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="text-sm font-medium text-gray-900 truncate">Toolid komplekt</h5>
+                                        <p class="text-xs text-gray-500">4x 49.99 €</p>
+                                    </div>
+                                    <button class="text-red-500 hover:text-red-700 p-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Total -->
+                            <div class="border-t border-gray-200 pt-3 mb-4">
+                                <div class="flex justify-between font-semibold">
+                                    <span>Kokku</span>
+                                    <span>499.95 €</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="space-y-2">
+                                <button class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 px-4 rounded-md font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200">
+                                    Vormista tellimus
+                                </button>
+                                <a href="#" class="block w-full text-center py-2 px-4 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                                    Vaata ostukorvi
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

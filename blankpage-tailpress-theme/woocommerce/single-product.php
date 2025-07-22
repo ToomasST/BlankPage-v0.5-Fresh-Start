@@ -495,9 +495,9 @@ get_header('shop'); ?>
                                                 const quantity = document.querySelector('input[name=quantity]').value;
                                                 console.log('📦 Quantity:', quantity);
                                                 
-                                                console.log('🚀 Sending AJAX request to /wordpress/?wc-ajax=add_to_cart');
+                                                console.log('🚀 Sending AJAX request to <?php echo admin_url('admin-ajax.php'); ?>?action=woocommerce_add_to_cart');
                                                 
-                                                fetch('/wordpress/?wc-ajax=add_to_cart', {
+                                                fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=woocommerce_add_to_cart', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -546,7 +546,7 @@ get_header('shop'); ?>
                                                 console.log('📦 Quantity:', quantity);
                                                 
                                                 // Add to cart via AJAX
-                                                fetch('/wordpress/?wc-ajax=add_to_cart', {
+                                                fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=woocommerce_add_to_cart', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -1231,36 +1231,45 @@ get_header('shop'); ?>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-                            <?php endif; ?>
-                            
-                            <!-- Left Gradient Overlay -->
-                            <div 
-                                x-show="leftOpacity > 0" 
-                                :style="{ opacity: leftOpacity }"
-                                x-transition:enter="transition-opacity duration-250 ease-out" 
-                                x-transition:leave="transition-opacity duration-250 ease-in"
-                                class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none z-10"
-                            ></div>
-                            
-                            <!-- Right Gradient Overlay -->
-                            <div 
-                                x-show="rightOpacity > 0" 
-                                :style="{ opacity: rightOpacity }"
-                                x-transition:enter="transition-opacity duration-250 ease-out" 
-                                x-transition:leave="transition-opacity duration-250 ease-in"
-                                class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-white via-white/70 to-transparent pointer-events-none z-10"
-                            ></div>
-                        </div>
-                        
-                        <!-- Scroll Indicator -->
-                        <div class="flex justify-center mt-4">
-                            <div class="text-sm text-gray-500 flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l3-3m0 0l3 3m-3-3v12" transform="rotate(90)"></path>
-                                </svg>
-                                Keri horisontaalselt, et näha kõiki arvustusi
+                                
+                                <!-- Left Gradient Overlay -->
+                                <div 
+                                    x-show="leftOpacity > 0" 
+                                    :style="{ opacity: leftOpacity }"
+                                    x-transition:enter="transition-opacity duration-250 ease-out" 
+                                    x-transition:leave="transition-opacity duration-250 ease-in"
+                                    class="absolute top-0 bottom-4 left-0 w-8 bg-gradient-to-r from-white via-white/70 to-transparent pointer-events-none z-10"
+                                ></div>
+                                
+                                <!-- Right Gradient Overlay -->
+                                <div 
+                                    x-show="rightOpacity > 0" 
+                                    :style="{ opacity: rightOpacity }"
+                                    x-transition:enter="transition-opacity duration-250 ease-out" 
+                                    x-transition:leave="transition-opacity duration-250 ease-in"
+                                    class="absolute top-0 bottom-4 right-0 w-8 bg-gradient-to-l from-white via-white/70 to-transparent pointer-events-none z-10"
+                                ></div>
                             </div>
-                        </div>
+                            
+                            <!-- Scroll Indicator (only show if horizontal scroll is available) -->
+                            <div 
+                                x-show="$refs.reviewsContainer && $refs.reviewsContainer.scrollWidth > $refs.reviewsContainer.clientWidth"
+                                x-transition:enter="transition-opacity duration-300 ease-out"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition-opacity duration-200 ease-in"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="flex justify-center mt-4"
+                            >
+                                <div class="text-sm text-gray-500 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l3-3m0 0l3 3m-3-3v12" transform="rotate(90)"></path>
+                                    </svg>
+                                    Keri horisontaalselt, et näha kõiki arvustusi
+                                </div>
+                            </div>
+                            <?php endif; ?>
                             
                             <!-- Modal -->
                             <template x-if="showModal">

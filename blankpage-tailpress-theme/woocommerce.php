@@ -8,8 +8,11 @@
 get_header(); ?>
 
 <div class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+    <?php if ( is_cart() ) : ?>
         <main id="primary" class="site-main">
+    <?php else : ?>
+        <div class="container mx-auto px-4 py-8">
+            <main id="primary" class="site-main">
             
             <?php
             /**
@@ -34,7 +37,9 @@ get_header(); ?>
             ?>
 
         </main><!-- #main -->
-    </div>
+    <?php if ( !is_cart() ) : ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php

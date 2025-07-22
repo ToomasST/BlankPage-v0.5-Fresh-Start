@@ -185,10 +185,7 @@
   @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
 }
 
-.woocommerce-checkout .woocommerce-billing-fields,
-.woocommerce-checkout .woocommerce-shipping-fields {
-  @apply bg-white rounded-xl shadow-lg border border-gray-100 p-6;
-}
+/* REMOVED: Checkout form field styling - now handled by template Tailwind classes */
 
 .woocommerce-checkout .woocommerce-billing-fields h3,
 .woocommerce-checkout .woocommerce-shipping-fields h3 {

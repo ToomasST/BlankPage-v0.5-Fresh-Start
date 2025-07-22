@@ -42,8 +42,18 @@
     list-style-type: decimal;
   }
 
+  /* REMOVED: CSS link color rule that was overriding Tailwind utilities */
+  /* Use Tailwind utility classes for link colors instead */
+
+  /* Multi-line text link focus ring - single continuous outline */
   :where(a) {
-    color: var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  :where(a:focus) {
+    outline: 2px solid var(--color-blue-500);
+    outline-offset: 2px;
+    border-radius: 0.125rem;
   }
 
   :where(li) {

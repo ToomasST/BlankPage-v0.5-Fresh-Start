@@ -491,9 +491,43 @@ BlankPage v0.5 windsurf/
 
 ## 🚀 DEVELOPMENT WORKFLOW
 
+### 🏗️ Migration Complete: XAMPP → Local by Flywheel (July 21, 2025)
+
+**Status:** ✅ Successfully migrated with full WooCommerce compatibility
+
+#### Migration Environment:
+- **From:** XAMPP (http://localhost/wordpress/)
+- **To:** Local by Flywheel (http://blankpage.local)
+- **Deploy Script:** `deploy-local.bat` (Local-specific)
+- **Vite Config:** Fixed for Vite 6.x manifest.json location
+
+#### 🔧 Critical WooCommerce Template Override Fix
+
+**Problem:** WooCommerce 5.5+ uses Gutenberg blocks for cart/checkout, completely ignoring custom PHP templates
+
+**Required Solution (MANDATORY for all installations):**
+
+1. **functions.php filters:**
+```php
+add_filter('woocommerce_cart_use_cart_block_page_template', '__return_false');
+add_filter('woocommerce_checkout_use_checkout_block_page_template', '__return_false');
+```
+
+2. **Manual page content replacement:**
+   - WordPress Admin → Pages → Cart → Replace content with: `[woocommerce_cart]`
+   - WordPress Admin → Pages → Checkout → Replace content with: `[woocommerce_checkout]`
+   - Save both pages
+
+**Result:** Forces WooCommerce to use legacy shortcode system that respects theme template overrides
+
+⚠️ **IMPORTANT:** This must be done after every WooCommerce installation/migration
+
+---
+
 ### Deploy Script Functionality
 ```bash
-.\deploy.bat
+.\deploy-local.bat  # For Local by Flywheel
+.\deploy.bat        # For XAMPP (legacy)
 ```
 
 **What it does:**

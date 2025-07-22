@@ -22,7 +22,7 @@
     
     <?php wp_head(); ?>
 </head>
-<body <?php body_class('bg-white text-zinc-900 antialiased'); ?>>
+<body <?php body_class('bg-gray-50 text-zinc-900 antialiased'); ?>>
 <?php do_action('tailpress_site_before'); ?>
 
 <div id="page" class="min-h-screen flex flex-col">
@@ -109,4 +109,4 @@
         <?php endif; ?>
 
         <?php do_action('tailpress_content_start'); ?>
-        <main>
+        <main class="bg-gray-50">
